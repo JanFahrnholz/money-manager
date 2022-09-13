@@ -15,15 +15,11 @@ class ContactStorage {
 
         this.contacts.push(p);
         this.setContacts(this.contacts);
-        console.log(this.contacts);
+
         return this.contacts;
     };
 
-    public findById = (id: number) => {
-        const p = this.contacts.find((p) => p.id === id);
-        console.info("found", this.contacts, p);
-        return p;
-    };
+    public findById = (id: number) => this.contacts.find((p) => p.id === id);
 
     public getInitials = (id: number) => {
         const p = this.findById(id);
