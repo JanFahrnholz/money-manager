@@ -12,6 +12,7 @@ import { ContactContext } from "../../../context/ContactContext";
 import { TransactionContext } from "../../../context/TransactionContext";
 import Transaction from "../../../types/Transaction";
 import MoneyOffIcon from "@mui/icons-material/MoneyOff";
+import PaidIcon from "@mui/icons-material/Paid";
 
 const TransactionListItem: FC<{ transaction: Transaction }> = ({
     transaction,
@@ -24,6 +25,14 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
 
     const secondaryAction = () => {
         if (tCtx.storage.isType(transaction.id, "Rechnung")) {
+            if (tCtx.storage.getIsPaid(transaction.id)) {
+                return (
+                    <IconButton edge="end" sx={{ mr: 1 }} aria-label="delete">
+                        <PaidIcon />
+                    </IconButton>
+                );
+            }
+
             return (
                 <IconButton edge="end" sx={{ mr: 1 }} aria-label="delete">
                     <MoneyOffIcon />
