@@ -4,12 +4,7 @@ import Transaction from "../types/Transaction";
 const _ = require("lodash");
 import TransactionStorage from "../lib/TransactionStorage";
 
-interface ContextType {
-    storage: TransactionStorage;
-    reload: () => void;
-}
-
-export const TransactionContext = createContext<ContextType>(undefined!);
+export const TransactionContext = createContext<TransactionStorage>(undefined!);
 
 const TransactionContextProvider: FC = (props) => {
     const [transactions, setTransactions] = usePersistantState<Transaction[]>(
@@ -19,19 +14,8 @@ const TransactionContextProvider: FC = (props) => {
 
     const storage = new TransactionStorage(transactions, setTransactions);
 
-    const reload = () => {
-        const t = [...transactions];
-
-        setTransactions(t);
-    };
-
     return (
-        <TransactionContext.Provider
-            value={{
-                storage,
-                reload,
-            }}
-        >
+        <TransactionContext.Provider value={storage}>
             {props.children}
         </TransactionContext.Provider>
     );

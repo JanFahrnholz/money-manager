@@ -18,14 +18,14 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
     transaction,
 }) => {
     const tCtx = useContext(TransactionContext);
-    const { storage } = useContext(ContactContext);
+    const cCtx = useContext(ContactContext);
 
-    const type = tCtx.storage.getTypeById(transaction.typeId);
-    const contact = storage.findById(transaction.personId);
+    const type = tCtx.getTypeById(transaction.typeId);
+    const contact = cCtx.findById(transaction.personId);
 
     const secondaryAction = () => {
-        if (tCtx.storage.isType(transaction.id, "Rechnung")) {
-            if (storage.findById(transaction.personId)?.balance >= 0) {
+        if (tCtx.isType(transaction.id, "Rechnung")) {
+            if (cCtx.findById(transaction.personId)?.balance >= 0) {
                 return (
                     <IconButton edge="end" sx={{ mr: 1 }} aria-label="delete">
                         <PaidIcon />
@@ -50,7 +50,7 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
             secondaryAction={secondaryAction()}
         >
             <ListItemAvatar>
-                <Avatar>{storage.getInitials(transaction.personId)}</Avatar>
+                <Avatar>{cCtx.getInitials(transaction.personId)}</Avatar>
             </ListItemAvatar>
             <ListItemText
                 primary={`${type?.name} ${transaction.amount}€`}

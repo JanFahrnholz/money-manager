@@ -2255,12 +2255,27 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-use-downloader@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/react-use-downloader/-/react-use-downloader-1.1.7.tgz#f8d920dc6f9227a842d83bc21f1554bde78d5386"
+  integrity sha512-DfQWHf/f7B4MSmPsE2syNnaRSuit72ApvJAMdMi1midubPLNI5z8EBG3zI0CqTiEPrhALQCftHOGzQDe1tkQ4A==
+  dependencies:
+    react "^17.0.2"
+
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
+
+react@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 read-cache@^1.0.0:
   version "1.0.0"

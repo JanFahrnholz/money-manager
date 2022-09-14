@@ -9,7 +9,7 @@ import { FC, useContext } from "react";
 import { ContactContext } from "../../../context/ContactContext";
 
 const ContactList: FC = () => {
-    const { storage } = useContext(ContactContext);
+    const storage = useContext(ContactContext);
 
     return (
         <List

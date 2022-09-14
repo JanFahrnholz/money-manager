@@ -16,11 +16,11 @@ const ProfileContextProvider: FC = (props) => {
     const transactions = useContext(TransactionContext);
     const contacts = useContext(ContactContext);
 
-    const stats = new StatsCalculator(transactions.storage, contacts.storage);
+    const stats = new StatsCalculator(transactions, contacts);
 
     useEffect(() => {
         stats.calculate();
-    }, [transactions.storage.transactions, contacts.storage.contacts]);
+    }, [transactions.transactions, contacts.contacts]);
 
     return (
         <ProfileContext.Provider

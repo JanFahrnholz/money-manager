@@ -41,7 +41,7 @@ const AddContact: FC = () => {
 
     const [name, setName] = useState("");
 
-    const { storage, reload } = useContext(ContactContext);
+    const storage = useContext(ContactContext);
 
     const submit = () => {
         if (name === "") {
@@ -50,7 +50,6 @@ const AddContact: FC = () => {
         }
 
         storage.add(name);
-        reload();
 
         setOpen(false);
         setError(null);

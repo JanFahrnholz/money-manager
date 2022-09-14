@@ -34,7 +34,7 @@ class TransactionStorage {
         };
 
         this.transactions.unshift(t);
-        this.setTransactions(this.transactions);
+        this.reload();
 
         return t;
     };
@@ -86,6 +86,12 @@ class TransactionStorage {
         if (l < 1) return 1;
 
         return l + 1;
+    };
+
+    public reload = () => {
+        const t = [...this.transactions];
+
+        this.setTransactions(t);
     };
 }
 

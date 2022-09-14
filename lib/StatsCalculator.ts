@@ -24,7 +24,7 @@ class StatsCalculator {
         this.t.transactions.map((t) => {
             if (this.t.isType(t.id, "Einkauf")) balance -= t.amount;
             if (this.t.isType(t.id, "Verkauf")) balance += t.amount;
-            if (this.t.isType(t.id, "Rechnung")) balance -= t.amount;
+            // if (this.t.isType(t.id, "Rechnung")) balance -= t.amount;
             if (this.t.isType(t.id, "Rückzahlung")) balance += t.amount;
         });
 
@@ -35,7 +35,7 @@ class StatsCalculator {
         let pending = 0;
 
         this.c.contacts.map((c) => {
-            pending += c.balance;
+            if (c.balance < 0) pending += c.balance;
         });
 
         return pending * -1;
@@ -45,14 +45,6 @@ class StatsCalculator {
         {
             name: "Balance",
             value: this.calcBalance,
-        },
-        {
-            name: "Pending Money",
-            value: this.calcPendingMoney,
-        },
-        {
-            name: "Pending Money",
-            value: this.calcPendingMoney,
         },
         {
             name: "Pending Money",

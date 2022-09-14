@@ -15,7 +15,7 @@ import Transaction from "../../../types/Transaction";
 import TransactionListItem from "./item";
 
 const TransactionList: FC = () => {
-    const { storage } = useContext(TransactionContext);
+    const storage = useContext(TransactionContext);
 
     return (
         <div className="p-2">

@@ -14,7 +14,7 @@ class ContactStorage {
         const p = new Contact(this.generateId(), name, balance);
 
         this.contacts.push(p);
-        this.setContacts(this.contacts);
+        this.reload();
 
         return this.contacts;
     };
@@ -62,6 +62,11 @@ class ContactStorage {
         if (l < 1) return 1;
 
         return l + 1;
+    };
+
+    public reload = () => {
+        const t = [...this.contacts];
+        this.setContacts(t);
     };
 }
 

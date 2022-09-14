@@ -4,12 +4,7 @@ import Contact from "../types/Contact";
 const _ = require("lodash");
 import ContactStorage from "../lib/ContactStorage";
 
-interface ContextType {
-    storage: ContactStorage;
-    reload: () => void;
-}
-
-export const ContactContext = createContext<ContextType>(undefined!);
+export const ContactContext = createContext<ContactStorage>(undefined!);
 
 const ContactContextProvider: FC = (props) => {
     const [contacts, setContacts] = usePersistantState<Contact[]>(
@@ -19,18 +14,8 @@ const ContactContextProvider: FC = (props) => {
 
     const storage = new ContactStorage(contacts, setContacts);
 
-    const reload = () => {
-        const t = [...contacts];
-        setContacts(t);
-    };
-
     return (
-        <ContactContext.Provider
-            value={{
-                storage,
-                reload,
-            }}
-        >
+        <ContactContext.Provider value={storage}>
             {props.children}
         </ContactContext.Provider>
     );

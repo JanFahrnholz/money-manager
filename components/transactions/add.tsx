@@ -54,15 +54,15 @@ const AddTransaction: FC = () => {
             return;
         }
 
-        const t = tCtx.storage.add(amount, person, type, null);
-        cCtx.storage.addTransaction(person, t.id);
+        const t = tCtx.add(amount, person, type, null);
+        cCtx.addTransaction(person, t.id);
 
-        if (tCtx.storage.isType(t.id, "Rechnung")) {
-            cCtx.storage.addBalance(person, amount);
+        if (tCtx.isType(t.id, "Rechnung")) {
+            cCtx.addBalance(person, amount);
         }
 
-        if (tCtx.storage.isType(t.id, "Rückzahlung")) {
-            cCtx.storage.addBalance(person, -amount);
+        if (tCtx.isType(t.id, "Rückzahlung")) {
+            cCtx.addBalance(person, -amount);
         }
 
         tCtx.reload();
@@ -161,7 +161,7 @@ const AddTransaction: FC = () => {
                                     required
                                     placeholder="Select a person"
                                 >
-                                    {cCtx.storage.contacts.map((person) => (
+                                    {cCtx.contacts.map((person) => (
                                         <MenuItem
                                             value={person.id}
                                             key={person.id}
@@ -186,7 +186,7 @@ const AddTransaction: FC = () => {
                                     required
                                     placeholder="Select a transaction type"
                                 >
-                                    {tCtx.storage.types.map((type) => (
+                                    {tCtx.types.map((type) => (
                                         <MenuItem value={type.id} key={type.id}>
                                             {type.name}
                                         </MenuItem>
