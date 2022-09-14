@@ -69,6 +69,16 @@ class TransactionStorage {
         return false;
     };
 
+    public getIsPaid = (transactionId: number) => {
+        if (!this.isType(transactionId, "Rechnung")) return;
+
+        const t = this.findById(transactionId);
+
+        if (!t?.relatedTransactionId) return false;
+
+        return true;
+    };
+
     public getPendingTransactions = () => {};
 
     public generateId = () => {

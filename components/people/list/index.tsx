@@ -22,7 +22,7 @@ const ContactList: FC = () => {
                     </ListItemAvatar>
                     <ListItemText
                         primary={p.name}
-                        secondary={`Balance: ${p.balance}`}
+                        secondary={`Balance: ${p.balance}€`}
                     />
                 </ListItem>
             ))}

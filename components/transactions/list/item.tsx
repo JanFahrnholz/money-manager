@@ -25,7 +25,7 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
 
     const secondaryAction = () => {
         if (tCtx.storage.isType(transaction.id, "Rechnung")) {
-            if (tCtx.storage.getIsPaid(transaction.id)) {
+            if (storage.findById(transaction.personId)?.balance >= 0) {
                 return (
                     <IconButton edge="end" sx={{ mr: 1 }} aria-label="delete">
                         <PaidIcon />

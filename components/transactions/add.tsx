@@ -56,6 +56,15 @@ const AddTransaction: FC = () => {
 
         const t = tCtx.storage.add(amount, person, type, null);
         cCtx.storage.addTransaction(person, t.id);
+
+        if (tCtx.storage.isType(t.id, "Rechnung")) {
+            cCtx.storage.addBalance(person, amount);
+        }
+
+        if (tCtx.storage.isType(t.id, "Rückzahlung")) {
+            cCtx.storage.addBalance(person, -amount);
+        }
+
         tCtx.reload();
 
         setOpen(false);

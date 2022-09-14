@@ -1,11 +1,7 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import { createContext, FC } from "react";
 import usePersistantState from "../hooks/usePersistantStorage";
 import Transaction from "../types/Transaction";
-import TransactionType from "../types/TransactionType";
 const _ = require("lodash");
-import data from "../data/transactions.json";
-import { ContactContext } from "./ContactContext";
-import Contact from "../types/Contact";
 import TransactionStorage from "../lib/TransactionStorage";
 
 interface ContextType {

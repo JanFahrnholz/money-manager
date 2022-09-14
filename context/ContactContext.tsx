@@ -1,8 +1,7 @@
-import { createContext, FC, useState } from "react";
+import { createContext, FC } from "react";
 import usePersistantState from "../hooks/usePersistantStorage";
 import Contact from "../types/Contact";
 const _ = require("lodash");
-import data from "../data/contacts.json";
 import ContactStorage from "../lib/ContactStorage";
 
 interface ContextType {

@@ -33,6 +33,18 @@ class ContactStorage {
         return initials;
     };
 
+    public addBalance = (id: number, balance: number) => {
+        this.setContacts(
+            this.contacts.map((c) => {
+                if (c.id === id) {
+                    c.balance -= balance;
+                    return c;
+                }
+                return c;
+            })
+        );
+    };
+
     public addTransaction = (contactId: number, transactionId: number) => {
         this.setContacts(
             this.contacts.map((c) => {
