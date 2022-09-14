@@ -40,7 +40,6 @@ const AddContact: FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [name, setName] = useState("");
-    const [balance, setBalance] = useState(0);
 
     const { storage, reload } = useContext(ContactContext);
 
@@ -50,7 +49,7 @@ const AddContact: FC = () => {
             return;
         }
 
-        storage.add(name, balance);
+        storage.add(name);
         reload();
 
         setOpen(false);
@@ -127,18 +126,6 @@ const AddContact: FC = () => {
                         className="m-2"
                         required
                         autoFocus
-                    />
-
-                    <TextField
-                        id="balance-input"
-                        value={balance}
-                        onChange={(e) => setBalance(+e.target.value)}
-                        label="Balance"
-                        variant="outlined"
-                        fullWidth
-                        type="number"
-                        className="m-2"
-                        required
                     />
                 </div>
             </Dialog>
