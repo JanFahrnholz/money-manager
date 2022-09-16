@@ -6,10 +6,10 @@ class TransactionStorage {
     transactions: Transaction[];
     setTransactions: Function;
     types: TransactionType[] = [
-        { id: 1, color: "#f58276", name: "Einkauf" },
-        { id: 2, color: "#7af0ab", name: "Verkauf" },
-        { id: 3, color: "#f58276", name: "Rechnung" },
-        { id: 4, color: "#7af0ab", name: "Rückzahlung" },
+        { id: 1, color: "#ff1c1c", name: "Einkauf" },
+        { id: 2, color: "#62D836", name: "Verkauf" },
+        { id: 3, color: "#ff1c1c", name: "Rechnung" },
+        { id: 4, color: "#62D836", name: "Rückzahlung" },
     ];
 
     constructor(transactions: Transaction[], setTransactions: Function) {

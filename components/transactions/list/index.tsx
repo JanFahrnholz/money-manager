@@ -17,13 +17,19 @@ import TransactionListItem from "./item";
 const TransactionList: FC = () => {
     const storage = useContext(TransactionContext);
 
+    const formatDate = (date: Date) =>
+        `${new Date(date).toLocaleDateString("default", {
+            month: "long",
+            year: "numeric",
+        })}`;
+
     return (
         <div className="p-2">
             <List
                 sx={{
                     width: "100%",
                     maxHeight: "80vh",
-                    bgcolor: "background.paper",
+                    bgcolor: "background.default",
                     position: "relative",
                     overflow: "auto",
                     "& ul": { padding: 0 },
@@ -33,11 +39,9 @@ const TransactionList: FC = () => {
                 {Object.values(storage.getSortedTransactions()).map((month) => (
                     <li key={`section-${month[0].date}`}>
                         <ul key={`ul-${month[0].date}`}>
-                            <ListSubheader>{`${new Date(
-                                month[0].date
-                            ).toLocaleDateString("default", {
-                                month: "long",
-                            })}`}</ListSubheader>
+                            <ListSubheader sx={{ borderRadius: "5px" }}>
+                                {formatDate(month[0].date)}
+                            </ListSubheader>
 
                             {month.map((transaction: Transaction) => (
                                 <TransactionListItem

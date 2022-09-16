@@ -45,12 +45,23 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
         <ListItem
             key={transaction.id}
             alignItems="flex-start"
-            sx={{ my: 1, bgcolor: type?.color, borderRadius: 1 }}
+            sx={{
+                my: 1,
+                borderRadius: 1,
+                bgcolor: "background.paper",
+                color: "secondary.contrastText",
+            }}
             className="shadow border"
             secondaryAction={secondaryAction()}
         >
             <ListItemAvatar>
-                <Avatar>{cCtx.getInitials(transaction.personId)}</Avatar>
+                <Avatar
+                    sx={{
+                        bgcolor: type?.color,
+                    }}
+                >
+                    {cCtx.getInitials(transaction.personId)}
+                </Avatar>
             </ListItemAvatar>
             <ListItemText
                 primary={`${type?.name} ${transaction.amount}€`}
@@ -61,7 +72,6 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
                         }}
                         component="span"
                         variant="body2"
-                        color="text.primary"
                     >
                         {contact?.name}
                     </Typography>

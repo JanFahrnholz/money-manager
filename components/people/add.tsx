@@ -16,6 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
     Alert,
     CssBaseline,
+    DialogContent,
     Fab,
     FormControl,
     InputLabel,
@@ -53,6 +54,7 @@ const AddContact: FC = () => {
 
         setOpen(false);
         setError(null);
+        setName("");
     };
 
     return (
@@ -81,7 +83,14 @@ const AddContact: FC = () => {
                 onClose={() => setOpen(false)}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: "relative", px: 1 }}>
+                <AppBar
+                    sx={{
+                        position: "relative",
+                        px: 1,
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                    }}
+                >
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -107,9 +116,13 @@ const AddContact: FC = () => {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <div className="p-6">
+                <DialogContent sx={{ bgcolor: "background.default" }}>
                     {error && (
-                        <Alert className="mb-4" severity="error">
+                        <Alert
+                            className="mb-1"
+                            severity="error"
+                            variant="filled"
+                        >
                             {error}
                         </Alert>
                     )}
@@ -122,11 +135,11 @@ const AddContact: FC = () => {
                         variant="outlined"
                         fullWidth
                         type={"text"}
-                        className="m-2"
+                        className="mt-2"
                         required
                         autoFocus
                     />
-                </div>
+                </DialogContent>
             </Dialog>
         </div>
     );

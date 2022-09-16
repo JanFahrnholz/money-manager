@@ -11,8 +11,6 @@ const ResetProfile: FC = () => {
             transactions: t.transactions,
             contacts: c.contacts,
         });
-
-        console.log(data);
     };
     const eraseData = () => {};
 

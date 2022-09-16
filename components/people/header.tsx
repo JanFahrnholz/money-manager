@@ -6,7 +6,7 @@ const ContactListHeader: FC = () => {
 
     return (
         <>
-            <div className="bg-gray-200 m-2 p-4 rounded shadow-sm">
+            <div className="bg-dark-800 m-2 p-4 rounded shadow-sm">
                 {storage.contacts.length} contacts
             </div>
         </>
