@@ -16,6 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
     Alert,
     CssBaseline,
+    DialogContent,
     Fab,
     FormControl,
     Grid,
@@ -98,7 +99,14 @@ const AddTransaction: FC = () => {
                 onClose={() => setOpen(false)}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: "relative", px: 1 }}>
+                <AppBar
+                    sx={{
+                        position: "relative",
+                        px: 1,
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                    }}
+                >
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -124,7 +132,7 @@ const AddTransaction: FC = () => {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <div className="p-6">
+                <DialogContent sx={{ bgcolor: "background.default" }}>
                     {error && (
                         <Alert className="mb-4" severity="error">
                             {error}
@@ -195,7 +203,7 @@ const AddTransaction: FC = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                </div>
+                </DialogContent>
             </Dialog>
         </div>
     );

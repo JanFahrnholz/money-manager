@@ -11,7 +11,7 @@ const StatsHeader: FC = () => {
             {ctx.stats.statistics.map((item, i) => {
                 if (i >= 2) return;
                 return (
-                    <Grid xs={6} key={item.name}>
+                    <Grid item xs={6} key={item.name}>
                         <Card className="m-2">
                             <CardContent>
                                 <Typography
