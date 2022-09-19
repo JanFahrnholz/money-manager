@@ -1,0 +1,9 @@
+services:
+  debt-calculator:
+    build:
+      context: .
+      dockerfile: prod.Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./src:/srv/app"
