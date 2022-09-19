@@ -54,32 +54,30 @@ const ContactList: FC = () => {
         <>
             <List sx={{ width: "100%" }}>
                 {storage.contacts.map((p) => (
-                    <>
-                        <ListItem
-                            key={p.id}
-                            secondaryAction={
-                                <IconButton
-                                    edge="end"
-                                    aria-label="delete"
-                                    sx={{ mr: 1 }}
-                                    onClick={() => handleClick(p)}
-                                >
-                                    <KeyboardArrowRightOutlinedIcon />
-                                </IconButton>
-                            }
-                        >
-                            <ListItemAvatar>
-                                <Avatar sx={{ bgcolor: "primary.main" }}>
-                                    {storage.getInitials(p.id)}
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={p.name}
-                                secondary={`Balance: ${p.balance}€`}
-                            />
-                            {/* <ListItemText primary={<MemberCardProcess />} /> */}
-                        </ListItem>
-                    </>
+                    <ListItem
+                        key={p.id}
+                        secondaryAction={
+                            <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                sx={{ mr: 1 }}
+                                onClick={() => handleClick(p)}
+                            >
+                                <KeyboardArrowRightOutlinedIcon />
+                            </IconButton>
+                        }
+                    >
+                        <ListItemAvatar>
+                            <Avatar sx={{ bgcolor: "primary.main" }}>
+                                {storage.getInitials(p.id)}
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={p.name}
+                            secondary={`Balance: ${p.balance}€`}
+                        />
+                        {/* <ListItemText primary={<MemberCardProcess />} /> */}
+                    </ListItem>
                 ))}
             </List>
             <ContactDetailDrawer

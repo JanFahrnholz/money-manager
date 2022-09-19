@@ -15,6 +15,7 @@
     "@mui/material": "^5.10.3",
     "@mui/styled-engine-sc": "^5.10.3",
     "autoprefixer": "^10.4.8",
+    "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
     "next": "12.2.5",
     "postcss": "^8.4.16",
