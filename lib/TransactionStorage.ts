@@ -47,9 +47,11 @@ class TransactionStorage {
     };
 
     public getSortedTransactions = () => {
-        return _.groupBy(this.transactions, ({ date }) =>
+        const t = _.groupBy(this.transactions, ({ date }) =>
             new Date(date).getMonth()
         );
+
+        return Object.values(t).reverse();
     };
 
     public getTransactionTypebyId = (id: number) => {
