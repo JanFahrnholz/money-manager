@@ -6,10 +6,6 @@ import {
     IconButton,
     Input,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
-    Paper,
-    Skeleton,
     styled,
     SwipeableDrawer,
     Table,
@@ -21,16 +17,13 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
-import { FC, SyntheticEvent, useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
 import Contact from "../../../types/Contact";
-import StampcardProcessWidget from "../../misc/StampcardProcessWidget";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 type Props = {
     contact: Contact | undefined;

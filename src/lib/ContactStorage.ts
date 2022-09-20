@@ -76,7 +76,7 @@ class ContactStorage {
 
     private generateId = () => {
         const id = new Date().valueOf();
-        console.log(id);
+
         return id;
     };
 

@@ -15,6 +15,8 @@ import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import ContactDetailDrawer from "./detail";
 import Contact from "../../../types/Contact";
+import { motion, AnimatePresence } from "framer-motion";
+import { Opacity } from "@mui/icons-material";
 
 const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -44,6 +46,7 @@ const ContactList: FC = () => {
     const storage = useContext(ContactContext);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selectedContact, setSelectedContact] = useState<Contact>();
+    let i = 0;
 
     const handleClick = (c: Contact) => {
         setSelectedContact(c);
@@ -53,32 +56,46 @@ const ContactList: FC = () => {
     return (
         <>
             <List sx={{ width: "100%" }}>
-                {storage.contacts.map((p) => (
-                    <ListItem
-                        key={p.id}
-                        secondaryAction={
-                            <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                sx={{ mr: 1 }}
-                                onClick={() => handleClick(p)}
+                <AnimatePresence>
+                    {storage.contacts.map((p) => {
+                        i += 0.05;
+                        return (
+                            <motion.div
+                                key={p.id}
+                                transition={{ duration: 0.3, delay: i }}
+                                initial={{ opacity: 0, x: -100 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -200 }}
                             >
-                                <KeyboardArrowRightOutlinedIcon />
-                            </IconButton>
-                        }
-                    >
-                        <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: "primary.main" }}>
-                                {storage.getInitials(p.id)}
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={p.name}
-                            secondary={`Balance: ${p.balance}€`}
-                        />
-                        {/* <ListItemText primary={<MemberCardProcess />} /> */}
-                    </ListItem>
-                ))}
+                                <ListItem
+                                    secondaryAction={
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                            sx={{ mr: 1 }}
+                                            onClick={() => handleClick(p)}
+                                        >
+                                            <KeyboardArrowRightOutlinedIcon />
+                                        </IconButton>
+                                    }
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar
+                                            sx={{ bgcolor: "primary.main" }}
+                                        >
+                                            {storage.getInitials(p.id)}
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={p.name}
+                                        secondary={`Balance: ${p.balance}€`}
+                                    />
+                                    {/* <ListItemText primary={<MemberCardProcess />} /> */}
+                                </ListItem>
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             </List>
             <ContactDetailDrawer
                 contact={selectedContact}

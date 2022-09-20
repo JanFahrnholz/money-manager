@@ -42,7 +42,7 @@ const AddTransaction: FC = () => {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState<number>(0);
     const [person, setContact] = useState(0);
     const [type, setType] = useState(1);
 
