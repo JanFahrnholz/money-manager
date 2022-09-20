@@ -26,7 +26,14 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                 }
             })}
             <Paper
-                sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+                sx={{
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    pb: 2,
+                    bgcolor: "secondary.main",
+                }}
                 elevation={3}
             >
                 <BottomNavigation
