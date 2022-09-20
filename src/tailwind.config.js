@@ -13,6 +13,7 @@ module.exports = {
                 },
                 primary: "#ffd600",
                 secondary: "#313131",
+                danger: "#ff1c1c",
             },
         },
     },

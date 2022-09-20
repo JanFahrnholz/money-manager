@@ -2,6 +2,12 @@ import { Global } from "@emotion/react";
 import {
     Box,
     CssBaseline,
+    FormControl,
+    IconButton,
+    Input,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
     Paper,
     Skeleton,
     styled,
@@ -12,13 +18,19 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    TextField,
     Typography,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { FC, SyntheticEvent, useContext } from "react";
+import { FC, SyntheticEvent, useContext, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
 import Contact from "../../../types/Contact";
 import StampcardProcessWidget from "../../misc/StampcardProcessWidget";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { ContactContext } from "../../../context/ContactContext";
+import DoneIcon from "@mui/icons-material/Done";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 type Props = {
     contact: Contact | undefined;
@@ -29,6 +41,8 @@ type Props = {
 
 const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen, window }) => {
     const storage = useContext(TransactionContext);
+    const contacts = useContext(ContactContext);
+    const [editing, setEditing] = useState(false);
 
     if (!contact) return;
 
@@ -48,6 +62,15 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen, window }) => {
             month: "long",
             year: "numeric",
         })}`;
+
+    const deleteContact = (id: number) => {
+        contacts.delete(id);
+        setOpen(false);
+    };
+
+    const editName = (name: string) => {
+        contacts.editName(contact.id, name);
+    };
 
     return (
         <Root>
@@ -95,7 +118,41 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen, window }) => {
                             borderTopRightRadius: 8,
                         }}
                     >
-                        {contact.name}
+                        {!editing && contact.name}
+
+                        {editing && (
+                            <FormControl variant="standard">
+                                <Input
+                                    id="outlined-adornment-password"
+                                    type="text"
+                                    defaultValue={contact.name}
+                                    onChange={(e) => editName(e.target.value)}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() =>
+                                                    setEditing(false)
+                                                }
+                                                edge="end"
+                                            >
+                                                <DoneIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                />
+                            </FormControl>
+                        )}
+
+                        <span className="float-right space-x-3">
+                            <EditIcon
+                                onClick={() => setEditing(!editing)}
+                                className="hover:cursor-pointer hover:text-white"
+                            />
+                            <DeleteIcon
+                                onClick={() => deleteContact(contact.id)}
+                                className="hover:cursor-pointer hover:text-danger"
+                            />
+                        </span>
                     </Typography>
 
                     <Typography

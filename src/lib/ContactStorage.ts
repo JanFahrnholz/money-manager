@@ -19,6 +19,23 @@ class ContactStorage {
         return this.contacts;
     };
 
+    public editName = (id: number, name: string) => {
+        this.setContacts(
+            this.contacts.map((c) => {
+                if (c.id === id) {
+                    c.name = name;
+                    return c;
+                }
+                return c;
+            })
+        );
+    };
+
+    public delete = (id: number) => {
+        _.remove(this.contacts, { id });
+        this.reload();
+    };
+
     public findById = (id: number) => this.contacts.find((p) => p.id === id);
 
     public getInitials = (id: number) => {
@@ -58,10 +75,9 @@ class ContactStorage {
     };
 
     private generateId = () => {
-        const l = this.contacts.length;
-        if (l < 1) return 1;
-
-        return l + 1;
+        const id = new Date().valueOf();
+        console.log(id);
+        return id;
     };
 
     public reload = () => {

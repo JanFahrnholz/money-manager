@@ -83,7 +83,7 @@ const AddTransaction: FC = () => {
                     margin: 0,
                     top: "auto",
                     right: 15,
-                    bottom: 75,
+                    bottom: 90,
                     left: "auto",
                     position: "fixed",
                 }}
