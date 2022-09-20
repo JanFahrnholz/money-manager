@@ -39,6 +39,11 @@ class TransactionStorage {
         return t;
     };
 
+    public delete = (id: number) => {
+        _.remove(this.transactions, { id });
+        this.reload();
+    };
+
     public findById = (id: number) =>
         this.transactions.find((t) => t.id === id);
 
