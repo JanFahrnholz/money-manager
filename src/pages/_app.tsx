@@ -4,6 +4,7 @@ import TransactionContextProvider from "../context/TransactionContext";
 import ContactContextProvider from "../context/ContactContext";
 import ProfileContextProvider from "../context/ProfileContext";
 import { createTheme, ThemeProvider } from "@mui/material";
+import Head from "next/head";
 
 const theme = createTheme({
     palette: {
@@ -36,6 +37,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             <ContactContextProvider>
                 <TransactionContextProvider>
                     <ProfileContextProvider>
+                        <Head>
+                            <meta
+                                name="viewport"
+                                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                            />
+                        </Head>
                         <Component {...pageProps} />
                     </ProfileContextProvider>
                 </TransactionContextProvider>

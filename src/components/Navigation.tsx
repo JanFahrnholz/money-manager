@@ -33,7 +33,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        pb: 2,
+                        pb: 3,
                         bgcolor: "secondary.main",
                     }}
                     elevation={3}

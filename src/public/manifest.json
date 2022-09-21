@@ -2,6 +2,7 @@
     "theme_color": "#ffd600",
     "background_color": "#303030",
     "display": "standalone",
+    "orientation": "portrait",
     "scope": "/",
     "start_url": "/",
     "name": "MoneyManager",
