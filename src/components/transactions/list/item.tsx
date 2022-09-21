@@ -30,10 +30,16 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
 
     if (!contact) return <></>;
 
+    const deleteTransaction = () => {
+        cCtx.addBalance(transaction.personId, -transaction.amount);
+
+        tCtx.delete(transaction.id);
+    };
+
     const actions = [
         {
             name: "Delete",
-            action: () => tCtx.delete(transaction.id),
+            action: () => deleteTransaction(),
             color: "#ff1c1c",
         },
     ];
