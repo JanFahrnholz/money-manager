@@ -3,10 +3,11 @@ import usePersistantState from "../hooks/usePersistantStorage";
 import Transaction from "../types/Transaction";
 const _ = require("lodash");
 import TransactionStorage from "../lib/TransactionStorage";
+import { Props } from "next/script";
 
 export const TransactionContext = createContext<TransactionStorage>(undefined!);
 
-const TransactionContextProvider: FC = (props) => {
+const TransactionContextProvider: FC<Props> = (props) => {
     const [transactions, setTransactions] = usePersistantState<Transaction[]>(
         "dc_transactions",
         []

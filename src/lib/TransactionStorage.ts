@@ -44,19 +44,27 @@ class TransactionStorage {
         this.reload();
     };
 
-    public findById = (id: number) =>
-        this.transactions.find((t) => t.id === id);
+    public findById = (id: number | undefined) => {
+        if (id === undefined) return;
+        let t = this.transactions.find((t) => t.id === id);
 
-    public getTypeById = (id: number) => {
+        if (!t) return null;
+
+        return t;
+    };
+
+    public getTypeById = (id: number | undefined) => {
+        if (id === undefined) return;
+
         return this.types.find((t) => t.id === id);
     };
 
     public getSortedTransactions = () => {
-        const t = _.groupBy(this.transactions, ({ date }) =>
+        const t = _.groupBy(this.transactions, ({ date }: { date: Date }) =>
             new Date(date).getMonth()
         );
 
-        return Object.values(t).reverse();
+        return Object.values(t).reverse() as Transaction[][];
     };
 
     public getTransactionTypebyId = (id: number) => {

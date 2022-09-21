@@ -25,19 +25,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
 
-type Props = {
+interface Props {
     contact: Contact | undefined;
     open: boolean;
     setOpen: (open: boolean) => void;
-    window?: () => Window;
-};
+}
 
-const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen, window }) => {
+const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
     const storage = useContext(TransactionContext);
     const contacts = useContext(ContactContext);
     const [editing, setEditing] = useState(false);
 
-    if (!contact) return;
+    if (contact === undefined) return <></>;
 
     const iOS =
         typeof navigator !== "undefined" &&
@@ -45,16 +44,21 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen, window }) => {
 
     const drawerBleeding = 0;
     const drawerHeight = 400;
-    const transactions = contact.transactions
+    let transactions = contact.transactions
         .map((t) => storage.findById(t))
         .reverse();
 
-    const formatDate = (date: Date) =>
-        `${new Date(date).toLocaleDateString("default", {
+    if (!transactions) transactions = [];
+
+    const formatDate = (date: Date | undefined) => {
+        if (!date) return "Error";
+
+        return `${new Date(date).toLocaleDateString("default", {
             day: "2-digit",
             month: "long",
             year: "numeric",
         })}`;
+    };
 
     const deleteContact = (id: number) => {
         contacts.delete(id);

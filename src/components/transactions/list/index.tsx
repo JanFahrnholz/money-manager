@@ -17,6 +17,10 @@ import TransactionListItem from "./item";
 const TransactionList: FC = () => {
     const storage = useContext(TransactionContext);
 
+    const transactions = Object.values(storage.getSortedTransactions());
+
+    console.log(transactions);
+
     const formatDate = (date: Date) =>
         `${new Date(date).toLocaleDateString("default", {
             month: "long",
@@ -36,9 +40,9 @@ const TransactionList: FC = () => {
                 }}
                 subheader={<li />}
             >
-                {Object.values(storage.getSortedTransactions()).map((month) => (
+                {transactions.map((month) => (
                     <li key={`section-${month[0].date}`}>
-                        <ul key={`ul-${month[0].date}`}>
+                        <ul>
                             <ListSubheader sx={{ borderRadius: "5px" }}>
                                 {formatDate(month[0].date)}
                             </ListSubheader>

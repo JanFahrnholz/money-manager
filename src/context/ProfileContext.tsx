@@ -1,3 +1,4 @@
+import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import usePersistantState from "../hooks/usePersistantStorage";
 import StatsCalculator from "../lib/StatsCalculator";
@@ -11,7 +12,7 @@ interface ContextType {
 
 export const ProfileContext = createContext<ContextType>(undefined!);
 
-const ProfileContextProvider: FC = (props) => {
+const ProfileContextProvider: FC<Props> = (props) => {
     const [profile, setProfile] = usePersistantState("dc_profile", {});
     const transactions = useContext(TransactionContext);
     const contacts = useContext(ContactContext);

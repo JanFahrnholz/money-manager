@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ReactElement } from "react";
 import { FC } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,7 +11,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import Paper from "@mui/material/Paper";
 
 type Props = {
-    tabs: [FC, FC, FC];
+    tabs: [ReactElement, ReactElement, ReactElement];
 };
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
@@ -19,43 +20,45 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
 
     return (
         <Box ref={ref}>
-            <CssBaseline />
-            {tabs.map((tab, index) => {
-                if (value === index) {
-                    return tab;
-                }
-            })}
-            <Paper
-                sx={{
-                    position: "fixed",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    pb: 2,
-                    bgcolor: "secondary.main",
-                }}
-                elevation={3}
-            >
-                <BottomNavigation
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
+            <>
+                <CssBaseline />
+                {tabs.map((tab, index) => {
+                    if (value === index) {
+                        return tab;
+                    }
+                })}
+                <Paper
+                    sx={{
+                        position: "fixed",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        pb: 2,
+                        bgcolor: "secondary.main",
                     }}
+                    elevation={3}
                 >
-                    <BottomNavigationAction
-                        label="Transactions"
-                        icon={<RestoreIcon />}
-                    />
-                    <BottomNavigationAction
-                        label="Contacts"
-                        icon={<PeopleIcon />}
-                    />
-                    <BottomNavigationAction
-                        label="Profile"
-                        icon={<AccountCircleIcon />}
-                    />
-                </BottomNavigation>
-            </Paper>
+                    <BottomNavigation
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+                        }}
+                    >
+                        <BottomNavigationAction
+                            label="Transactions"
+                            icon={<RestoreIcon />}
+                        />
+                        <BottomNavigationAction
+                            label="Contacts"
+                            icon={<PeopleIcon />}
+                        />
+                        <BottomNavigationAction
+                            label="Profile"
+                            icon={<AccountCircleIcon />}
+                        />
+                    </BottomNavigation>
+                </Paper>
+            </>
         </Box>
     );
 };

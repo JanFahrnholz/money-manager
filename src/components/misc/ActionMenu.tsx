@@ -96,7 +96,7 @@ const Root = styled("div")(({ theme }) => ({
 const Puller = styled(Box)(({ theme }) => ({
     width: 30,
     height: 6,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: "background.default",
     borderRadius: 3,
     position: "absolute",
     top: 8,
@@ -104,7 +104,7 @@ const Puller = styled(Box)(({ theme }) => ({
 }));
 
 const StyledBox = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: "background.default",
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
 }));

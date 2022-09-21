@@ -28,6 +28,8 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
     const type = tCtx.getTypeById(transaction.typeId);
     const contact = cCtx.findById(transaction.personId);
 
+    if (!contact) return <></>;
+
     const actions = [
         {
             name: "Delete",
@@ -37,8 +39,8 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
     ];
 
     const secondaryAction = () => {
-        if (tCtx.isType(transaction.id, "Rechnung")) {
-            if (cCtx.findById(transaction.personId)?.balance >= 0) {
+        if (type?.name === "Rechnung") {
+            if (contact?.balance >= 0) {
                 return (
                     <>
                         <IconButton

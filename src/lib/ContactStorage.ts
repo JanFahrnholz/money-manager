@@ -36,10 +36,15 @@ class ContactStorage {
         this.reload();
     };
 
-    public findById = (id: number) => this.contacts.find((p) => p.id === id);
+    public findById = (id: number | undefined) => {
+        if (id === undefined) return;
+        return this.contacts.find((p) => p.id === id);
+    };
 
     public getInitials = (id: number) => {
         const p = this.findById(id);
+
+        if (!p) return;
 
         var names = p.name.split(" "),
             initials = names[0].substring(0, 1).toUpperCase();
