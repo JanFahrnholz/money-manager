@@ -1,7 +1,7 @@
 import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import usePersistantState from "../hooks/usePersistantStorage";
-import StatsCalculator from "../lib/StatsCalculator";
+import StatsCalculator from "../lib/ProfileStorage";
 import { ContactContext } from "./ContactContext";
 import { TransactionContext } from "./TransactionContext";
 const _ = require("lodash");
@@ -13,7 +13,8 @@ interface ContextType {
 export const ProfileContext = createContext<ContextType>(undefined!);
 
 const ProfileContextProvider: FC<Props> = (props) => {
-    const [profile, setProfile] = usePersistantState("dc_profile", {});
+    const [vault, setVault] = usePersistantState("dc_vault", 0);
+    const [balance, setBalance] = usePersistantState("dc_balance", 0);
     const transactions = useContext(TransactionContext);
     const contacts = useContext(ContactContext);
 

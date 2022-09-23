@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.center-anchor {
+    transform: translate(-50%, -50%);
+}

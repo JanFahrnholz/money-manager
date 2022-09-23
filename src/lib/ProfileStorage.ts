@@ -6,7 +6,7 @@ type Statistic = {
     value: () => string | number;
 };
 
-class StatsCalculator {
+class ProfileStorage {
     private t: TransactionStorage;
     private c: ContactStorage;
 
@@ -14,8 +14,21 @@ class StatsCalculator {
         this.t = t;
         this.c = c;
     }
+
+    public withdraw = (amount: number) => {
+        const balance = this.vault + amount;
+
+        this.setVault(balance);
+    };
+
+    public deposit = (amount: number) => {
+        const balance = this.vault + amount;
+
+        this.setVault(balance);
+    };
+
     public calculate = () => {
-        this.statistics.forEach((s) => s.value);
+        this.statistics.forEach((s) => s.value());
     };
 
     private calcBalance = () => {
@@ -44,7 +57,7 @@ class StatsCalculator {
     statistics: Statistic[] = [
         {
             name: "Balance",
-            value: this.calcBalance,
+            value: () => this.balance,
         },
         {
             name: "Pending Money",
@@ -53,4 +66,4 @@ class StatsCalculator {
     ];
 }
 
-export default StatsCalculator;
+export default ProfileStorage;

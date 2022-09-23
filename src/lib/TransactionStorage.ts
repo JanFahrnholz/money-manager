@@ -96,12 +96,7 @@ class TransactionStorage {
 
     public getPendingTransactions = () => {};
 
-    public generateId = () => {
-        const l = this.transactions.length;
-        if (l < 1) return 1;
-
-        return l + 1;
-    };
+    public generateId = () => new Date().valueOf() + this.transactions.length;
 
     public reload = () => {
         const t = [...this.transactions];

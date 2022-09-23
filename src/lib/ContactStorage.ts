@@ -31,6 +31,18 @@ class ContactStorage {
         );
     };
 
+    public editBalance = (id: number, balance: number) => {
+        this.setContacts(
+            this.contacts.map((c) => {
+                if (c.id === id) {
+                    c.balance = balance;
+                    return c;
+                }
+                return c;
+            })
+        );
+    };
+
     public delete = (id: number) => {
         _.remove(this.contacts, { id });
         this.reload();
@@ -79,11 +91,7 @@ class ContactStorage {
         );
     };
 
-    private generateId = () => {
-        const id = new Date().valueOf();
-
-        return id;
-    };
+    private generateId = () => new Date().valueOf() + this.contacts.length;
 
     public reload = () => {
         const t = [...this.contacts];

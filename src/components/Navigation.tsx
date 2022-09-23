@@ -6,16 +6,17 @@ import CssBaseline from "@mui/material/CssBaseline";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import Paper from "@mui/material/Paper";
+import usePersistantState from "../hooks/usePersistantStorage";
 
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement];
 };
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = usePersistantState("dc_last_tab", 0);
     const ref = React.useRef<HTMLDivElement>(null);
 
     return (
@@ -54,7 +55,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         />
                         <BottomNavigationAction
                             label="Profile"
-                            icon={<AccountCircleIcon />}
+                            icon={<ManageAccountsIcon />}
                         />
                     </BottomNavigation>
                 </Paper>

@@ -19,8 +19,6 @@ const TransactionList: FC = () => {
 
     const transactions = Object.values(storage.getSortedTransactions());
 
-    console.log(transactions);
-
     const formatDate = (date: Date) =>
         `${new Date(date).toLocaleDateString("default", {
             month: "long",

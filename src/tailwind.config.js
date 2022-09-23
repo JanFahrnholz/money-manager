@@ -10,6 +10,7 @@ module.exports = {
                 dark: {
                     900: "#303030",
                     800: "#424242",
+                    700: "#5a5a5a",
                 },
                 primary: "#ffd600",
                 secondary: "#313131",

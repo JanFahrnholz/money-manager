@@ -23,6 +23,7 @@ const theme = createTheme({
         },
         text: {
             primary: "#fff",
+            secondary: "#ccc",
         },
         background: {
             default: "#303030",
