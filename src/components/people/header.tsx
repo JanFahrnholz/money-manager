@@ -5,11 +5,9 @@ const ContactListHeader: FC = () => {
     const storage = useContext(ContactContext);
 
     return (
-        <>
-            <div className="bg-dark-800 m-2 p-4 rounded shadow-sm">
-                {storage.contacts.length} contacts
-            </div>
-        </>
+        <div className="bg-dark-800 m-2 p-4 rounded shadow-sm sticky">
+            {storage.contacts.length} contacts
+        </div>
     );
 };
 

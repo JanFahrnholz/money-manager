@@ -24,6 +24,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
+import { Balance } from "@mui/icons-material";
+import { constants } from "fs/promises";
 
 interface Props {
     contact: Contact | undefined;
@@ -67,6 +69,10 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
 
     const editName = (name: string) => {
         contacts.editName(contact.id, name);
+    };
+
+    const editBalance = (balance: number) => {
+        contacts.editBalance(contact.id, balance);
     };
 
     return (
@@ -124,27 +130,22 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                                     type="text"
                                     defaultValue={contact.name}
                                     onChange={(e) => editName(e.target.value)}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() =>
-                                                    setEditing(false)
-                                                }
-                                                edge="end"
-                                            >
-                                                <DoneIcon />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
                                 />
                             </FormControl>
                         )}
 
                         <span className="float-right space-x-3">
-                            <EditIcon
-                                onClick={() => setEditing(!editing)}
-                                className="hover:cursor-pointer hover:text-white"
-                            />
+                            {!editing ? (
+                                <EditIcon
+                                    onClick={() => setEditing(!editing)}
+                                    className="hover:cursor-pointer hover:text-white"
+                                />
+                            ) : (
+                                <DoneIcon
+                                    onClick={() => setEditing(!editing)}
+                                    className="hover:cursor-pointer hover:text-white"
+                                />
+                            )}
                             <DeleteIcon
                                 onClick={() => deleteContact(contact.id)}
                                 className="hover:cursor-pointer hover:text-danger"
@@ -159,7 +160,20 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                             bgcolor: "background.default",
                         }}
                     >
-                        Balance: {contact.balance}€
+                        {!editing && <>Balance: {contact.balance}€</>}
+
+                        {editing && (
+                            <FormControl variant="standard">
+                                <Input
+                                    id="outlined-adornment-password"
+                                    type="number"
+                                    defaultValue={contact.balance}
+                                    onChange={(e) =>
+                                        editBalance(+e.target.value)
+                                    }
+                                />
+                            </FormControl>
+                        )}
                     </Typography>
 
                     {/* <StampcardProcessWidget contact={contact} /> */}

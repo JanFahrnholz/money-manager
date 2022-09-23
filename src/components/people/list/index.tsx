@@ -55,7 +55,7 @@ const ContactList: FC = () => {
 
     return (
         <>
-            <List sx={{ width: "100%" }}>
+            <List sx={{ width: "100%", pb: 18 }}>
                 <AnimatePresence>
                     {storage.contacts.map((p) => {
                         i += 0.05;
@@ -68,6 +68,7 @@ const ContactList: FC = () => {
                                 exit={{ opacity: 0, x: -200 }}
                             >
                                 <ListItem
+                                    onClick={() => handleClick(p)}
                                     secondaryAction={
                                         <IconButton
                                             edge="end"
