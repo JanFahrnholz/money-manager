@@ -15,18 +15,6 @@ class ProfileStorage {
         this.c = c;
     }
 
-    public withdraw = (amount: number) => {
-        const balance = this.vault + amount;
-
-        this.setVault(balance);
-    };
-
-    public deposit = (amount: number) => {
-        const balance = this.vault + amount;
-
-        this.setVault(balance);
-    };
-
     public calculate = () => {
         this.statistics.forEach((s) => s.value());
     };
@@ -57,7 +45,7 @@ class ProfileStorage {
     statistics: Statistic[] = [
         {
             name: "Balance",
-            value: () => this.balance,
+            value: this.calcBalance,
         },
         {
             name: "Pending Money",

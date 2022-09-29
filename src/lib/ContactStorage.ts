@@ -10,8 +10,8 @@ class ContactStorage {
         this.setContacts = setContacts;
     }
 
-    public add = (name: string, balance = 0) => {
-        const p = new Contact(this.generateId(), name, balance);
+    public add = (name: string, balance = 0, id?: number | undefined) => {
+        const p = new Contact(id || this.generateId(), name, balance);
 
         this.contacts.push(p);
         this.reload();

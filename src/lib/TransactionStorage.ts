@@ -21,7 +21,8 @@ class TransactionStorage {
         amount: number,
         personId: number,
         typeId: number,
-        relatedTransactionId: number | null = null
+        relatedTransactionId: number | null = null,
+        id?: undefined | number
     ) => {
         const date = new Date();
         const t = {
