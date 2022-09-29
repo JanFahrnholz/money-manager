@@ -10,6 +10,18 @@ class Wallet {
         this.balance = balance[0];
         this.setBalance = balance[1];
     }
+
+    public withdraw = (amount: number) => {
+        const balance = this.vault + amount;
+
+        this.setVault(balance);
+    };
+
+    public deposit = (amount: number) => {
+        const balance = this.vault + amount;
+
+        this.setVault(balance);
+    };
 }
 
 export default Wallet;
