@@ -4,10 +4,8 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    TextField,
 } from "@mui/material";
 import { FC, useState } from "react";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 
 const Tools: FC = () => {
     const [v1, setV1] = useState<number>(null!);
@@ -30,59 +28,67 @@ const Tools: FC = () => {
     };
 
     return (
-        <Grid container sx={{ mt: 6 }}>
-            <Grid item xs={4}>
-                <FormControl sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-v1">
-                        Amount
-                    </InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-v1"
-                        type="number"
-                        value={v1 ? v1.toFixed(2) : ""}
-                        onChange={(e) => handleV1(+e.target.value)}
-                        startAdornment={
-                            <InputAdornment position="start">g</InputAdornment>
-                        }
-                        label="Amount"
-                    />
-                </FormControl>
+        <div>
+            <Grid container sx={{ mt: 6 }}>
+                <Grid item xs={4}>
+                    <FormControl sx={{ m: 1 }}>
+                        <InputLabel htmlFor="outlined-adornment-v1">
+                            Amount
+                        </InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-v1"
+                            type="number"
+                            value={v1 ? v1.toFixed(2) : ""}
+                            onChange={(e) => handleV1(+e.target.value)}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    g
+                                </InputAdornment>
+                            }
+                            label="Amount"
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={4}>
+                    <FormControl sx={{ m: 1 }}>
+                        <InputLabel htmlFor="outlined-adornment-rate">
+                            Rate
+                        </InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-rate"
+                            type="number"
+                            value={rate ? rate.toFixed(3) : ""}
+                            onChange={(e) => handleRate(+e.target.value)}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    x
+                                </InputAdornment>
+                            }
+                            label="Amount"
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={4}>
+                    <FormControl sx={{ m: 1 }}>
+                        <InputLabel htmlFor="outlined-adornment-v2">
+                            Amount
+                        </InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-v2"
+                            value={v2 ? v2.toFixed(2) : ""}
+                            type="number"
+                            onChange={(e) => handleV2(+e.target.value)}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    $
+                                </InputAdornment>
+                            }
+                            label="Amount"
+                        />
+                    </FormControl>
+                </Grid>
             </Grid>
-            <Grid item xs={4}>
-                <FormControl sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-rate">
-                        Rate
-                    </InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-rate"
-                        type="number"
-                        value={rate ? rate.toFixed(3) : ""}
-                        onChange={(e) => handleRate(+e.target.value)}
-                        startAdornment={
-                            <InputAdornment position="start">x</InputAdornment>
-                        }
-                        label="Amount"
-                    />
-                </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-                <FormControl sx={{ m: 1 }}>
-                    <InputLabel htmlFor="outlined-adornment-v2">
-                        Amount
-                    </InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-v2"
-                        value={v2 ? v2.toFixed(2) : ""}
-                        type="number"
-                        onChange={(e) => handleV2(+e.target.value)}
-                        startAdornment={
-                            <InputAdornment position="start">$</InputAdornment>
-                        }
-                        label="Amount"
-                    />
-                </FormControl>
-            </Grid>
-        </Grid>
+        </div>
     );
 };
 
