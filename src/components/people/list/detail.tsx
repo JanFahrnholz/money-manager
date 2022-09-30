@@ -188,11 +188,14 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {transactions.map((t) => (
-                                    <TableRow key={t?.id}>
+                                {transactions.map((t, i) => (
+                                    <TableRow key={i}>
                                         <TableCell>{t?.amount}€</TableCell>
                                         <TableCell>
-                                            {storage.getTypeById(t?.id)?.name}
+                                            {
+                                                storage.getTypeById(t?.typeId)
+                                                    ?.name
+                                            }
                                         </TableCell>
                                         <TableCell>
                                             {formatDate(t?.date)}
