@@ -10,9 +10,10 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import Paper from "@mui/material/Paper";
 import usePersistantState from "../hooks/usePersistantStorage";
+import PercentIcon from "@mui/icons-material/Percent";
 
 type Props = {
-    tabs: [ReactElement, ReactElement, ReactElement];
+    tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
 };
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
@@ -52,6 +53,10 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         <BottomNavigationAction
                             label="Contacts"
                             icon={<PeopleIcon />}
+                        />
+                        <BottomNavigationAction
+                            label="Tools"
+                            icon={<PercentIcon />}
                         />
                         <BottomNavigationAction
                             label="Profile"
