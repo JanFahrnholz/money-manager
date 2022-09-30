@@ -24,6 +24,7 @@
         "postcss": "^8.4.16",
         "react": "18.2.0",
         "react-dom": "18.2.0",
+        "react-pwa-add-to-homescreen": "^1.1.7",
         "styled-components": "^5.3.5",
         "tailwindcss": "^3.1.8"
     },

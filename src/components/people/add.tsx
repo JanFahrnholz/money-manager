@@ -71,6 +71,7 @@ const AddContact: FC = () => {
                     bottom: 90,
                     left: "auto",
                     position: "fixed",
+                    zIndex: 50,
                 }}
                 onClick={() => setOpen(true)}
             >

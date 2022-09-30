@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { version } from "../../package.json";
+import project from "../../package.json";
 
 const AppVersion: FC = () => {
-    return <>v{version}</>;
+    return <>v{project.version}</>;
 };
 
 export default AppVersion;
