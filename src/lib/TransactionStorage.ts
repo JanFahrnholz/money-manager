@@ -68,10 +68,6 @@ class TransactionStorage {
         return Object.values(t).reverse() as Transaction[][];
     };
 
-    public getTransactionTypebyId = (id: number) => {
-        return this.types.find((t) => t.id === id);
-    };
-
     public isType = (
         transactionId: number,
         type: "Einkauf" | "Verkauf" | "Rechnung" | "Rückzahlung"
