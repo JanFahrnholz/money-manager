@@ -24,8 +24,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
-import { Balance } from "@mui/icons-material";
-import { constants } from "fs/promises";
 
 interface Props {
     contact: Contact | undefined;
