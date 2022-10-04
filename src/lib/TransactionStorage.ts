@@ -6,8 +6,8 @@ class TransactionStorage {
     transactions: Transaction[];
     setTransactions: Function;
     types: TransactionType[] = [
-        { id: 1, color: "#ff1c1c", name: "Einkauf" },
-        { id: 2, color: "#62D836", name: "Verkauf" },
+        { id: 1, color: "#ff1c1c", name: "Ausgabe" },
+        { id: 2, color: "#62D836", name: "Einnahme" },
         { id: 3, color: "#ff1c1c", name: "Rechnung" },
         { id: 4, color: "#62D836", name: "Rückzahlung" },
     ];
@@ -70,7 +70,7 @@ class TransactionStorage {
 
     public isType = (
         transactionId: number,
-        type: "Einkauf" | "Verkauf" | "Rechnung" | "Rückzahlung"
+        type: "Ausgabe" | "Einnahme" | "Rechnung" | "Rückzahlung"
     ) => {
         const typeId = this.findById(transactionId)?.typeId;
 
@@ -93,7 +93,7 @@ class TransactionStorage {
 
     public getPendingTransactions = () => {};
 
-    public generateId = () => new Date().valueOf() + this.transactions.length;
+    public generateId = () => new Date().valueOf();
 
     public reload = () => {
         const t = [...this.transactions];
