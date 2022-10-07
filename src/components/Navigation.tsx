@@ -21,9 +21,9 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
     const ref = React.useRef<HTMLDivElement>(null);
 
     return (
-        <Box ref={ref}>
-            <>
-                <CssBaseline />
+        <div>
+            <CssBaseline />
+            <Box ref={ref}>
                 {tabs.map((tab, index) => {
                     if (value === index) {
                         return tab;
@@ -37,6 +37,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         right: 0,
                         pb: 3,
                         bgcolor: "secondary.main",
+                        zIndex: 1500,
                     }}
                     elevation={3}
                 >
@@ -64,8 +65,8 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         />
                     </BottomNavigation>
                 </Paper>
-            </>
-        </Box>
+            </Box>
+        </div>
     );
 };
 

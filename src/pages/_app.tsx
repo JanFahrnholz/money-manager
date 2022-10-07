@@ -5,6 +5,8 @@ import ContactContextProvider from "../context/ContactContext";
 import ProfileContextProvider from "../context/ProfileContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Head from "next/head";
+import { Client, Account, ID } from "appwrite";
+import UserContextProvider from "../context/UserContext";
 
 const theme = createTheme({
     palette: {
@@ -33,23 +35,31 @@ const theme = createTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+    const client = new Client()
+        .setEndpoint(process.env.AW_URL || "") // Your API Endpoint
+        .setProject(process.env.AW_PROJECT || ""); // Your project ID
+
     return (
         <ThemeProvider theme={theme}>
-            <ContactContextProvider>
-                <TransactionContextProvider>
-                    <ProfileContextProvider>
-                        <Head>
-                            <meta
-                                name="viewport"
-                                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                            />
-                        </Head>
-                        <Component {...pageProps} />
-                    </ProfileContextProvider>
-                </TransactionContextProvider>
-            </ContactContextProvider>
+            <UserContextProvider>
+                <ContactContextProvider>
+                    <TransactionContextProvider>
+                        <ProfileContextProvider>
+                            <Head>
+                                <meta
+                                    name="viewport"
+                                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                                />
+                            </Head>
+                            <Component {...pageProps} />
+                        </ProfileContextProvider>
+                    </TransactionContextProvider>
+                </ContactContextProvider>
+            </UserContextProvider>
         </ThemeProvider>
     );
 }
 
 export default MyApp;
+
+export const getServerSideProps = async () => {};

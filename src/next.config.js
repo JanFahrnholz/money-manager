@@ -8,4 +8,8 @@ const withPWA = require("next-pwa")({
 
 module.exports = withPWA({
     reactStrictMode: true,
+    env: {
+        AW_URL: process.env.AW_URL,
+        AW_PROJECT: process.env.AW_PROJECT,
+    },
 });

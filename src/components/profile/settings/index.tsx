@@ -8,9 +8,13 @@ import { FC, useState } from "react";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import settings from "../../../config/profileSettings";
+import usePersistantState from "../../../hooks/usePersistantStorage";
 
 const ProfileSettings: FC = () => {
-    const [expanded, setExpanded] = useState<string | false>(false);
+    const [expanded, setExpanded] = usePersistantState<string | false>(
+        "mm-settings-expanded",
+        false
+    );
 
     const handleChange =
         (panel: string) =>
@@ -20,9 +24,14 @@ const ProfileSettings: FC = () => {
 
     return (
         <>
+            <AccordionSummary>
+                <Typography sx={{ color: "#fff" }}>Settings</Typography>
+            </AccordionSummary>
+
             {settings.map((setting) => (
                 <Accordion
                     TransitionProps={{ unmountOnExit: true }}
+                    sx={{ zIndex: -10 }}
                     disableGutters
                     key={setting.id}
                     expanded={expanded === setting.id}
@@ -44,6 +53,7 @@ const ProfileSettings: FC = () => {
                     </AccordionDetails>
                 </Accordion>
             ))}
+            <div className="h-24"></div>
         </>
     );
 };
