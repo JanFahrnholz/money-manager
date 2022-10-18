@@ -8,7 +8,7 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC, ReactElement, useContext, useState } from "react";
+import { FC, FormEvent, ReactElement, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "../context/UserContext";
 
@@ -23,7 +23,7 @@ const LoginPage: FC = () => {
     const router = useRouter();
     const { login } = useContext(UserContext);
 
-    const handleSubmit = async (e: Event) => {
+    const handleSubmit = async (e: any) => {
         setStatus(
             <CircularProgress sx={{ color: "secondary.main" }} size={14} />
         );

@@ -1,4 +1,4 @@
-import { Account, Client, Models } from "appwrite";
+import { Account, AppwriteException, Client, Models } from "appwrite";
 import { useRouter } from "next/router";
 import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
@@ -84,7 +84,7 @@ const UserContextProvider: FC<Props> = (props) => {
             const res = await account.createEmailSession(email, password);
             reload();
             return false;
-        } catch (e) {
+        } catch (e: any) {
             return e.message;
         }
     };

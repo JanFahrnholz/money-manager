@@ -27,7 +27,7 @@ const AccountSettings: FC = () => {
             .listSessions()
             .then((sessions) => setDevices(sessions.total))
             .catch((err) => setDevices("all"));
-    }, [user]);
+    }, [user, account]);
 
     const details: Detail[] = [
         {

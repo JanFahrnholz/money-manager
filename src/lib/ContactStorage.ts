@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import Backup from "../types/Backup";

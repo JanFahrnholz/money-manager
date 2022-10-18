@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import Backup from "../types/Backup";
 
-function useSync<T>(key: string, data: T) {
+function useSync<T>(key: string, data: T): [T, (data: T) => void] {
     const backup: Backup<T> = {
         data,
         time: new Date(),
@@ -47,7 +47,7 @@ function useSync<T>(key: string, data: T) {
         return await getPreferences(key);
     };
 
-    return [state.data, setState, getState];
+    return [state.data, setState];
 }
 
 export default useSync;

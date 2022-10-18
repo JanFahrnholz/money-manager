@@ -38,7 +38,7 @@ const CloudDataTransactions: FC = () => {
             });
         };
         fetch();
-    }, [user, transactions]);
+    }, [user, transactions, getPreferences]);
 
     const [syncTransactions, setSyncTransactions] = useSync<boolean>(
         "syncTransactions",

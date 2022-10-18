@@ -22,7 +22,7 @@ const RegisterPage: FC = () => {
     const router = useRouter();
     const { register } = useContext(UserContext);
 
-    const handleSubmit = async (e: Event) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         setStatus(
             <CircularProgress sx={{ color: "secondary.main" }} size={14} />

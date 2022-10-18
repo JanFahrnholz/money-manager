@@ -37,7 +37,7 @@ const CloudDataContacts: FC = () => {
             });
         };
         fetch();
-    }, [user, contacts]);
+    }, [user, contacts, getPreferences]);
 
     const [syncContacts, setSyncContacts] = useSync("syncContacts", false);
     return (
