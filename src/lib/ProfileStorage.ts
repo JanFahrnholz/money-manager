@@ -23,13 +23,10 @@ class ProfileStorage {
         let balance = 0;
 
         this.t.transactions.map((t) => {
-            console.log(balance);
-
             if (this.t.isType(t.id, "Ausgabe")) balance -= t.amount;
             if (this.t.isType(t.id, "Einnahme")) balance += t.amount;
             // if (this.t.isType(t.id, "Rechnung")) balance -= t.amount;
             if (this.t.isType(t.id, "Rückzahlung")) balance += t.amount;
-            console.log(balance);
         });
 
         return balance;
