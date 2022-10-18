@@ -43,12 +43,14 @@ const ActionMenu: FC<Props> = ({ actions, open, setOpen }) => {
                         overflow: "visible",
                         background: "transparent",
                         boxShadow: "none",
+                        zIndex: 1600,
                     },
                 }}
             />
 
             <SwipeableDrawer
                 anchor="bottom"
+                sx={{ zIndex: 1600 }}
                 open={open}
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}

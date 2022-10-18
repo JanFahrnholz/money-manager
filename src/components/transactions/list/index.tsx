@@ -1,16 +1,6 @@
-import {
-    List,
-    ListSubheader,
-    ListItem,
-    ListItemText,
-    Avatar,
-    Divider,
-    ListItemAvatar,
-    Typography,
-} from "@mui/material";
-import { FC, useContext, useEffect, useState, Fragment } from "react";
+import { List, ListSubheader } from "@mui/material";
+import { FC, useContext } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
-
 import Transaction from "../../../types/Transaction";
 import TransactionListItem from "./item";
 

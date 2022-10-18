@@ -35,10 +35,6 @@ const theme = createTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const client = new Client()
-        .setEndpoint(process.env.AW_URL || "") // Your API Endpoint
-        .setProject(process.env.AW_PROJECT || ""); // Your project ID
-
     return (
         <ThemeProvider theme={theme}>
             <UserContextProvider>

@@ -15,8 +15,11 @@ const UnauthenticatedProfile: FC = () => {
                 <ListItem>
                     <ListItemText
                         primary={
-                            <Typography variant="h5" sx={{ m: 0, p: 0 }}>
-                                Welcome
+                            <Typography
+                                variant="h6"
+                                sx={{ m: 0, p: 0, fontWeight: 600 }}
+                            >
+                                MoneyManager
                             </Typography>
                         }
                     />
@@ -36,12 +39,7 @@ const UnauthenticatedProfile: FC = () => {
                     </Button>
                 </ListItem>
             </Box>
-            <Typography sx={{ m: 1 }}>
-                We now support Online Account features
-            </Typography>
-            <Typography sx={{ m: 1, mt: 2, color: "text.secondary" }}>
-                Note: Disabled features may be updated in the future
-            </Typography>
+
             <div className="text-center"></div>
         </>
     );

@@ -1,4 +1,4 @@
-import { Link, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { FC } from "react";
 import AppVersion from "../../misc/AppVersion";
 

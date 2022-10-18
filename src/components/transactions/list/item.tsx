@@ -4,10 +4,7 @@ import {
     Avatar,
     ListItemText,
     Typography,
-    Divider,
     IconButton,
-    ListItemButton,
-    Icon,
 } from "@mui/material";
 import { FC, useContext, useState } from "react";
 import { ContactContext } from "../../../context/ContactContext";

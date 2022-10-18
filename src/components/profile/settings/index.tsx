@@ -4,8 +4,7 @@ import {
     Typography,
     AccordionDetails,
 } from "@mui/material";
-import { FC, useState } from "react";
-
+import { FC } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import settings from "../../../config/profileSettings";
 import usePersistantState from "../../../hooks/usePersistantStorage";
@@ -30,7 +29,7 @@ const ProfileSettings: FC = () => {
 
             {settings.map((setting) => (
                 <Accordion
-                    TransitionProps={{ unmountOnExit: true }}
+                    TransitionProps={{ unmountOnExit: false }}
                     sx={{ zIndex: -10 }}
                     disableGutters
                     key={setting.id}

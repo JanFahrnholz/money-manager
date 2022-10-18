@@ -1,7 +1,6 @@
 import { Card, CardContent, Grid, Typography } from "@mui/material";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext } from "react";
 import { ProfileContext } from "../../context/ProfileContext";
-import { TransactionContext } from "../../context/TransactionContext";
 
 const StatsHeader: FC = () => {
     const ctx = useContext(ProfileContext);

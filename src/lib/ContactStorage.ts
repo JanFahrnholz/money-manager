@@ -1,14 +1,39 @@
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import Backup from "../types/Backup";
 import Contact from "../types/Contact";
 const _ = require("lodash");
 
 class ContactStorage {
     contacts: Contact[];
     setContacts: Function;
+    sync: Function;
+    getPreferences: Function;
 
     constructor(contacts: Contact[], setContacts: Function) {
         this.contacts = contacts;
         this.setContacts = setContacts;
+
+        const { sync, getPreferences } = useContext(UserContext);
+        this.sync = sync;
+        this.getPreferences = getPreferences;
     }
+
+    public backup = async () => {
+        await this.sync("contacts", this.contacts);
+
+        this.setContacts([...this.contacts]);
+    };
+
+    public deleteBackup = async () => {
+        await this.sync("contacts", []);
+    };
+
+    public restore = async () => {
+        this.getPreferences("contacts").then((pref: Backup<Contact[]>) =>
+            this.setContacts(pref.data)
+        );
+    };
 
     public add = (name: string, balance = 0, id?: number | undefined) => {
         const p = new Contact(id || this.generateId(), name, balance);

@@ -1,23 +1,32 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
-import { Alert, Avatar, CssBaseline } from "@mui/material";
+import {
+    Alert,
+    Avatar,
+    CircularProgress,
+    CssBaseline,
+    Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { FC, ReactElement, useContext, useState } from "react";
 import { Account, Client } from "appwrite";
 import { useRouter } from "next/router";
 import LoginProvider from "../components/misc/LoginProviders";
 import { UserContext } from "../context/UserContext";
+import Link from "next/link";
 
 const RegisterPage: FC = () => {
     const [error, setError] = useState<string>();
-    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<any>("Sign up");
     const router = useRouter();
     const { register } = useContext(UserContext);
 
     const handleSubmit = async (e: Event) => {
-        setLoading(true);
         e.preventDefault();
+        setStatus(
+            <CircularProgress sx={{ color: "secondary.main" }} size={14} />
+        );
 
         const name = e.target["name"].value;
         const email = e.target["email"].value;
@@ -31,7 +40,7 @@ const RegisterPage: FC = () => {
 
         const res = await register(name, email, pw1);
         setError(res);
-        setLoading(false);
+        setStatus("Sign up");
 
         if (!res) router.push("/");
     };
@@ -144,10 +153,22 @@ const RegisterPage: FC = () => {
                                     type="submit"
                                     className="flex w-full justify-center rounded-md border hover:cursor-pointer border-transparent bg-primary py-3 px-4 font-medium text-dark-900 shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2"
                                 >
-                                    {loading ? "Loading..." : "Sign in"}
+                                    {status}
                                 </button>
                             </div>
                         </form>
+
+                        <Link href={"/login"}>
+                            <Typography
+                                sx={{
+                                    color: "text.secondary",
+                                    mt: 1.5,
+                                    textDecoration: "underline",
+                                }}
+                            >
+                                Already registered? Login
+                            </Typography>
+                        </Link>
 
                         {/* <LoginProvider /> */}
                     </div>

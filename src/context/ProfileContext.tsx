@@ -1,5 +1,5 @@
 import { Props } from "next/script";
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import { createContext, FC, useContext, useEffect } from "react";
 import usePersistantState from "../hooks/usePersistantStorage";
 import StatsCalculator from "../lib/ProfileStorage";
 import { ContactContext } from "./ContactContext";
@@ -13,8 +13,6 @@ interface ContextType {
 export const ProfileContext = createContext<ContextType>(undefined!);
 
 const ProfileContextProvider: FC<Props> = (props) => {
-    const [vault, setVault] = usePersistantState("dc_vault", 0);
-    const [balance, setBalance] = usePersistantState("dc_balance", 0);
     const transactions = useContext(TransactionContext);
     const contacts = useContext(ContactContext);
 

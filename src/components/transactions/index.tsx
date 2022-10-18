@@ -1,18 +1,6 @@
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListSubheader,
-    Fab,
-    Box,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import React, { useContext } from "react";
 import { FC } from "react";
-import { TransactionContext } from "../../context/TransactionContext";
 import AddTransaction from "./add";
 import StatsHeader from "../misc/StatsHeader";
-import Transaction from "../../types/Transaction";
 import TransactionList from "./list";
 
 const Transactions: FC = () => {

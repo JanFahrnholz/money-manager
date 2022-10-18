@@ -3,9 +3,7 @@ import {
     Box,
     CssBaseline,
     FormControl,
-    IconButton,
     Input,
-    InputAdornment,
     styled,
     SwipeableDrawer,
     Table,
@@ -14,7 +12,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField,
     Typography,
 } from "@mui/material";
 import { FC, useContext, useState } from "react";
@@ -24,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
+import ConfirmationDialog from "../../misc/ConfirmationDialog";
 
 interface Props {
     contact: Contact | undefined;
@@ -35,6 +33,7 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
     const storage = useContext(TransactionContext);
     const contacts = useContext(ContactContext);
     const [editing, setEditing] = useState(false);
+    const [confirm, setConfirm] = useState(false);
 
     if (contact === undefined) return <></>;
 
@@ -60,8 +59,8 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
         })}`;
     };
 
-    const deleteContact = (id: number) => {
-        contacts.delete(id);
+    const deleteContact = () => {
+        contacts.delete(contact.id);
         setOpen(false);
     };
 
@@ -75,6 +74,15 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
 
     return (
         <Root>
+            <ConfirmationDialog
+                open={confirm}
+                setOpen={setConfirm}
+                title="Delete contact"
+                content={"Are you sure want to delete this contact"}
+                disagreeText="Cancel"
+                agreeText="Delete"
+                action={deleteContact}
+            />
             <CssBaseline />
             <Global
                 styles={{
@@ -145,7 +153,7 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                                 />
                             )}
                             <DeleteIcon
-                                onClick={() => deleteContact(contact.id)}
+                                onClick={() => setConfirm(true)}
                                 className="hover:cursor-pointer hover:text-danger"
                             />
                         </span>

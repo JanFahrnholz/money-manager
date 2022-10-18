@@ -4,12 +4,12 @@ import {
     Avatar,
     CircularProgress,
     CssBaseline,
-    Divider,
+    Link,
+    Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC, ReactElement, useContext, useState } from "react";
 import { useRouter } from "next/router";
-import LoginProvider from "../components/misc/LoginProviders";
 import { UserContext } from "../context/UserContext";
 
 type Card = {
@@ -19,12 +19,14 @@ type Card = {
 
 const LoginPage: FC = () => {
     const [error, setError] = useState<string>();
-    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<any>("Sign in");
     const router = useRouter();
     const { login } = useContext(UserContext);
 
     const handleSubmit = async (e: Event) => {
-        setLoading(true);
+        setStatus(
+            <CircularProgress sx={{ color: "secondary.main" }} size={14} />
+        );
         e.preventDefault();
 
         const email = e.target["email"].value;
@@ -32,7 +34,7 @@ const LoginPage: FC = () => {
 
         const res = await login(email, pw);
         setError(res);
-        setLoading(false);
+        setStatus("Login");
 
         if (!res) router.push("/");
     };
@@ -109,10 +111,22 @@ const LoginPage: FC = () => {
                                     type="submit"
                                     className="flex w-full justify-center rounded-md border hover:cursor-pointer border-transparent bg-primary py-3 px-4 font-medium text-dark-900 shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2"
                                 >
-                                    {loading ? "Loading..." : "Sign in"}
+                                    {status}
                                 </button>
                             </div>
                         </form>
+
+                        <Link href={"/register"}>
+                            <Typography
+                                sx={{
+                                    color: "text.secondary",
+                                    mt: 1.5,
+                                    textDecoration: "underline",
+                                }}
+                            >
+                                New here? Create an account
+                            </Typography>
+                        </Link>
                         {/* <LoginProvider /> */}
                     </div>
                 </div>

@@ -1,13 +1,10 @@
-import { Box, Button, ListItem, ListItemText, Typography } from "@mui/material";
+import { Box, ListItem, ListItemText, Typography } from "@mui/material";
 import { FC, useContext } from "react";
 import { UserContext } from "../../../context/UserContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const AuthenticatedProfile: FC = () => {
     const { user, logout } = useContext(UserContext);
-
-    const greetings = ["Hi", "Hey", "What's up", "Welcome back"];
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
     return (
         <>
@@ -31,7 +28,7 @@ const AuthenticatedProfile: FC = () => {
                     <ListItemText
                         primary={
                             <Typography variant="h5" sx={{ m: 0, p: 0 }}>
-                                {greeting}, {user?.name}
+                                {user?.name}
                             </Typography>
                         }
                     />

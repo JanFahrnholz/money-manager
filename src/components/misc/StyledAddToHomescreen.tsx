@@ -14,7 +14,7 @@ const StyledAddToHomescreen: FC = () => {
                 body: {
                     background:
                         "linear-gradient(0deg, rgba(0,0,0,0.8) 70%, rgba(255,255,255,0) 100%)",
-                    zIndex: "500",
+                    zIndex: "2000",
                     paddingTop: "50px",
                     border: "none",
                     color: "#fff",

@@ -1,3 +1,7 @@
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import Backup from "../types/Backup";
+import Contact from "../types/Contact";
 import Transaction from "../types/Transaction";
 import TransactionType from "../types/TransactionType";
 const _ = require("lodash");
@@ -5,6 +9,8 @@ const _ = require("lodash");
 class TransactionStorage {
     transactions: Transaction[];
     setTransactions: Function;
+    sync: Function;
+    getPreferences: Function;
     types: TransactionType[] = [
         { id: 1, color: "#ff1c1c", name: "Ausgabe" },
         { id: 2, color: "#62D836", name: "Einnahme" },
@@ -15,7 +21,27 @@ class TransactionStorage {
     constructor(transactions: Transaction[], setTransactions: Function) {
         this.transactions = transactions;
         this.setTransactions = setTransactions;
+
+        const { sync, getPreferences } = useContext(UserContext);
+        this.sync = sync;
+        this.getPreferences = getPreferences;
     }
+
+    public backup = async () => {
+        await this.sync("transactions", this.transactions);
+
+        this.setTransactions([...this.transactions]);
+    };
+
+    public deleteBackup = async () => {
+        await this.sync("transactions", []);
+    };
+
+    public restore = async () => {
+        this.getPreferences("transactions").then((pref: Backup<Contact[]>) =>
+            this.setTransactions(pref.data)
+        );
+    };
 
     public add = (
         amount: number,

@@ -5,6 +5,7 @@ const _ = require("lodash");
 import ContactStorage from "../lib/ContactStorage";
 import { Props } from "next/script";
 import { UserContext } from "./UserContext";
+import Backup from "../types/Backup";
 
 export const ContactContext = createContext<ContactStorage>(undefined!);
 
@@ -18,8 +19,9 @@ const ContactContextProvider: FC<Props> = (props) => {
 
     useEffect(() => {
         const backup = async () => {
-            if (await getPreferences("syncContacts"))
-                sync("contacts", contacts);
+            getPreferences("syncContacts").then((pref: Backup<boolean>) => {
+                if (pref.data) sync("contacts", contacts);
+            });
         };
         backup();
     }, [contacts]);

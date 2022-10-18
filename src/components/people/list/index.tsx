@@ -16,7 +16,6 @@ import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRig
 import ContactDetailDrawer from "./detail";
 import Contact from "../../../types/Contact";
 import { motion, AnimatePresence } from "framer-motion";
-import { Opacity } from "@mui/icons-material";
 
 const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {

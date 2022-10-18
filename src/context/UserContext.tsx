@@ -1,13 +1,17 @@
 import { Account, Client, Models } from "appwrite";
+import { useRouter } from "next/router";
 import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import Backup from "../types/Backup";
 
 interface ContextType {
     user: Models.Account<{}> | undefined;
     session: Models.Session | undefined;
+    account: Account;
+    getPreferences: (key: string | undefined) => any;
     sync: Function;
-    useSync: Function;
-    getPreferences: (key: string) => any;
+    syncDisabled: boolean;
+    setSyncDisabled: (state: boolean) => void;
     login: Function;
     loginGoogle: Function;
     register: Function;
@@ -17,10 +21,14 @@ interface ContextType {
 export const UserContext = createContext<ContextType>(undefined!);
 
 const UserContextProvider: FC<Props> = (props) => {
+    const [syncDisabled, setSyncDisabled] = useState(false);
+    const [triggerReload, setReload] = useState(false);
     const [user, setUser] = useState<Models.Account<{}> | undefined>(undefined);
     const [session, setSession] = useState<Models.Session | undefined>(
         undefined
     );
+
+    const router = useRouter();
 
     const client = new Client()
         .setEndpoint(process.env.AW_URL || "") // Your API Endpoint
@@ -28,69 +36,53 @@ const UserContextProvider: FC<Props> = (props) => {
 
     const account = new Account(client);
 
-    console.log(user, session);
-
     useEffect(() => {
         const setData = async () => {
             try {
                 const user = await account.get();
                 setUser(user);
-                const cs = await account.getPrefs();
-                if (typeof cs.cloudSync != "boolean") sync("cloudSync", false);
             } catch (e) {
                 setUser(undefined);
             }
+
+            try {
+                const session = await account.getSession("current");
+                setSession(session);
+            } catch (e) {
+                setSession(undefined);
+            }
         };
         setData();
-    }, [session]);
+    }, [triggerReload]);
 
-    const getPreferences = async (key?: string) => {
+    const reload = () => setReload(!triggerReload);
+
+    const getPreferences = async (key: string | undefined = undefined) => {
+        if (!user) return Promise.reject("User not logged in");
         const prefs = await account.getPrefs();
 
         return key ? prefs[key] : prefs;
     };
 
-    const sync = async (key: string, data: any) => {
+    async function sync<T>(key: string, data: T) {
+        if (syncDisabled) return Promise.reject("Sync disabled");
+        if (!user) return Promise.reject("User not logged in");
         const prefs = await account.getPrefs();
 
-        prefs[key] = data;
+        const backup: Backup<T> = {
+            data,
+            time: new Date(),
+        };
+
+        prefs[key] = backup;
 
         await account.updatePrefs(prefs);
-    };
-    const useSync = (key: string, data: any) => {
-        const [state, setInternalState] = useState(data);
-
-        useEffect(() => {
-            const syncInternal = async () => {
-                try {
-                    const pref = await getPreferences(key);
-                    if (pref === undefined) return;
-                    setInternalState(pref);
-                } catch (e) {}
-            };
-            syncInternal();
-        }, [user, session]);
-
-        const setState = (value: any) => {
-            setInternalState(value);
-            console.log(
-                "🚀 ~ file: UserContext.tsx ~ line 77 ~ setState ~ value",
-                value
-            );
-            sync(key, value);
-        };
-
-        const getState = async () => {
-            return await getPreferences(key);
-        };
-
-        return [state, setState, getState];
-    };
+    }
 
     const login = async (email: string, password: string) => {
         try {
             const res = await account.createEmailSession(email, password);
-            setSession(res);
+            reload();
             return false;
         } catch (e) {
             return e.message;
@@ -108,8 +100,6 @@ const UserContextProvider: FC<Props> = (props) => {
                 : "https://mm.industed.com/login";
 
         const res = account.createOAuth2Session("google", onSuccess, onFailure);
-
-        console.log(res);
     };
 
     const register = async (name: string, email: string, password: string) => {
@@ -120,13 +110,21 @@ const UserContextProvider: FC<Props> = (props) => {
 
             await login(email, password);
             return false;
-        } catch (e) {
-            return e.message;
-        }
+        } catch (e) {}
+
+        reload();
     };
 
-    const logout = () => {
+    const logout = (everywhere = false) => {
         account.deleteSession("current").then(() => setSession(undefined));
+
+        if (everywhere)
+            account.deleteSessions().then(() => setSession(undefined));
+
+        setSession(undefined);
+        setUser(undefined);
+
+        reload();
     };
 
     return (
@@ -134,9 +132,11 @@ const UserContextProvider: FC<Props> = (props) => {
             value={{
                 user,
                 session,
-                sync,
-                useSync,
+                account,
                 getPreferences,
+                sync,
+                syncDisabled,
+                setSyncDisabled,
                 login,
                 loginGoogle,
                 register,

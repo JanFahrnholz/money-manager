@@ -1,4 +1,3 @@
-import { Button, Typography } from "@mui/material";
 import { FC, useContext } from "react";
 import AppVersion from "../misc/AppVersion";
 import ProfileSettings from "./settings";

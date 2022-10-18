@@ -5,6 +5,7 @@ const _ = require("lodash");
 import TransactionStorage from "../lib/TransactionStorage";
 import { Props } from "next/script";
 import { UserContext } from "./UserContext";
+import Backup from "../types/Backup";
 
 export const TransactionContext = createContext<TransactionStorage>(undefined!);
 
@@ -18,8 +19,9 @@ const TransactionContextProvider: FC<Props> = (props) => {
 
     useEffect(() => {
         const backup = async () => {
-            if (await getPreferences("syncTransactions"))
-                sync("transactions", transactions);
+            getPreferences("syncTransactions").then((pref: Backup<boolean>) => {
+                if (pref.data) sync("transactions", transactions);
+            });
         };
         backup();
     }, [transactions]);
