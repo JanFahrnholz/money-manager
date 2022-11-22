@@ -1,4 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
     Alert,
     Avatar,
@@ -8,9 +9,9 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC, FormEvent, ReactElement, useContext, useState } from "react";
+import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
-import { UserContext } from "../context/UserContext";
+import { loginWithId } from "../lib/Pocketbase";
 
 type Card = {
     icon: ReactElement;
@@ -21,7 +22,6 @@ const LoginPage: FC = () => {
     const [error, setError] = useState<string>();
     const [status, setStatus] = useState<any>("Sign in");
     const router = useRouter();
-    const { login } = useContext(UserContext);
 
     const handleSubmit = async (e: any) => {
         setStatus(
@@ -29,18 +29,26 @@ const LoginPage: FC = () => {
         );
         e.preventDefault();
 
-        const email = e.target["email"].value;
+        const id = e.target["email"].value;
         const pw = e.target["pw"].value;
 
-        const res = await login(email, pw);
-        setError(res);
-        setStatus("Login");
-
-        if (!res) router.push("/");
+        loginWithId(id, pw)
+            .then(() => {
+                setError(undefined);
+                setStatus("Success!");
+                router.push("/");
+            })
+            .catch((err) => {
+                setError(err.message);
+                setStatus("Sign in");
+            });
     };
 
     return (
         <Box>
+            <div className="pt-6 pl-6" onClick={() => router.back()}>
+                <ArrowBackIosIcon />
+            </div>
             <CssBaseline />
             <div className="flex min-h-full flex-col justify-center py-10 sm:px-6 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -48,7 +56,7 @@ const LoginPage: FC = () => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <h2 className="mt-6 text-center text-2xl font-bold tracking-tight text-primary">
-                        Login to your account
+                        Identify yourself
                     </h2>
                 </div>
                 <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
@@ -63,14 +71,14 @@ const LoginPage: FC = () => {
                                     htmlFor="email"
                                     className="block text-sm font-medium text-primary"
                                 >
-                                    Email address
+                                    User ID
                                 </label>
                                 <div className="mt-1">
                                     <input
                                         id="email"
                                         name="email"
-                                        type="email"
-                                        autoComplete="email"
+                                        type="text"
+                                        autoComplete="username"
                                         required
                                         className="block w-full appearance-none rounded-md border px-3 py-2 placeholder-gray-900 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
                                     />
@@ -124,10 +132,9 @@ const LoginPage: FC = () => {
                                     textDecoration: "underline",
                                 }}
                             >
-                                New here? Create an account
+                                New here? Create your ID
                             </Typography>
                         </Link>
-                        {/* <LoginProvider /> */}
                     </div>
                 </div>
             </div>

@@ -4,59 +4,38 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
-    Rating,
-    styled,
     IconButton,
+    Typography,
+    CircularProgress,
 } from "@mui/material";
-import { FC, useContext, useState } from "react";
-import { ContactContext } from "../../../context/ContactContext";
-import CircleIcon from "@mui/icons-material/Circle";
-import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import { FC, useContext, useEffect, useState } from "react";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import ContactDetailDrawer from "./detail";
-import Contact from "../../../types/Contact";
 import { motion, AnimatePresence } from "framer-motion";
-
-const StyledRating = styled(Rating)({
-    "& .MuiRating-iconFilled": {
-        color: "#ff6d75",
-    },
-    "& .MuiRating-iconHover": {
-        color: "#ff3d47",
-    },
-});
-
-const MemberCardProcess: FC = () => {
-    return (
-        <StyledRating
-            name="customized-color"
-            defaultValue={2}
-            getLabelText={(value: number) =>
-                `${value} Heart${value !== 1 ? "s" : ""}`
-            }
-            precision={1}
-            icon={<CircleIcon fontSize="inherit" />}
-            emptyIcon={<CircleOutlinedIcon fontSize="inherit" />}
-        />
-    );
-};
+import { ContactContext } from "../../../context/ContactContext";
+import { getInitials } from "../../../lib/Contacts";
+import MustBeLoggedInAlert from "../../misc/MustBeLoggedInAlert";
 
 const ContactList: FC = () => {
-    const storage = useContext(ContactContext);
     const [openDrawer, setOpenDrawer] = useState(false);
-    const [selectedContact, setSelectedContact] = useState<Contact>();
+    const [selectedContact, setSelectedContact] = useState<string>();
+
+    const { contacts } = useContext(ContactContext);
+
+    const [error, setError] = useState<false | string>(false);
     let i = 0;
 
-    const handleClick = (c: Contact) => {
+    function handleClick(c: string) {
         setSelectedContact(c);
         setOpenDrawer(!openDrawer);
-    };
+    }
 
     return (
         <>
+            <MustBeLoggedInAlert msg="Please login to use this functions" />
             <List sx={{ width: "100%", pb: 18 }}>
                 <AnimatePresence>
-                    {storage.contacts.map((p) => {
+                    {contacts.map((p) => {
                         i += 0.05;
                         return (
                             <motion.div
@@ -67,13 +46,13 @@ const ContactList: FC = () => {
                                 exit={{ opacity: 0, x: -200 }}
                             >
                                 <ListItem
-                                    onClick={() => handleClick(p)}
+                                    onClick={() => handleClick(p.id)}
                                     secondaryAction={
                                         <IconButton
                                             edge="end"
                                             aria-label="delete"
                                             sx={{ mr: 1 }}
-                                            onClick={() => handleClick(p)}
+                                            onClick={() => handleClick(p.id)}
                                         >
                                             <KeyboardArrowRightOutlinedIcon />
                                         </IconButton>
@@ -83,7 +62,7 @@ const ContactList: FC = () => {
                                         <Avatar
                                             sx={{ bgcolor: "primary.main" }}
                                         >
-                                            {storage.getInitials(p.id)}
+                                            {getInitials(p.name)}
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText
@@ -98,7 +77,7 @@ const ContactList: FC = () => {
                 </AnimatePresence>
             </List>
             <ContactDetailDrawer
-                contact={selectedContact}
+                id={selectedContact}
                 open={openDrawer}
                 setOpen={setOpenDrawer}
             />

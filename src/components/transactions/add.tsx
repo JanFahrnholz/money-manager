@@ -10,7 +10,6 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import AddIcon from "@mui/icons-material/Add";
 import {
-    Alert,
     DialogContent,
     Fab,
     FormControl,
@@ -20,8 +19,11 @@ import {
     Select,
     TextField,
 } from "@mui/material";
+import Numpad from "../misc/numpad";
+import { create } from "../../lib/Transactions";
+import TransactionType from "../../types/TransactionType";
+import Error from "../misc/Error";
 import { ContactContext } from "../../context/ContactContext";
-import { TransactionContext } from "../../context/TransactionContext";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -34,36 +36,23 @@ const Transition = forwardRef(function Transition(
 
 const AddTransaction: FC = () => {
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
+
+    const types = ["Einnahme", "Ausgabe", "Rechnung", "Rückzahlung"];
 
     const [amount, setAmount] = useState<number>(0);
-    const [person, setContact] = useState(0);
-    const [type, setType] = useState(1);
-
-    const cCtx = useContext(ContactContext);
-    const tCtx = useContext(TransactionContext);
+    const [contact, setContact] = useState<string>("");
+    const [info, setInfo] = useState<string | undefined>();
+    const [type, setType] = useState<TransactionType>("Einnahme");
+    const { contacts } = useContext(ContactContext);
 
     const submit = () => {
-        if (type! <= 0 || amount === 0 || person! <= 0) {
-            setError("Invalid input");
-            return;
-        }
-
-        const t = tCtx.add(amount, person, type, null);
-        cCtx.addTransaction(person, t.id);
-
-        if (tCtx.isType(t.id, "Rechnung")) {
-            cCtx.addBalance(person, amount);
-        }
-
-        if (tCtx.isType(t.id, "Rückzahlung")) {
-            cCtx.addBalance(person, -amount);
-        }
-
-        tCtx.reload();
-
-        setOpen(false);
-        setError(null);
+        create({ amount, info, contact, type })
+            .then((res) => {
+                setInfo(undefined);
+                setOpen(false);
+            })
+            .catch((err) => setError(err.message));
     };
 
     return (
@@ -128,26 +117,20 @@ const AddTransaction: FC = () => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent sx={{ bgcolor: "background.default" }}>
-                    {error && (
-                        <Alert className="mb-4" severity="error">
-                            {error}
-                        </Alert>
-                    )}
+                    <Error error={error} />
+                    <Typography
+                        variant="h2"
+                        sx={{
+                            textAlign: "center",
+                            my: 3.5,
+                            fontWeight: "500",
+                            letterSpacing: 1.5,
+                        }}
+                    >
+                        {amount.toFixed(2)}€
+                    </Typography>
 
-                    <TextField
-                        id="amount-input"
-                        value={amount}
-                        onChange={(e) => setAmount(+e.target.value)}
-                        label="Amount"
-                        variant="outlined"
-                        fullWidth
-                        type="number"
-                        required
-                        autoFocus
-                        className="my-2"
-                    />
-
-                    <Grid container>
+                    <Grid container columnSpacing={1}>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">
@@ -156,22 +139,18 @@ const AddTransaction: FC = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={person}
+                                    value={contact || "Selected contact"}
                                     label="Age"
-                                    onChange={(e) =>
-                                        setContact(+e.target.value)
-                                    }
+                                    onChange={(e) => setContact(e.target.value)}
                                     required
                                     placeholder="Select a person"
                                 >
-                                    {cCtx.contacts.map((person) => (
-                                        <MenuItem
-                                            value={person.id}
-                                            key={person.id}
-                                        >
-                                            {person.name}
-                                        </MenuItem>
-                                    ))}
+                                    {contacts &&
+                                        contacts.map((c) => (
+                                            <MenuItem value={c.id} key={c.id}>
+                                                {c.name}
+                                            </MenuItem>
+                                        ))}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -185,19 +164,33 @@ const AddTransaction: FC = () => {
                                     id="demo-simple-select"
                                     value={type}
                                     label="Age"
-                                    onChange={(e) => setType(+e.target.value)}
+                                    onChange={(e) =>
+                                        setType(
+                                            e.target.value as TransactionType
+                                        )
+                                    }
                                     required
                                     placeholder="Select a transaction type"
                                 >
-                                    {tCtx.types.map((type) => (
-                                        <MenuItem value={type.id} key={type.id}>
-                                            {type.name}
+                                    {types.map((type) => (
+                                        <MenuItem value={type} key={type}>
+                                            {type}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
                     </Grid>
+                    <TextField
+                        sx={{ mt: 1 }}
+                        placeholder="Optional: Info"
+                        fullWidth
+                        type="text"
+                        onChange={(e) => setInfo(e.target.value)}
+                    />
+                    <div className="mt-2">
+                        <Numpad setter={setAmount} />
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>

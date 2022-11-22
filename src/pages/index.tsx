@@ -5,6 +5,7 @@ import Profile from "../components/profile";
 import Tools from "../components/tools";
 import Transactions from "../components/transactions";
 import StyledAddToHomescreen from "../components/misc/StyledAddToHomescreen";
+const axios = require("axios");
 
 const Home: NextPage = () => {
     return (

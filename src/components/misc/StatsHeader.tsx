@@ -1,34 +1,83 @@
 import { Card, CardContent, Grid, Typography } from "@mui/material";
-import { FC, useContext } from "react";
-import { ProfileContext } from "../../context/ProfileContext";
+import { FC, useContext, useEffect, useState } from "react";
+import { ContactContext } from "../../context/ContactContext";
+import { TransactionContext } from "../../context/TransactionContext";
+import {
+    getBalance,
+    getMoneyToPayBack,
+    getPendingMoney,
+} from "../../lib/Statistics";
 
 const StatsHeader: FC = () => {
-    const ctx = useContext(ProfileContext);
+    const [pendingMoney, setPendingMoney] = useState(0);
+    const [toPay, setToPay] = useState(0);
+    const [balance, setBalance] = useState(0);
+    const { contacts } = useContext(ContactContext);
+    const { transactions } = useContext(TransactionContext);
+
+    useEffect(() => {
+        setPendingMoney(getPendingMoney(contacts));
+    }, [contacts]);
+
+    useEffect(() => {
+        setToPay(getMoneyToPayBack(contacts));
+    }, [contacts]);
+
+    useEffect(() => {
+        setBalance(getBalance(transactions));
+    }, [transactions]);
 
     return (
-        <Grid container>
-            {ctx.stats.statistics.map((item, i) => {
-                if (i >= 2) return;
-                return (
-                    <Grid item xs={6} key={item.name}>
-                        <Card className="m-2">
-                            <CardContent>
-                                <Typography
-                                    sx={{ fontSize: 14 }}
-                                    color="text.secondary"
-                                    gutterBottom
-                                >
-                                    {item.name}
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    {item.value()}€
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                );
-            })}
-        </Grid>
+        <>
+            <Grid container spacing={1} p={1}>
+                {/* <Grid item xs={4}>
+                    <Card>
+                        <CardContent>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                Balance
+                            </Typography>
+                            <Typography variant="h5" component="div">
+                                {balance}€
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid> */}
+                <Grid item xs={6}>
+                    <Card>
+                        <CardContent>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                Pending
+                            </Typography>
+                            <Typography variant="h5">
+                                {pendingMoney}€
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={6}>
+                    <Card>
+                        <CardContent>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                to Pay
+                            </Typography>
+                            <Typography variant="h5">{toPay}€</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+        </>
     );
 };
 

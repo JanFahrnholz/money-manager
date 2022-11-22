@@ -1,6 +1,7 @@
 import { Global } from "@emotion/react";
 import {
     Box,
+    CircularProgress,
     CssBaseline,
     FormControl,
     Input,
@@ -14,28 +15,29 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import { FC, useContext, useState } from "react";
-import { TransactionContext } from "../../../context/TransactionContext";
+import { FC, useEffect, useState } from "react";
 import Contact from "../../../types/Contact";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { ContactContext } from "../../../context/ContactContext";
 import DoneIcon from "@mui/icons-material/Done";
 import ConfirmationDialog from "../../misc/ConfirmationDialog";
+import { remove } from "../../../lib/Contacts";
+import { client } from "../../../lib/Pocketbase";
+import Record from "../../../types/Record";
+import Transaction from "../../../types/Transaction";
 
 interface Props {
-    contact: Contact | undefined;
+    id: string | undefined;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
-    const storage = useContext(TransactionContext);
-    const contacts = useContext(ContactContext);
+const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [confirm, setConfirm] = useState(false);
-
-    if (contact === undefined) return <></>;
+    const [contact, setContact] = useState<Record<Contact>>();
+    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
 
     const iOS =
         typeof navigator !== "undefined" &&
@@ -43,11 +45,30 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
 
     const drawerBleeding = 0;
     const drawerHeight = 400;
-    let transactions = contact.transactions
-        .map((t) => storage.findById(t))
-        .reverse();
+    const totalCashflow = 0;
 
-    if (!transactions) transactions = [];
+    useEffect(() => {
+        if (!id) return;
+        client.records
+            .getOne("contacts", id)
+            .then((res: unknown) => {
+                setContact(res as Record<Contact>);
+                setLoading(false);
+            })
+            .catch((err) => console.log(err));
+
+        client.records
+            .getFullList("transactions", 20, {
+                filter: `contact="${id}"`,
+                sort: "-created",
+            })
+            .then((res: unknown) => {
+                setTransactions(res as Record<Transaction>[]);
+            })
+            .catch((err) => console.log(err));
+    }, [id]);
+
+    if (!contact) return <></>;
 
     const formatDate = (date: Date | undefined) => {
         if (!date) return "Error";
@@ -60,17 +81,15 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
     };
 
     const deleteContact = () => {
-        contacts.delete(contact.id);
+        remove(contact.id).catch((err) => console.log(err));
         setOpen(false);
     };
 
-    const editName = (name: string) => {
-        contacts.editName(contact.id, name);
-    };
+    const editName = (name: string) => {};
 
-    const editBalance = (balance: number) => {
-        contacts.editBalance(contact.id, balance);
-    };
+    const editBalance = (balance: number) => {};
+
+    if (loading) return <CircularProgress />;
 
     return (
         <Root>
@@ -92,6 +111,7 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                         borderRadius: 8,
                         background: "#303030",
                         opacity: 1,
+                        zIndex: 1600,
                     },
                 }}
             />
@@ -166,8 +186,12 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                             bgcolor: "background.default",
                         }}
                     >
-                        {!editing && <>Balance: {contact.balance}€</>}
-
+                        {!editing && (
+                            <>
+                                Balance: {contact.balance}€ + Cashflow:{" "}
+                                {totalCashflow}€
+                            </>
+                        )}
                         {editing && (
                             <FormControl variant="standard">
                                 <Input
@@ -196,15 +220,10 @@ const ContactDetailDrawer: FC<Props> = ({ contact, open, setOpen }) => {
                             <TableBody>
                                 {transactions.map((t, i) => (
                                     <TableRow key={i}>
-                                        <TableCell>{t?.amount}€</TableCell>
+                                        <TableCell>{t.amount}€</TableCell>
+                                        <TableCell>{t.type}</TableCell>
                                         <TableCell>
-                                            {
-                                                storage.getTypeById(t?.typeId)
-                                                    ?.name
-                                            }
-                                        </TableCell>
-                                        <TableCell>
-                                            {formatDate(t?.date)}
+                                            {formatDate(t.date)}
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import { useEffect, useState } from "react";
 
 export default function usePersistantState<T>(
     key: string,

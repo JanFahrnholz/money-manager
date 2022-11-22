@@ -1,7 +1,3 @@
-type TransactionType = {
-    id: number;
-    color: string;
-    name: string;
-};
+type TransactionType = "Einnahme" | "Ausgabe" | "Rechnung" | "Rückzahlung";
 
 export default TransactionType;

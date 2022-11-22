@@ -1,6 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import GoogleIcon from "@mui/icons-material/Google";
-import AppleIcon from "@mui/icons-material/Apple";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
     Alert,
     Avatar,
@@ -9,18 +8,14 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC, ReactElement, useContext, useState } from "react";
-import { Account, Client } from "appwrite";
+import { FC, useState } from "react";
 import { useRouter } from "next/router";
-import LoginProvider from "../components/misc/LoginProviders";
-import { UserContext } from "../context/UserContext";
-import Link from "next/link";
+import { register } from "../lib/Pocketbase";
 
 const RegisterPage: FC = () => {
-    const [error, setError] = useState<string>();
-    const [status, setStatus] = useState<any>("Sign up");
+    const [error, setError] = useState<string | false>();
+    const [status, setStatus] = useState<any>("Create");
     const router = useRouter();
-    const { register } = useContext(UserContext);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -28,33 +23,39 @@ const RegisterPage: FC = () => {
             <CircularProgress sx={{ color: "secondary.main" }} size={14} />
         );
 
-        const name = e.target["name"].value;
-        const email = e.target["email"].value;
-        const pw1 = e.target["pw1"].value;
-        const pw2 = e.target["pw2"].value;
+        const password = e.target["pw1"].value;
+        const passwordConfirm = e.target["pw2"].value;
 
-        if (pw1 !== pw2) {
+        if (password !== passwordConfirm) {
             setError("Passwords do not match");
+            setStatus("Create");
             return;
         }
 
-        const res = await register(name, email, pw1);
-        setError(res);
-        setStatus("Sign up");
-
-        if (!res) router.push("/");
+        register(password, passwordConfirm)
+            .then(() => {
+                setError(false);
+                setStatus("Success");
+                router.push("/");
+            })
+            .catch((err: any) => {
+                setError(err.message);
+            });
     };
 
     return (
         <Box>
+            <div className="pt-6 pl-6" onClick={() => router.back()}>
+                <ArrowBackIosIcon />
+            </div>
             <CssBaseline />
-            <div className="flex min-h-full flex-col justify-center py-10 sm:px-6 lg:px-8">
+            <div className=" flex min-h-full flex-col justify-center py-10 sm:px-6 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
                     <Avatar sx={{ mx: "auto", bgcolor: "primary.main" }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <h2 className="mt-6 text-center text-2xl font-bold tracking-tight text-primary">
-                        Sign up your account
+                        Create your access key
                     </h2>
                 </div>
                 <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
@@ -64,43 +65,6 @@ const RegisterPage: FC = () => {
                             method="POST"
                             onSubmit={(e) => handleSubmit(e)}
                         >
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="block text-sm font-medium text-primary"
-                                >
-                                    Name
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        id="name"
-                                        name="name"
-                                        type="text"
-                                        autoComplete="name"
-                                        required
-                                        className="block w-full appearance-none rounded-md border px-3 py-2 placeholder-gray-900 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="block text-sm font-medium text-primary"
-                                >
-                                    Email address
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        autoComplete="email"
-                                        required
-                                        className="block w-full appearance-none rounded-md border px-3 py-2 placeholder-gray-900 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-                                    />
-                                </div>
-                            </div>
-
                             <div>
                                 <label
                                     htmlFor="pw1"
@@ -158,17 +122,14 @@ const RegisterPage: FC = () => {
                             </div>
                         </form>
 
-                        <Link href={"/login"}>
-                            <Typography
-                                sx={{
-                                    color: "text.secondary",
-                                    mt: 1.5,
-                                    textDecoration: "underline",
-                                }}
-                            >
-                                Already registered? Login
-                            </Typography>
-                        </Link>
+                        <Typography
+                            sx={{
+                                color: "text.secondary",
+                                mt: 1.5,
+                            }}
+                        >
+                            You will retrieve a unique user ID
+                        </Typography>
 
                         {/* <LoginProvider /> */}
                     </div>

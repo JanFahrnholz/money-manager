@@ -1,20 +1,18 @@
-import { CircularProgress, List, ListSubheader } from "@mui/material";
-import { FC, useContext, useEffect, useRef, useState } from "react";
-import ViewportList from "react-viewport-list";
+import { Alert, CircularProgress, List, ListSubheader } from "@mui/material";
+import { FC, useContext, useEffect, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
+import { client } from "../../../lib/Pocketbase";
+import { list } from "../../../lib/Transactions";
+import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
+import Error from "../../misc/Error";
+import MustBeLoggedInAlert from "../../misc/MustBeLoggedInAlert";
 import TransactionListItem from "./item";
+const _ = require("lodash");
 
 const TransactionList: FC = () => {
-    const storage = useContext(TransactionContext);
-    const [transactions, setTransactions] = useState<Transaction[][]>(
-        Object.values(storage.getSortedTransactions())
-    );
-
-    useEffect(() => {
-        const t = Object.values(storage.getSortedTransactions());
-        setTransactions(t);
-    }, [storage.transactions, storage]);
+    const [error, setError] = useState();
+    const { transactions } = useContext(TransactionContext);
 
     const formatDate = (date: Date) =>
         `${new Date(date).toLocaleDateString("default", {
@@ -23,56 +21,43 @@ const TransactionList: FC = () => {
         })}`;
 
     return (
-        <div className="p-2">
-            <List
-                sx={{
-                    width: "100%",
-                    maxHeight: "80vh",
-                    bgcolor: "background.default",
-                    position: "relative",
-                    overflow: "auto",
-                    "& ul": { padding: 0 },
-                }}
-                subheader={<li />}
-            >
-                <ViewportList items={transactions} itemMinSize={20}>
-                    {(item) => (
-                        <li key={`section-${item[0].date}`}>
+        <div>
+            <MustBeLoggedInAlert msg="Please login to use this functions" />
+
+            <div className="px-2">
+                <List
+                    sx={{
+                        width: "100%",
+                        height: "80vh",
+                        bgcolor: "background.default",
+                        position: "relative",
+                        overflow: "auto",
+                        "& ul": { padding: 0 },
+                    }}
+                    subheader={<li />}
+                >
+                    {(transactions as any[]).map((month) => (
+                        <li key={`section-${month[0].date}`}>
                             <ul>
                                 <ListSubheader sx={{ borderRadius: "5px" }}>
-                                    {formatDate(item[0].date)}
+                                    {formatDate(month[0].date)}
                                 </ListSubheader>
 
-                                {item.map((transaction: Transaction) => (
-                                    <TransactionListItem
-                                        key={transaction.id}
-                                        transaction={transaction}
-                                    />
-                                ))}
+                                {month.map(
+                                    (transaction: Record<Transaction>) => (
+                                        <TransactionListItem
+                                            key={transaction.id}
+                                            transaction={transaction}
+                                        />
+                                    )
+                                )}
                             </ul>
                         </li>
-                    )}
-                </ViewportList>
-            </List>
+                    ))}
+                </List>
+            </div>
         </div>
     );
 };
 
 export default TransactionList;
-
-// {transactions.map((month) => (
-//     <li key={`section-${month[0].date}`}>
-//         <ul>
-//             <ListSubheader sx={{ borderRadius: "5px" }}>
-//                 {formatDate(month[0].date)}
-//             </ListSubheader>
-
-//             {month.map((transaction: Transaction) => (
-//                 <TransactionListItem
-//                     key={transaction.id}
-//                     transaction={transaction}
-//                 />
-//             ))}
-//         </ul>
-//     </li>
-// ))}
