@@ -1,22 +1,40 @@
-import { createContext, FC } from "react";
-import usePersistantState from "../hooks/usePersistantStorage";
-import Transaction from "../types/Transaction";
-const _ = require("lodash");
-import TransactionStorage from "../lib/TransactionStorage";
 import { Props } from "next/script";
+import { createContext, FC, useEffect, useState } from "react";
+import { list } from "../lib/Transactions";
+import { client } from "../lib/Pocketbase";
+import Record from "../types/Record";
+import Transaction from "../types/Transaction";
+import { useRouter } from "next/router";
 
-export const TransactionContext = createContext<TransactionStorage>(undefined!);
+type ContextProps = {
+    transactions: Record<Transaction>[];
+};
+
+export const TransactionContext = createContext<ContextProps>(undefined!);
 
 const TransactionContextProvider: FC<Props> = (props) => {
-    const [transactions, setTransactions] = usePersistantState<Transaction[]>(
-        "dc_transactions",
-        []
-    );
+    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+    const [trigger, setTrigger] = useState(true);
+    const router = useRouter();
 
-    const storage = new TransactionStorage(transactions, setTransactions);
+    useEffect(() => {
+        list()
+            .then((res) => {
+                setTransactions(res as Record<Transaction>[]);
+            })
+            .catch((err) => {});
+
+        client.realtime
+            .subscribe("transactions", (res) => setTrigger(!trigger))
+            .catch((err) => router.reload());
+    }, [trigger]);
 
     return (
-        <TransactionContext.Provider value={storage}>
+        <TransactionContext.Provider
+            value={{
+                transactions,
+            }}
+        >
             {props.children}
         </TransactionContext.Provider>
     );

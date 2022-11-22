@@ -1,6 +1,4 @@
-import * as React from "react";
-import { ReactElement } from "react";
-import { FC } from "react";
+import { ReactElement, FC, useRef } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import BottomNavigation from "@mui/material/BottomNavigation";
@@ -18,12 +16,12 @@ type Props = {
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
     const [value, setValue] = usePersistantState("dc_last_tab", 0);
-    const ref = React.useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
     return (
-        <Box ref={ref}>
-            <>
-                <CssBaseline />
+        <div>
+            <CssBaseline />
+            <Box ref={ref}>
                 {tabs.map((tab, index) => {
                     if (value === index) {
                         return tab;
@@ -37,6 +35,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         right: 0,
                         pb: 3,
                         bgcolor: "secondary.main",
+                        zIndex: 1500,
                     }}
                     elevation={3}
                 >
@@ -64,8 +63,8 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         />
                     </BottomNavigation>
                 </Paper>
-            </>
-        </Box>
+            </Box>
+        </div>
     );
 };
 

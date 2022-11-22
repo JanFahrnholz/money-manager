@@ -2,20 +2,14 @@ import { Global } from "@emotion/react";
 import styled from "@emotion/styled";
 import {
     Box,
-    Button,
     CssBaseline,
     List,
     ListItem,
     ListItemButton,
-    ListItemIcon,
     ListItemText,
-    Skeleton,
     SwipeableDrawer,
-    Typography,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
-import container from "postcss/lib/container";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 type Props = {
     actions: {
@@ -43,12 +37,14 @@ const ActionMenu: FC<Props> = ({ actions, open, setOpen }) => {
                         overflow: "visible",
                         background: "transparent",
                         boxShadow: "none",
+                        zIndex: 1600,
                     },
                 }}
             />
 
             <SwipeableDrawer
                 anchor="bottom"
+                sx={{ zIndex: 1600 }}
                 open={open}
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}

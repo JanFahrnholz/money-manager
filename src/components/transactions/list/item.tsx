@@ -4,79 +4,30 @@ import {
     Avatar,
     ListItemText,
     Typography,
-    Divider,
     IconButton,
-    ListItemButton,
-    Icon,
 } from "@mui/material";
 import { FC, useContext, useState } from "react";
-import { ContactContext } from "../../../context/ContactContext";
-import { TransactionContext } from "../../../context/TransactionContext";
 import Transaction from "../../../types/Transaction";
-import MoneyOffIcon from "@mui/icons-material/MoneyOff";
-import PaidIcon from "@mui/icons-material/Paid";
 import ActionMenu from "../../misc/ActionMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Record from "../../../types/Record";
+import { getInitials } from "../../../lib/Contacts";
+import { getColor, remove } from "../../../lib/Transactions";
 
-const TransactionListItem: FC<{ transaction: Transaction }> = ({
+const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     transaction,
 }) => {
-    const tCtx = useContext(TransactionContext);
-    const cCtx = useContext(ContactContext);
     const [openActions, setOpenActions] = useState(false);
-
-    const type = tCtx.getTypeById(transaction.typeId);
-    const contact = cCtx.findById(transaction.personId);
-
-    if (!contact) return <></>;
-
-    const deleteTransaction = () => {
-        cCtx.addBalance(transaction.personId, -transaction.amount);
-
-        tCtx.delete(transaction.id);
-    };
 
     const actions = [
         {
             name: "Delete",
-            action: () => deleteTransaction(),
+            action: () => remove(transaction.id),
             color: "#ff1c1c",
         },
     ];
 
     const secondaryAction = () => {
-        if (type?.name === "Rechnung") {
-            if (contact?.balance >= 0) {
-                return (
-                    <>
-                        <IconButton
-                            edge="end"
-                            sx={{ mr: 1 }}
-                            aria-label="delete"
-                        >
-                            <PaidIcon />
-                        </IconButton>
-                        <IconButton
-                            onClick={() => setOpenActions(!openActions)}
-                        >
-                            <MoreHorizIcon />
-                        </IconButton>
-                    </>
-                );
-            }
-
-            return (
-                <>
-                    <IconButton edge="end" sx={{ mr: 1 }} aria-label="delete">
-                        <MoneyOffIcon />
-                    </IconButton>
-                    <IconButton onClick={() => setOpenActions(!openActions)}>
-                        <MoreHorizIcon />
-                    </IconButton>
-                </>
-            );
-        }
-
         return (
             <IconButton onClick={() => setOpenActions(!openActions)}>
                 <MoreHorizIcon />
@@ -100,14 +51,14 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
             <ListItemAvatar>
                 <Avatar
                     sx={{
-                        bgcolor: type?.color,
+                        bgcolor: getColor(transaction.type),
                     }}
                 >
-                    {cCtx.getInitials(transaction.personId)}
+                    {getInitials(transaction["@expand"].contact.name)}
                 </Avatar>
             </ListItemAvatar>
             <ListItemText
-                primary={`${type?.name} ${transaction.amount}€`}
+                primary={`${transaction.type} ${transaction.amount}€`}
                 secondary={
                     <Typography
                         sx={{
@@ -116,7 +67,7 @@ const TransactionListItem: FC<{ transaction: Transaction }> = ({
                         component="span"
                         variant="body2"
                     >
-                        {contact?.name}
+                        {transaction["@expand"].contact.name}
                     </Typography>
                 }
             />
