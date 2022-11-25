@@ -5,7 +5,7 @@ type Transaction = {
     info: string;
     date: Date;
     type: TransactionType;
-    contact: string;
+    user: string;
     owner: string;
 };
 

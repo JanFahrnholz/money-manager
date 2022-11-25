@@ -11,7 +11,7 @@ import {
 import { Box } from "@mui/system";
 import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
-import { loginWithId } from "../lib/Pocketbase";
+import { login } from "../lib/Pocketbase";
 
 type Card = {
     icon: ReactElement;
@@ -32,7 +32,7 @@ const LoginPage: FC = () => {
         const id = e.target["email"].value;
         const pw = e.target["pw"].value;
 
-        loginWithId(id, pw)
+        login(id, pw)
             .then(() => {
                 setError(undefined);
                 setStatus("Success!");

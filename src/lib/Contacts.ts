@@ -14,21 +14,30 @@ type UpdateProps = {
     user?: string;
 };
 
-const list = (): Promise<Record<Contact>[]> => {
-    return new Promise((resolve, reject) => {
-        client.records
-            .getFullList("contacts")
-            .then((res: unknown) => {
-                resolve(res as Record<Contact>[]);
-            })
-            .catch((err) => reject(err));
-    });
+const list = async (): Promise<Record<Contact>[]> => {
+    try {
+        const id = client.authStore.model?.id;
+        const contacts = (await client
+            .collection("contacts")
+            .getFullList(undefined, {
+                sort: "-user",
+                expand: "owner",
+            })) as Record<Contact>[];
+
+        contacts.sort((a, b) => {
+            return a.owner != id ? -1 : b.owner != id ? 1 : 0;
+        });
+
+        return contacts;
+    } catch (error) {
+        return [];
+    }
 };
 
 const create = ({ name, balance, user }: CreateProps) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res = await client.records.create("contacts", {
+            const res = await client.collection("contacts").create({
                 name,
                 balance,
                 user,
@@ -44,7 +53,7 @@ const create = ({ name, balance, user }: CreateProps) => {
 const update = (id: string, data: UpdateProps) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res = await client.records.update("contacts", id, data);
+            const res = await client.collection("contacts").update(id, data);
             resolve(res);
         } catch (error) {
             reject(error);
@@ -55,7 +64,7 @@ const update = (id: string, data: UpdateProps) => {
 const modifyBalance = async (id: string, modifier: number) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const contact = await client.records.getOne("contacts", id);
+            const contact = await client.collection("contacts").getOne(id);
 
             await update(id, { balance: contact.balance + modifier });
         } catch (error) {
@@ -66,12 +75,23 @@ const modifyBalance = async (id: string, modifier: number) => {
 
 const remove = (id: string) => {
     return new Promise((resolve, reject) => {
-        client.records
-            .delete("contacts", id)
+        client
+            .collection("contacts")
+            .delete(id)
             .then((res) => resolve(res))
             .catch((err) => reject(err));
     });
 };
+
+const isOwner = async (id: string) => {
+    try {
+        const contact = await client
+            .collection("contacts")
+            .getOne<Record<Contact>>(id);
+        return contact.owner == id;
+    } catch (error) {}
+};
+const isUser = async (id: string) => {};
 
 const getInitials = (name: string) => {
     let names = name.split(" "),

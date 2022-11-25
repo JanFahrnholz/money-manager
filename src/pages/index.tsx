@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Navigation from "../components/Navigation";
-import People from "../components/people";
+import People from "../components/contacts";
 import Profile from "../components/profile";
 import Tools from "../components/tools";
 import Transactions from "../components/transactions";

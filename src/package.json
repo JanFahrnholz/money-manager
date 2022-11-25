@@ -1,6 +1,6 @@
 {
     "name": "money-manager",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "private": true,
     "scripts": {
         "dev": "next dev",
@@ -26,12 +26,13 @@
         "lodash": "^4.17.21",
         "next": "12.2.5",
         "next-pwa": "^5.6.0",
-        "pocketbase": "^0.7.4",
+        "pocketbase": "^0.8.0",
         "postcss": "^8.4.16",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-pwa-add-to-homescreen": "^1.1.7",
         "react-viewport-list": "^6.1.0",
+        "short-unique-id": "^4.4.4",
         "styled-components": "^5.3.5",
         "tailwindcss": "^3.1.8"
     },

@@ -1,7 +1,7 @@
 type Record<T> = {
-    "@CollectionId": number;
-    "@CollectionName": string;
-    "@expand": any;
+    CollectionId: number;
+    CollectionName: string;
+    expand: any;
     id: string;
     created: Date;
     updated: Date;

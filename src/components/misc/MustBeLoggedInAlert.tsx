@@ -8,7 +8,7 @@ type Props = {
 };
 
 const MustBeLoggedInAlert: FC<Props> = ({ msg }) => {
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(true);
 
     useEffect(() => {
         setUser(client.authStore.isValid);

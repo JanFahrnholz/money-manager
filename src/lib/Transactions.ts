@@ -23,10 +23,12 @@ type UpdateProps = {
 const list = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res = await client.records.getList("transactions", 1, 100, {
-                sort: "-created",
-                expand: "contact",
-            });
+            const res = await client
+                .collection("transactions")
+                .getList(1, 100, {
+                    sort: "-created",
+                    expand: "contact,owner",
+                });
             const t = _.groupBy(res.items, ({ date }: { date: Date }) =>
                 new Date(date).getMonth()
             );
@@ -41,7 +43,7 @@ const list = () => {
 const create = ({ amount, info, contact, type }: CreateProps) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res = await client.records.create("transactions", {
+            const res = await client.collection("transactions").create({
                 amount,
                 type,
                 info,
@@ -50,17 +52,11 @@ const create = ({ amount, info, contact, type }: CreateProps) => {
                 owner: client.authStore.model?.id,
             });
 
-            const contactEntry = await client.records.getOne(
-                "contacts",
-                contact
-            );
+            const contactEntry = await client
+                .collection("contacts")
+                .getOne(contact);
 
             if (type == "Rechnung") {
-                console.log(
-                    "update contact",
-                    contactEntry.balance - amount,
-                    contactEntry
-                );
                 await updateContact(contact, {
                     balance: contactEntry.balance - amount,
                 });
@@ -82,7 +78,9 @@ const create = ({ amount, info, contact, type }: CreateProps) => {
 const update = (id: string, data: UpdateProps) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res = await client.records.update("transactions", id, data);
+            const res = await client
+                .collection("transactions")
+                .update(id, data);
             resolve(res);
         } catch (error) {
             reject(error);
@@ -93,27 +91,25 @@ const update = (id: string, data: UpdateProps) => {
 const remove = (id: string) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const transaction = await client.records.getOne(
-                "transactions",
-                id,
-                {
+            const transaction = (await client
+                .collection("transactions")
+                .getOne(id, {
                     expand: "contact",
-                }
-            );
+                })) as Record<Transaction>;
 
             if (transaction.type == "Rechnung")
                 await modifyBalance(
-                    transaction["@expand"].contact.id,
+                    transaction.expand.contact.id,
                     transaction.amount
                 );
 
             if (transaction.type == "Rückzahlung")
                 await modifyBalance(
-                    transaction["@expand"].contact.id,
+                    transaction.expand.contact.id,
                     -transaction.amount
                 );
 
-            await client.records.delete("transactions", id);
+            await client.collection("transactions").delete(id);
         } catch (error) {
             reject(error);
         }

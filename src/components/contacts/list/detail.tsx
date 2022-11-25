@@ -17,14 +17,13 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import Contact from "../../../types/Contact";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import DoneIcon from "@mui/icons-material/Done";
 import ConfirmationDialog from "../../misc/ConfirmationDialog";
 import { remove } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
+import ContactDetailsWhenOwned from "./isOwner";
+import { getCashflow } from "../../../lib/Statistics";
 
 interface Props {
     id: string | undefined;
@@ -33,11 +32,11 @@ interface Props {
 }
 
 const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
-    const [editing, setEditing] = useState(false);
+    const [totalCashflow, setTotalCashflow] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [confirm, setConfirm] = useState(false);
     const [contact, setContact] = useState<Record<Contact>>();
     const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+    const isOwner = client.authStore.model?.id == contact?.owner;
 
     const iOS =
         typeof navigator !== "undefined" &&
@@ -45,25 +44,27 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
 
     const drawerBleeding = 0;
     const drawerHeight = 400;
-    const totalCashflow = 0;
 
     useEffect(() => {
         if (!id) return;
-        client.records
-            .getOne("contacts", id)
+        client
+            .collection("contacts")
+            .getOne(id, { expand: "owner" })
             .then((res: unknown) => {
                 setContact(res as Record<Contact>);
                 setLoading(false);
             })
             .catch((err) => console.log(err));
 
-        client.records
-            .getFullList("transactions", 20, {
+        client
+            .collection("transactions")
+            .getFullList(20, {
                 filter: `contact="${id}"`,
                 sort: "-created",
             })
             .then((res: unknown) => {
                 setTransactions(res as Record<Transaction>[]);
+                setTotalCashflow(getCashflow(res as Record<Transaction>[]));
             })
             .catch((err) => console.log(err));
     }, [id]);
@@ -80,28 +81,10 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
         })}`;
     };
 
-    const deleteContact = () => {
-        remove(contact.id).catch((err) => console.log(err));
-        setOpen(false);
-    };
-
-    const editName = (name: string) => {};
-
-    const editBalance = (balance: number) => {};
-
     if (loading) return <CircularProgress />;
 
     return (
         <Root>
-            <ConfirmationDialog
-                open={confirm}
-                setOpen={setConfirm}
-                title="Delete contact"
-                content={"Are you sure want to delete this contact"}
-                disagreeText="Cancel"
-                agreeText="Delete"
-                action={deleteContact}
-            />
             <CssBaseline />
             <Global
                 styles={{
@@ -147,36 +130,14 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                             borderTopRightRadius: 8,
                         }}
                     >
-                        {!editing && contact.name}
-
-                        {editing && (
-                            <FormControl variant="standard">
-                                <Input
-                                    id="outlined-adornment-password"
-                                    type="text"
-                                    defaultValue={contact.name}
-                                    onChange={(e) => editName(e.target.value)}
-                                />
-                            </FormControl>
-                        )}
-
-                        <span className="float-right space-x-3">
-                            {!editing ? (
-                                <EditIcon
-                                    onClick={() => setEditing(!editing)}
-                                    className="hover:cursor-pointer hover:text-white"
-                                />
-                            ) : (
-                                <DoneIcon
-                                    onClick={() => setEditing(!editing)}
-                                    className="hover:cursor-pointer hover:text-white"
-                                />
-                            )}
-                            <DeleteIcon
-                                onClick={() => setConfirm(true)}
-                                className="hover:cursor-pointer hover:text-danger"
+                        {isOwner ? (
+                            <ContactDetailsWhenOwned
+                                contact={contact}
+                                setOpen={setOpen}
                             />
-                        </span>
+                        ) : (
+                            contact.name
+                        )}
                     </Typography>
 
                     <Typography
@@ -186,24 +147,10 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                             bgcolor: "background.default",
                         }}
                     >
-                        {!editing && (
-                            <>
-                                Balance: {contact.balance}€ + Cashflow:{" "}
-                                {totalCashflow}€
-                            </>
-                        )}
-                        {editing && (
-                            <FormControl variant="standard">
-                                <Input
-                                    id="outlined-adornment-password"
-                                    type="number"
-                                    defaultValue={contact.balance}
-                                    onChange={(e) =>
-                                        editBalance(+e.target.value)
-                                    }
-                                />
-                            </FormControl>
-                        )}
+                        <>
+                            Balance: {contact.balance}€ + Cashflow:{" "}
+                            {totalCashflow}€
+                        </>
                     </Typography>
 
                     {/* <StampcardProcessWidget contact={contact} /> */}

@@ -139,11 +139,11 @@ const AddTransaction: FC = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={contact || "Selected contact"}
-                                    label="Age"
+                                    value={contact}
+                                    label="Contact"
                                     onChange={(e) => setContact(e.target.value)}
                                     required
-                                    placeholder="Select a person"
+                                    placeholder="Select a contact"
                                 >
                                     {contacts &&
                                         contacts.map((c) => (

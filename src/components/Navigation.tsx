@@ -1,4 +1,4 @@
-import { ReactElement, FC, useRef } from "react";
+import { ReactElement, FC, useRef, useContext } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import BottomNavigation from "@mui/material/BottomNavigation";
@@ -9,13 +9,14 @@ import PeopleIcon from "@mui/icons-material/People";
 import Paper from "@mui/material/Paper";
 import usePersistantState from "../hooks/usePersistantStorage";
 import PercentIcon from "@mui/icons-material/Percent";
+import { NavigationContext } from "../context/NavigationContext";
 
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
 };
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
-    const [value, setValue] = usePersistantState("dc_last_tab", 0);
+    const { currentTab, setCurrentTab } = useContext(NavigationContext);
     const ref = useRef<HTMLDivElement>(null);
 
     return (
@@ -23,7 +24,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
             <CssBaseline />
             <Box ref={ref}>
                 {tabs.map((tab, index) => {
-                    if (value === index) {
+                    if (currentTab === index) {
                         return tab;
                     }
                 })}
@@ -35,14 +36,14 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                         right: 0,
                         pb: 3,
                         bgcolor: "secondary.main",
-                        zIndex: 1500,
+                        zIndex: 1000,
                     }}
                     elevation={3}
                 >
                     <BottomNavigation
-                        value={value}
+                        value={currentTab}
                         onChange={(event, newValue) => {
-                            setValue(newValue);
+                            setCurrentTab(newValue);
                         }}
                     >
                         <BottomNavigationAction

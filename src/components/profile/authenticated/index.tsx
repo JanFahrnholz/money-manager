@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { FC, useState } from "react";
-import { client } from "../../../lib/Pocketbase";
+import { client, deleteId } from "../../../lib/Pocketbase";
 import { useRouter } from "next/router";
 import useCopyToClipboard from "../../../hooks/useCopyToClipboard";
 import ConfirmationDialog from "../../misc/ConfirmationDialog";
@@ -25,31 +25,9 @@ const AuthenticatedProfile: FC = () => {
         router.reload();
     };
 
-    const deleteId = async () => {
-        if (id === undefined) return;
-
-        const idReference = await client.records.getFullList("ids", undefined, {
-            user_id: id,
-        });
-        await client.records.delete("ids", idReference[0].id);
-
-        const transactions = await client.records.getFullList(
-            "transactions",
-            undefined
-        );
-        transactions.map(async (transaction) => {
-            await client.records.delete("transactions", transaction.id);
-        });
-
-        const contacts = await client.records.getFullList(
-            "contacts",
-            undefined
-        );
-        contacts.map(async (contact) => {
-            await client.records.delete("contacts", contact.id);
-        });
-
-        await client.users.delete(id);
+    const del = async () => {
+        if (!id) return;
+        deleteId(id);
         logout();
     };
 
@@ -64,7 +42,7 @@ const AuthenticatedProfile: FC = () => {
                 }
                 disagreeText="Cancel"
                 agreeText="Delete"
-                action={() => deleteId()}
+                action={() => del()}
             />
             <Box
                 sx={{
