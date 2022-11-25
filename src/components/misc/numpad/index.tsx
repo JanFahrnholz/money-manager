@@ -36,6 +36,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
                     variant="outlined"
                     sx={{ height: "10vh", fontSize: 26 }}
                     fullWidth
+                    disableFocusRipple
                     onClick={() => add(i)}
                 >
                     {i}
@@ -66,6 +67,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
                     variant="outlined"
                     sx={{ height: "10vh", fontSize: 26 }}
                     fullWidth
+                    disableFocusRipple
                     onClick={() => clear()}
                 >
                     C
@@ -77,6 +79,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
                     variant="outlined"
                     sx={{ height: "10vh", fontSize: 26 }}
                     fullWidth
+                    disableFocusRipple
                     onClick={() => add(0)}
                 >
                     {0}
@@ -89,6 +92,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
                         variant="outlined"
                         sx={{ height: "10vh", fontSize: 26 }}
                         fullWidth
+                        disableFocusRipple
                         onClick={() => add(".")}
                     >
                         .

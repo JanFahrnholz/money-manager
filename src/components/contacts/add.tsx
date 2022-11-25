@@ -132,7 +132,6 @@ const AddContact: FC = () => {
                         fullWidth
                         type={"text"}
                         className="mt-2"
-                        autoFocus
                     />
                 </DialogContent>
             </Dialog>

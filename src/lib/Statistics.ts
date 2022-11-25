@@ -33,5 +33,15 @@ const getBalance = (transactions: Record<Transaction>[]) => {
 
     return balance;
 };
+const getCashflow = (transactions: Record<Transaction>[]) => {
+    let cashflow = 0;
+    transactions.map((t) => {
+        if (t.type === "Ausgabe") cashflow += t.amount;
+        if (t.type === "Einnahme") cashflow += t.amount;
+        if (t.type === "Rückzahlung") cashflow += t.amount;
+    });
 
-export { getPendingMoney, getMoneyToPayBack, getBalance };
+    return cashflow;
+};
+
+export { getPendingMoney, getMoneyToPayBack, getBalance, getCashflow };

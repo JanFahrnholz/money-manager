@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Client, Account, ID } from "appwrite";
 import ContactContextProvider from "../context/ContactContext";
 import TransactionContextProvider from "../context/TransactionContext";
+import NavigationContextProvider from "../context/NavigationContext";
 
 const theme = createTheme({
     palette: {
@@ -35,18 +36,20 @@ const theme = createTheme({
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider theme={theme}>
-            <TransactionContextProvider>
-                <ContactContextProvider>
-                    <Head>
-                        <meta
-                            name="viewport"
-                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                        />
-                        <title>Money Manager</title>
-                    </Head>
-                    <Component {...pageProps} />
-                </ContactContextProvider>
-            </TransactionContextProvider>
+            <NavigationContextProvider>
+                <TransactionContextProvider>
+                    <ContactContextProvider>
+                        <Head>
+                            <meta
+                                name="viewport"
+                                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                            />
+                            <title>Money Manager</title>
+                        </Head>
+                        <Component {...pageProps} />
+                    </ContactContextProvider>
+                </TransactionContextProvider>
+            </NavigationContextProvider>
         </ThemeProvider>
     );
 }
