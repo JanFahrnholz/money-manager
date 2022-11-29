@@ -22,7 +22,6 @@ const AuthenticatedProfile: FC = () => {
     const router = useRouter();
     const logout = () => {
         client.authStore.clear();
-        router.reload();
     };
 
     const del = async () => {

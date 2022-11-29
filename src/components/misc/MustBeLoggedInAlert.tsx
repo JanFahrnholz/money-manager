@@ -2,17 +2,14 @@ import { Alert } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { client } from "../../lib/Pocketbase";
 import { useRouter } from "next/router";
+import useLoggedIn from "../../hooks/useLoggedIn";
 
 type Props = {
     msg: string;
 };
 
 const MustBeLoggedInAlert: FC<Props> = ({ msg }) => {
-    const [user, setUser] = useState(true);
-
-    useEffect(() => {
-        setUser(client.authStore.isValid);
-    }, []);
+    const user = useLoggedIn();
     const router = useRouter();
 
     return (

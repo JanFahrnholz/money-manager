@@ -6,7 +6,7 @@ import { list } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
 import Error from "../../misc/Error";
-import MustBeLoggedInAlert from "../../misc/MustBeLoggedInAlert";
+
 import TransactionListItem from "./item";
 const _ = require("lodash");
 
@@ -22,8 +22,6 @@ const TransactionList: FC = () => {
 
     return (
         <div>
-            <MustBeLoggedInAlert msg="Please login to use this functions" />
-
             <div className="px-2">
                 <List
                     sx={{

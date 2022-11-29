@@ -1,4 +1,5 @@
-import PocketBase from "pocketbase";
+import Error from "next/error";
+import PocketBase, { ClientResponseError } from "pocketbase";
 import ShortUniqueId from "short-unique-id";
 
 const client = new PocketBase(process.env.PB_URL);
@@ -41,26 +42,11 @@ const login = (id: string, password: string) => {
 };
 
 const deleteId = async (id: string) => {
-    if (id === undefined) return;
+    try {
+        if (id === undefined) return;
 
-    const idReference = await client.collection("ids").getFullList(undefined, {
-        user_id: id,
-    });
-    await client.collection("ids").delete(idReference[0].id);
-
-    const transactions = await client
-        .collection("transactions")
-        .getFullList(undefined);
-    transactions.map(async (transaction) => {
-        await client.collection("transactions").delete(transaction.id);
-    });
-
-    const contacts = await client.collection("contacts").getFullList(undefined);
-    contacts.map(async (contact) => {
-        await client.collection("contacts").delete(contact.id);
-    });
-
-    await client.collection("users").delete(id);
+        await client.collection("users").delete(id);
+    } catch (error) {}
 };
 
 export { client, register, login, deleteId };

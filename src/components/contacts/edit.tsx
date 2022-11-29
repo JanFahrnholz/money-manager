@@ -10,8 +10,10 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import AddIcon from "@mui/icons-material/Add";
 import { Alert, DialogContent, Fab, TextField } from "@mui/material";
-import { create } from "../../lib/Contacts";
+import { create, update } from "../../lib/Contacts";
 import useLoggedIn from "../../hooks/useLoggedIn";
+import Contact from "../../types/Contact";
+import Record from "../../types/Record";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -22,21 +24,25 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const AddContact: FC = () => {
-    const [name, setName] = useState("");
-    const [userId, setUserId] = useState("");
-    const [open, setOpen] = useState(false);
+type Props = {
+    open: boolean;
+    setOpen: (data: boolean) => void;
+    contact: Record<Contact>;
+};
+
+const EditContact: FC<Props> = ({ open, setOpen, contact }) => {
+    const [name, setName] = useState(contact.name);
+    const [userId, setUserId] = useState(contact.user);
     const [error, setError] = useState<string | null>(null);
     const loggedIn = useLoggedIn();
 
     if (!loggedIn) return <></>;
 
     const submit = () => {
-        create({ name, balance: 0, user: userId })
+        update(contact.id, { name, user: userId })
             .then((res) => {
                 setOpen(false);
                 setError(null);
-                setName("");
             })
             .catch((err) => {
                 setError(err.message);
@@ -45,25 +51,6 @@ const AddContact: FC = () => {
 
     return (
         <div>
-            <Fab
-                variant="extended"
-                size="medium"
-                color="primary"
-                aria-label="add"
-                style={{
-                    margin: 0,
-                    top: "auto",
-                    right: 15,
-                    bottom: 90,
-                    left: "auto",
-                    position: "fixed",
-                    zIndex: 50,
-                }}
-                onClick={() => setOpen(true)}
-            >
-                <AddIcon sx={{ mr: 1 }} />
-                New contact
-            </Fab>
             <Dialog
                 fullScreen
                 open={open}
@@ -92,7 +79,7 @@ const AddContact: FC = () => {
                             variant="h6"
                             component="div"
                         >
-                            Add new contact
+                            Edit contact
                         </Typography>
                         <Button
                             autoFocus
@@ -143,4 +130,4 @@ const AddContact: FC = () => {
     );
 };
 
-export default AddContact;
+export default EditContact;

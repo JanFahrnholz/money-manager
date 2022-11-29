@@ -5,8 +5,10 @@ import Record from "../../../types/Record";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
+import AddLinkIcon from "@mui/icons-material/AddLink";
 import ConfirmationDialog from "../../misc/ConfirmationDialog";
 import { remove } from "../../../lib/Contacts";
+import EditContact from "../edit";
 
 type Props = {
     contact: Record<Contact>;
@@ -16,8 +18,7 @@ type Props = {
 const ContactDetailsWhenOwned: FC<Props> = ({ contact, setOpen }) => {
     const [editing, setEditing] = useState(false);
     const [confirm, setConfirm] = useState(false);
-
-    const editName = (name: string) => {};
+    const isLinked = contact?.user != "";
 
     const deleteContact = () => {
         remove(contact.id).catch((err) => console.log(err));
@@ -35,30 +36,27 @@ const ContactDetailsWhenOwned: FC<Props> = ({ contact, setOpen }) => {
                 agreeText="Delete"
                 action={deleteContact}
             />
-            {!editing && contact.name}
 
-            {editing && (
-                <FormControl variant="standard">
-                    <Input
-                        type="text"
-                        defaultValue={contact.name}
-                        onChange={(e) => editName(e.target.value)}
-                    />
-                </FormControl>
-            )}
+            <EditContact
+                open={editing}
+                setOpen={setEditing}
+                contact={contact}
+            />
+
+            {contact.name}
 
             <span className="float-right space-x-3">
-                {!editing ? (
-                    <EditIcon
-                        onClick={() => setEditing(!editing)}
-                        className="hover:cursor-pointer hover:text-white"
-                    />
-                ) : (
-                    <DoneIcon
-                        onClick={() => setEditing(!editing)}
+                {!isLinked && (
+                    <AddLinkIcon
+                        onClick={() => setEditing(true)}
                         className="hover:cursor-pointer hover:text-white"
                     />
                 )}
+
+                <EditIcon
+                    onClick={() => setEditing(true)}
+                    className="hover:cursor-pointer hover:text-white"
+                />
                 <DeleteIcon
                     onClick={() => setConfirm(true)}
                     className="hover:cursor-pointer hover:text-danger"

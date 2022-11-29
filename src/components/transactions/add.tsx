@@ -1,4 +1,12 @@
-import { useState, forwardRef, ReactElement, Ref, FC, useContext } from "react";
+import {
+    useState,
+    forwardRef,
+    ReactElement,
+    Ref,
+    FC,
+    useContext,
+    useEffect,
+} from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -24,6 +32,8 @@ import { create } from "../../lib/Transactions";
 import TransactionType from "../../types/TransactionType";
 import Error from "../misc/Error";
 import { ContactContext } from "../../context/ContactContext";
+import { client } from "../../lib/Pocketbase";
+import useLoggedIn from "../../hooks/useLoggedIn";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -37,14 +47,16 @@ const Transition = forwardRef(function Transition(
 const AddTransaction: FC = () => {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(null);
-
-    const types = ["Einnahme", "Ausgabe", "Rechnung", "Rückzahlung"];
-
     const [amount, setAmount] = useState<number>(0);
     const [contact, setContact] = useState<string>("");
     const [info, setInfo] = useState<string | undefined>();
     const [type, setType] = useState<TransactionType>("Einnahme");
     const { contacts } = useContext(ContactContext);
+    const loggedIn = useLoggedIn();
+
+    if (!loggedIn) return <></>;
+
+    const types = ["Einnahme", "Ausgabe", "Rechnung", "Rückzahlung"];
 
     const submit = () => {
         create({ amount, info, contact, type })

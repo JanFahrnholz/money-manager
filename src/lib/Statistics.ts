@@ -1,12 +1,19 @@
 import Contact from "../types/Contact";
 import Record from "../types/Record";
 import Transaction from "../types/Transaction";
+import { client } from "./Pocketbase";
 
 const getPendingMoney = (contacts: Record<Contact>[]): number => {
     let pending = 0;
+    const owner = client.authStore.model?.id;
 
     contacts.map((contact) => {
-        if (contact.balance < 0) pending += -1 * contact.balance;
+        if (contact.balance < 0 && contact.owner == owner) {
+            pending += -1 * contact.balance;
+        }
+        if (contact.balance > 0 && contact.owner != owner) {
+            pending += contact.balance;
+        }
     });
 
     return pending;
@@ -14,9 +21,13 @@ const getPendingMoney = (contacts: Record<Contact>[]): number => {
 
 const getMoneyToPayBack = (contacts: Record<Contact>[]): number => {
     let toPay = 0;
+    const owner = client.authStore.model?.id;
 
     contacts.map((contact) => {
-        if (contact.balance > 0) toPay += contact.balance;
+        if (contact.balance > 0 && contact.owner == owner)
+            toPay += contact.balance;
+        if (contact.balance < 0 && contact.owner != owner)
+            toPay += -1 * contact.balance;
     });
 
     return toPay;
