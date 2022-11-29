@@ -1,4 +1,11 @@
-import { ReactElement, FC, useRef, useContext } from "react";
+import {
+    ReactElement,
+    FC,
+    useRef,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import BottomNavigation from "@mui/material/BottomNavigation";
@@ -10,60 +17,84 @@ import Paper from "@mui/material/Paper";
 import usePersistantState from "../hooks/usePersistantStorage";
 import PercentIcon from "@mui/icons-material/Percent";
 import { NavigationContext } from "../context/NavigationContext";
+import { AnimatePresence, motion } from "framer-motion";
+import { client } from "../lib/Pocketbase";
+import useLoggedIn from "../hooks/useLoggedIn";
 
 type Props = {
-    tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
+    tabs: [ReactElement, ReactElement, ReactElement];
 };
 
 const Navigation: React.FC<Props> = ({ tabs }) => {
     const { currentTab, setCurrentTab } = useContext(NavigationContext);
-    const ref = useRef<HTMLDivElement>(null);
+    const loggedIn = useLoggedIn();
 
     return (
         <div>
             <CssBaseline />
-            <Box ref={ref}>
-                {tabs.map((tab, index) => {
-                    if (currentTab === index) {
-                        return tab;
-                    }
-                })}
-                <Paper
-                    sx={{
-                        position: "fixed",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        pb: 3,
-                        bgcolor: "secondary.main",
-                        zIndex: 1000,
-                    }}
-                    elevation={3}
-                >
-                    <BottomNavigation
-                        value={currentTab}
-                        onChange={(event, newValue) => {
-                            setCurrentTab(newValue);
+            <Box>
+                {loggedIn && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                            delay: 0.7,
                         }}
                     >
-                        <BottomNavigationAction
-                            label="Transactions"
-                            icon={<RestoreIcon />}
-                        />
-                        <BottomNavigationAction
-                            label="Contacts"
-                            icon={<PeopleIcon />}
-                        />
-                        <BottomNavigationAction
-                            label="Tools"
-                            icon={<PercentIcon />}
-                        />
-                        <BottomNavigationAction
-                            label="Profile"
-                            icon={<ManageAccountsIcon />}
-                        />
-                    </BottomNavigation>
-                </Paper>
+                        {tabs.map((tab, index) => {
+                            if (currentTab === index) {
+                                return tab;
+                            }
+                        })}
+                    </motion.div>
+                )}
+                <AnimatePresence>
+                    {loggedIn && (
+                        <motion.div
+                            key={"navbar"}
+                            style={{ position: "fixed", left: 0 }}
+                            initial={{ bottom: -100 }}
+                            animate={{ bottom: 0 }}
+                            exit={{ bottom: -100 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Paper
+                                sx={{
+                                    width: "100vw",
+                                    pb: 3,
+                                    bgcolor: "secondary.main",
+                                    zIndex: 1000,
+                                }}
+                                elevation={3}
+                            >
+                                <BottomNavigation
+                                    value={currentTab}
+                                    onChange={(event, newValue) => {
+                                        setCurrentTab(newValue);
+                                    }}
+                                >
+                                    <BottomNavigationAction
+                                        label="Transactions"
+                                        icon={<RestoreIcon />}
+                                    />
+                                    <BottomNavigationAction
+                                        label="Contacts"
+                                        icon={<PeopleIcon />}
+                                    />
+
+                                    <BottomNavigationAction
+                                        label="Profile"
+                                        icon={<ManageAccountsIcon />}
+                                    />
+                                </BottomNavigation>
+                            </Paper>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </Box>
         </div>
     );

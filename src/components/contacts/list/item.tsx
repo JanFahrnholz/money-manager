@@ -14,6 +14,7 @@ import Record from "../../../types/Record";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
+import LinkedFrom from "../../misc/LinkedFrom";
 
 type Props = {
     contact: Record<Contact>;
@@ -22,7 +23,6 @@ type Props = {
 
 const ContactListItem: FC<Props> = ({ contact, delay }) => {
     const isOwner = client.authStore.model?.id == contact.owner;
-    console.log(contact);
 
     let avatarBg = "#ffd600";
     if (!isOwner && contact.balance > 0) avatarBg = "#62D836";
@@ -30,7 +30,7 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
 
     return (
         <motion.div
-            key={contact.id}
+            key={`contact-${contact.id}`}
             transition={{ duration: 0.3, delay }}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -57,23 +57,7 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                 <ListItemText
                     primary={
                         !isOwner ? (
-                            <Typography
-                                sx={{
-                                    color: "text.secondary",
-                                    display: "inline",
-                                }}
-                            >
-                                linked from{" "}
-                                <Typography
-                                    sx={{
-                                        display: "inline",
-                                        color: "white",
-                                    }}
-                                >
-                                    {/* {contact.expand.owner.username} */}
-                                    {contact.owner}
-                                </Typography>
-                            </Typography>
+                            <LinkedFrom txt={contact.owner} />
                         ) : (
                             <>
                                 {!isOwner && "imported"}

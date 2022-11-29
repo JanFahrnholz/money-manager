@@ -24,6 +24,7 @@ import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
 import ContactDetailsWhenOwned from "./isOwner";
 import { getCashflow } from "../../../lib/Statistics";
+import LinkedFrom from "../../misc/LinkedFrom";
 
 interface Props {
     id: string | undefined;
@@ -47,7 +48,10 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
 
     useEffect(() => {
         if (!id) return;
-        client
+
+        setLoading(true);
+
+        const contacts = client
             .collection("contacts")
             .getOne(id, { expand: "owner" })
             .then((res: unknown) => {
@@ -56,7 +60,7 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
             })
             .catch((err) => console.log(err));
 
-        client
+        const transactions = client
             .collection("transactions")
             .getFullList(20, {
                 filter: `contact="${id}"`,
@@ -67,6 +71,8 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                 setTotalCashflow(getCashflow(res as Record<Transaction>[]));
             })
             .catch((err) => console.log(err));
+
+        Promise.all([transactions, contacts]).then(() => setLoading(false));
     }, [id]);
 
     if (!contact) return <></>;
@@ -136,7 +142,7 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                                 setOpen={setOpen}
                             />
                         ) : (
-                            contact.name
+                            <LinkedFrom txt={contact.owner} />
                         )}
                     </Typography>
 
@@ -148,8 +154,8 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                         }}
                     >
                         <>
-                            Balance: {contact.balance}€ + Cashflow:{" "}
-                            {totalCashflow}€
+                            Balance: {contact.balance}€
+                            {isOwner && <> Cashflow: {totalCashflow}€</>}
                         </>
                     </Typography>
 

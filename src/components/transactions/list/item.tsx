@@ -15,6 +15,7 @@ import { getInitials } from "../../../lib/Contacts";
 import { getColor, remove } from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
+import LinkedFrom from "../../misc/LinkedFrom";
 
 const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     transaction,
@@ -98,25 +99,7 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                                 )}
                             </>
                         ) : (
-                            <>
-                                <Typography
-                                    sx={{
-                                        color: "text.secondary",
-                                        display: "inline",
-                                    }}
-                                >
-                                    linked from{" "}
-                                    <Typography
-                                        sx={{
-                                            display: "inline",
-                                            color: "white",
-                                        }}
-                                    >
-                                        {/* {transaction.expand.owner.username} */}
-                                        {transaction.owner}
-                                    </Typography>
-                                </Typography>
-                            </>
+                            <LinkedFrom txt={transaction.owner} />
                         )}
                     </Typography>
                 }

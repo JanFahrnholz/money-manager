@@ -2,7 +2,6 @@ import { FC, useContext, useState } from "react";
 import ContactDetailDrawer from "./detail";
 import { AnimatePresence } from "framer-motion";
 import { ContactContext } from "../../../context/ContactContext";
-import MustBeLoggedInAlert from "../../misc/MustBeLoggedInAlert";
 import ContactListItem from "./item";
 import { List } from "@mui/material";
 const ContactList: FC = () => {
@@ -20,19 +19,15 @@ const ContactList: FC = () => {
     }
     return (
         <>
-            <MustBeLoggedInAlert msg="Please login to use this functions" />
-
             <List sx={{ width: "100%", pb: 18 }}>
-                <AnimatePresence>
-                    {contacts.map((c) => {
-                        i += 0.05;
-                        return (
-                            <div key={c.id} onClick={() => handleClick(c.id)}>
-                                <ContactListItem contact={c} delay={i} />
-                            </div>
-                        );
-                    })}
-                </AnimatePresence>
+                {contacts.map((c) => {
+                    i += 0.05;
+                    return (
+                        <div key={c.id} onClick={() => handleClick(c.id)}>
+                            <ContactListItem contact={c} delay={i} />
+                        </div>
+                    );
+                })}
             </List>
 
             <ContactDetailDrawer

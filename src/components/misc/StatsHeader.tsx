@@ -28,9 +28,8 @@ const StatsHeader: FC = () => {
     }, [transactions]);
 
     return (
-        <>
-            <Grid container spacing={1} p={1}>
-                {/* <Grid item xs={4}>
+        <Grid container spacing={1} p={1}>
+            {/* <Grid item xs={4}>
                     <Card>
                         <CardContent>
                             <Typography
@@ -46,38 +45,35 @@ const StatsHeader: FC = () => {
                         </CardContent>
                     </Card>
                 </Grid> */}
-                <Grid item xs={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography
-                                sx={{ fontSize: 14 }}
-                                color="text.secondary"
-                                gutterBottom
-                            >
-                                Pending
-                            </Typography>
-                            <Typography variant="h5">
-                                {pendingMoney}€
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography
-                                sx={{ fontSize: 14 }}
-                                color="text.secondary"
-                                gutterBottom
-                            >
-                                to Pay
-                            </Typography>
-                            <Typography variant="h5">{toPay}€</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
+            <Grid item xs={6}>
+                <Card>
+                    <CardContent>
+                        <Typography
+                            sx={{ fontSize: 14 }}
+                            color="text.secondary"
+                            gutterBottom
+                        >
+                            pending
+                        </Typography>
+                        <Typography variant="h5">{pendingMoney}€</Typography>
+                    </CardContent>
+                </Card>
             </Grid>
-        </>
+            <Grid item xs={6}>
+                <Card>
+                    <CardContent>
+                        <Typography
+                            sx={{ fontSize: 14 }}
+                            color="text.secondary"
+                            gutterBottom
+                        >
+                            to pay
+                        </Typography>
+                        <Typography variant="h5">{toPay}€</Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
     );
 };
 
