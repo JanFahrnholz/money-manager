@@ -7,6 +7,7 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
+    Paper,
     SwipeableDrawer,
 } from "@mui/material";
 import { FC } from "react";
@@ -15,7 +16,7 @@ type Props = {
     actions: {
         name: string;
         color?: string;
-        action: Function;
+        action: Function | undefined;
     }[];
     open: boolean;
     setOpen: Function;
@@ -29,7 +30,11 @@ const ActionMenu: FC<Props> = ({ actions, open, setOpen }) => {
     const drawerBleeding = 0;
 
     return (
-        <Root>
+        <Paper
+            sx={{
+                background: "transparent",
+            }}
+        >
             <CssBaseline />
             <Global
                 styles={{
@@ -68,6 +73,7 @@ const ActionMenu: FC<Props> = ({ actions, open, setOpen }) => {
                         >
                             <ListItemButton
                                 onClick={() => {
+                                    if (!a.action) return;
                                     a.action();
                                     setOpen(false);
                                 }}
@@ -78,7 +84,7 @@ const ActionMenu: FC<Props> = ({ actions, open, setOpen }) => {
                     ))}
                 </List>
             </SwipeableDrawer>
-        </Root>
+        </Paper>
     );
 };
 
