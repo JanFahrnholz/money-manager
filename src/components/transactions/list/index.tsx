@@ -65,7 +65,6 @@ const TransactionList: FC = () => {
                                             ).getDay();
                                         }
 
-                                        console.log(i, currDate, nextDate);
                                         return (
                                             <div key={transaction.id}>
                                                 <TransactionListItem
