@@ -1,4 +1,10 @@
-import { Alert, CircularProgress, List, ListSubheader } from "@mui/material";
+import {
+    Alert,
+    CircularProgress,
+    Divider,
+    List,
+    ListSubheader,
+} from "@mui/material";
 import { FC, useContext, useEffect, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
 import { client } from "../../../lib/Pocketbase";
@@ -42,12 +48,41 @@ const TransactionList: FC = () => {
                                 </ListSubheader>
 
                                 {month.map(
-                                    (transaction: Record<Transaction>) => (
-                                        <TransactionListItem
-                                            key={transaction.id}
-                                            transaction={transaction}
-                                        />
-                                    )
+                                    (
+                                        transaction: Record<Transaction>,
+                                        i: number,
+                                        arr: Record<Transaction>[]
+                                    ) => {
+                                        const currDate = new Date(
+                                            transaction.date
+                                        ).getDay();
+
+                                        let nextDate;
+
+                                        if (arr[i + 1]) {
+                                            nextDate = new Date(
+                                                arr[i + 1].date
+                                            ).getDay();
+                                        }
+
+                                        console.log(i, currDate, nextDate);
+                                        return (
+                                            <div key={transaction.id}>
+                                                <TransactionListItem
+                                                    transaction={transaction}
+                                                />
+                                                {currDate != nextDate &&
+                                                    nextDate !== undefined && (
+                                                        <Divider
+                                                            sx={{
+                                                                width: "75%",
+                                                                mx: "auto",
+                                                            }}
+                                                        />
+                                                    )}
+                                            </div>
+                                        );
+                                    }
                                 )}
                             </ul>
                         </li>
