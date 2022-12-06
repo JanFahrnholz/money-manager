@@ -25,6 +25,7 @@ import Transaction from "../../../types/Transaction";
 import ContactDetailsWhenOwned from "./isOwner";
 import { getCashflow } from "../../../lib/Statistics";
 import LinkedFrom from "../../misc/LinkedFrom";
+import TransactionDetailMenu from "../../transactions/menu";
 
 interface Props {
     id: string | undefined;
@@ -35,8 +36,11 @@ interface Props {
 const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     const [totalCashflow, setTotalCashflow] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [contact, setContact] = useState<Record<Contact>>();
     const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+    const [currentTransaction, setCurrentTransaction] =
+        useState<Record<Transaction>>();
     const isOwner = client.authStore.model?.id == contact?.owner;
 
     const iOS =
@@ -90,102 +94,116 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     if (loading) return <CircularProgress />;
 
     return (
-        <Root>
-            <CssBaseline />
-            <Global
-                styles={{
-                    ".MuiDrawer-root > .MuiPaper-root": {
-                        height: `${drawerHeight}px`,
-                        overflow: "visible",
-                        borderRadius: 8,
-                        background: "#303030",
-                        opacity: 1,
-                        zIndex: 1600,
-                    },
-                }}
-            />
-            <SwipeableDrawer
-                open={open}
-                anchor="bottom"
-                swipeAreaWidth={drawerBleeding}
-                disableSwipeToOpen={false}
-                disableBackdropTransition={!iOS}
-                disableDiscovery={iOS}
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-            >
-                <StyledBox
-                    sx={{
-                        position: "absolute",
-                        top: -drawerBleeding,
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                        height: `${drawerHeight}px`,
-                        visibility: "visible",
-                        right: 0,
-                        left: 0,
+        <>
+            <Root>
+                <CssBaseline />
+                <Global
+                    styles={{
+                        ".MuiDrawer-root > .MuiPaper-root": {
+                            height: `${drawerHeight}px`,
+                            overflow: "visible",
+                            borderRadius: 8,
+                            background: "#303030",
+                            opacity: 1,
+                            zIndex: 1600,
+                        },
                     }}
+                />
+                <SwipeableDrawer
+                    open={open}
+                    anchor="bottom"
+                    swipeAreaWidth={drawerBleeding}
+                    disableSwipeToOpen={false}
+                    disableBackdropTransition={!iOS}
+                    disableDiscovery={iOS}
+                    onClose={() => setOpen(false)}
+                    onOpen={() => setOpen(true)}
                 >
-                    <Puller />
-                    <Typography
+                    <StyledBox
                         sx={{
-                            p: 2,
-                            color: "text.secondary",
-                            bgcolor: "background.paper",
+                            position: "absolute",
+                            top: -drawerBleeding,
                             borderTopLeftRadius: 8,
                             borderTopRightRadius: 8,
+                            height: `${drawerHeight}px`,
+                            visibility: "visible",
+                            right: 0,
+                            left: 0,
                         }}
                     >
-                        {isOwner ? (
-                            <ContactDetailsWhenOwned
-                                contact={contact}
-                                setOpen={setOpen}
-                            />
-                        ) : (
-                            <LinkedFrom txt={contact.owner} />
-                        )}
-                    </Typography>
+                        <Puller />
+                        <Typography
+                            sx={{
+                                p: 2,
+                                color: "text.secondary",
+                                bgcolor: "background.paper",
+                                borderTopLeftRadius: 8,
+                                borderTopRightRadius: 8,
+                            }}
+                        >
+                            {isOwner ? (
+                                <ContactDetailsWhenOwned
+                                    contact={contact}
+                                    setOpen={setOpen}
+                                />
+                            ) : (
+                                <LinkedFrom txt={contact.owner} />
+                            )}
+                        </Typography>
 
-                    <Typography
-                        sx={{
-                            p: 2,
-                            color: "text.secondary",
-                            bgcolor: "background.default",
-                        }}
-                    >
-                        <>
-                            Balance: {contact.balance}€
-                            {isOwner && <> Cashflow: {totalCashflow}€</>}
-                        </>
-                    </Typography>
+                        <Typography
+                            sx={{
+                                p: 2,
+                                color: "text.secondary",
+                                bgcolor: "background.default",
+                            }}
+                        >
+                            <>
+                                Balance: {contact.balance}€
+                                {isOwner && <> Cashflow: {totalCashflow}€</>}
+                            </>
+                        </Typography>
 
-                    {/* <StampcardProcessWidget contact={contact} /> */}
+                        {/* <StampcardProcessWidget contact={contact} /> */}
 
-                    <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
-                        <Table stickyHeader>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Amount</TableCell>
-                                    <TableCell>Type</TableCell>
-                                    <TableCell>Date</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {transactions.map((t, i) => (
-                                    <TableRow key={i}>
-                                        <TableCell>{t.amount}€</TableCell>
-                                        <TableCell>{t.type}</TableCell>
-                                        <TableCell>
-                                            {formatDate(t.date)}
-                                        </TableCell>
+                        <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
+                            <Table stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Amount</TableCell>
+                                        <TableCell>Type</TableCell>
+                                        <TableCell>Date</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </StyledBox>
-            </SwipeableDrawer>
-        </Root>
+                                </TableHead>
+                                <TableBody>
+                                    {transactions.map((t, i) => (
+                                        <TableRow
+                                            key={i}
+                                            onClick={() => {
+                                                setCurrentTransaction(t);
+                                                setMenuOpen(true);
+                                            }}
+                                        >
+                                            <TableCell>{t.amount}€</TableCell>
+                                            <TableCell>{t.type}</TableCell>
+                                            <TableCell>
+                                                {formatDate(t.date)}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </StyledBox>
+                </SwipeableDrawer>
+            </Root>
+
+            {/* <TransactionDetailMenu
+                transaction={currentTransaction}
+                open={menuOpen}
+                setOpen={setMenuOpen}
+            /> */}
+        </>
     );
 };
 

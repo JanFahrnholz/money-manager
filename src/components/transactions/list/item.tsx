@@ -16,34 +16,13 @@ import { getColor, remove } from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
+import TransactionDetailMenu from "../menu";
 
 const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     transaction,
 }) => {
     const [openActions, setOpenActions] = useState(false);
     const isOwner = client.authStore.model?.id == transaction.owner;
-
-    const formatDate = (date: Date) => {
-        return `${new Date(date).toLocaleDateString("default", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        })}`;
-    };
-
-    const actions = [
-        {
-            name: formatDate(transaction.date),
-            action: () => {},
-            color: undefined as undefined | string,
-        },
-    ];
-    if (isOwner)
-        actions.push({
-            name: "Delete",
-            action: () => remove(transaction.id),
-            color: "#ff1c1c",
-        });
 
     const secondaryAction = () => {
         return (
@@ -104,8 +83,8 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                     </Typography>
                 }
             />
-            <ActionMenu
-                actions={actions}
+            <TransactionDetailMenu
+                transaction={transaction}
                 open={openActions}
                 setOpen={setOpenActions}
             />
