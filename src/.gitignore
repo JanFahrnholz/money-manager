@@ -2,6 +2,7 @@
 
 data
 aw-gen.json
+.env
 
 # dependencies
 /node_modules
