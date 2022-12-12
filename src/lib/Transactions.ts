@@ -1,6 +1,7 @@
 import { Balance } from "@mui/icons-material";
 import Contact from "../types/Contact";
 import Record from "../types/Record";
+import SortedTransactions from "../types/SortedTransactions";
 import Transaction from "../types/Transaction";
 import TransactionType from "../types/TransactionType";
 import { modifyBalance, update as updateContact } from "./Contacts";
@@ -10,6 +11,7 @@ const _ = require("lodash");
 type CreateProps = {
     amount: number;
     info?: string;
+    planned?: boolean;
     contact: string;
     type: TransactionType;
 };
@@ -17,36 +19,43 @@ type CreateProps = {
 type UpdateProps = {
     amount?: number;
     info?: string;
+    planned?: boolean;
     date?: Date;
 };
 
-const list = () => {
+const list = (filter?: string) => {
     return new Promise(async (resolve, reject) => {
         try {
             const res = await client
                 .collection("transactions")
                 .getList(1, 100, {
                     sort: "-created",
+                    filter,
                     expand: "contact,owner",
                 });
-            const t = _.groupBy(res.items, ({ date }: { date: Date }) =>
-                new Date(date).getMonth()
-            );
-
-            resolve(Object.values(t).reverse());
+            resolve(res.items);
         } catch (error) {
             reject(error);
         }
     });
 };
 
-const create = ({ amount, info, contact, type }: CreateProps) => {
+const sort = (transactions: Record<Transaction>[]) => {
+    const t = _.groupBy(transactions, ({ date }: { date: Date }) =>
+        new Date(date).getMonth()
+    );
+
+    return Object.values(t).reverse() as SortedTransactions;
+};
+
+const create = ({ amount, info, contact, type, planned }: CreateProps) => {
     return new Promise(async (resolve, reject) => {
         try {
             const res = await client.collection("transactions").create({
                 amount,
                 type,
                 info,
+                planned,
                 contact,
                 date: new Date(),
                 owner: client.authStore.model?.id,
@@ -133,4 +142,4 @@ const getColor = (type: string) => {
     }
 };
 
-export { list, create, update, remove, getColor };
+export { list, sort, create, update, remove, getColor };

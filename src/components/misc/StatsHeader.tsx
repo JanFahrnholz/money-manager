@@ -1,5 +1,12 @@
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+    Card,
+    CardContent,
+    CircularProgress,
+    Grid,
+    Typography,
+} from "@mui/material";
 import { FC, useContext, useEffect, useState } from "react";
+import { useBoolean } from "usehooks-ts";
 import { ContactContext } from "../../context/ContactContext";
 import { TransactionContext } from "../../context/TransactionContext";
 import {
@@ -11,21 +18,18 @@ import {
 const StatsHeader: FC = () => {
     const [pendingMoney, setPendingMoney] = useState(0);
     const [toPay, setToPay] = useState(0);
+    // const loading = useBoolean(true);
+    const [loading, setLoading] = useState(true);
     const [balance, setBalance] = useState(0);
     const { contacts } = useContext(ContactContext);
     const { transactions } = useContext(TransactionContext);
 
     useEffect(() => {
         setPendingMoney(getPendingMoney(contacts));
-    }, [contacts]);
-
-    useEffect(() => {
         setToPay(getMoneyToPayBack(contacts));
-    }, [contacts]);
-
-    useEffect(() => {
         setBalance(getBalance(transactions));
-    }, [transactions]);
+        setLoading(false);
+    }, [contacts, transactions]);
 
     return (
         <Grid container spacing={1} p={1}>
@@ -55,7 +59,14 @@ const StatsHeader: FC = () => {
                         >
                             pending
                         </Typography>
-                        <Typography variant="h5">{pendingMoney}€</Typography>
+                        <Typography variant="h5">
+                            {loading ? (
+                                <CircularProgress size={40} />
+                            ) : (
+                                <>{pendingMoney}</>
+                            )}
+                            €
+                        </Typography>
                     </CardContent>
                 </Card>
             </Grid>
@@ -69,7 +80,9 @@ const StatsHeader: FC = () => {
                         >
                             to pay
                         </Typography>
-                        <Typography variant="h5">{toPay}€</Typography>
+                        <Typography variant="h5">
+                            {loading ? <CircularProgress size={40} /> : toPay}€
+                        </Typography>
                     </CardContent>
                 </Card>
             </Grid>

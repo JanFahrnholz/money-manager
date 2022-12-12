@@ -22,7 +22,7 @@ const TransactionContextProvider: FC<Props> = (props) => {
     const router = useRouter();
 
     useEffect(() => {
-        list()
+        list("planned=False")
             .then((res) => {
                 setTransactions(res as Record<Transaction>[]);
             })

@@ -4,27 +4,27 @@ import {
     Divider,
     List,
     ListSubheader,
+    Typography,
 } from "@mui/material";
+import { Box } from "@mui/system";
 import { FC, useContext, useEffect, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
-import { client } from "../../../lib/Pocketbase";
-import { list } from "../../../lib/Transactions";
+import { list, sort } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
+import SortedTransactions from "../../../types/SortedTransactions";
 import Transaction from "../../../types/Transaction";
-import Error from "../../misc/Error";
-
 import TransactionListItem from "./item";
-const _ = require("lodash");
 
 const TransactionList: FC = () => {
     const [error, setError] = useState();
     const { transactions } = useContext(TransactionContext);
+    const [sorted, setSorted] = useState<SortedTransactions | null>(null);
 
-    const formatDate = (date: Date) =>
-        `${new Date(date).toLocaleDateString("default", {
-            month: "long",
-            year: "numeric",
-        })}`;
+    useEffect(() => {
+        setSorted(sort(transactions));
+    }, [transactions]);
+
+    if (!sorted) return loadingState();
 
     return (
         <div>
@@ -32,7 +32,7 @@ const TransactionList: FC = () => {
                 <List
                     sx={{
                         width: "100%",
-                        height: "80vh",
+                        height: "calc(100vh - 13rem)",
                         bgcolor: "background.default",
                         position: "relative",
                         overflow: "auto",
@@ -40,48 +40,12 @@ const TransactionList: FC = () => {
                     }}
                     subheader={<li />}
                 >
-                    {(transactions as any[]).map((month) => (
+                    {sorted.map((month) => (
                         <li key={`section-${month[0].date}`}>
+                            {renderSubheader(month[0].date)}
                             <ul>
-                                <ListSubheader sx={{ borderRadius: "5px" }}>
-                                    {formatDate(month[0].date)}
-                                </ListSubheader>
-
-                                {month.map(
-                                    (
-                                        transaction: Record<Transaction>,
-                                        i: number,
-                                        arr: Record<Transaction>[]
-                                    ) => {
-                                        const currDate = new Date(
-                                            transaction.date
-                                        ).getDay();
-
-                                        let nextDate;
-
-                                        if (arr[i + 1]) {
-                                            nextDate = new Date(
-                                                arr[i + 1].date
-                                            ).getDay();
-                                        }
-
-                                        return (
-                                            <div key={transaction.id}>
-                                                <TransactionListItem
-                                                    transaction={transaction}
-                                                />
-                                                {currDate != nextDate &&
-                                                    nextDate !== undefined && (
-                                                        <Divider
-                                                            sx={{
-                                                                width: "75%",
-                                                                mx: "auto",
-                                                            }}
-                                                        />
-                                                    )}
-                                            </div>
-                                        );
-                                    }
+                                {month.map((transaction, i, arr) =>
+                                    renderTransaction(transaction, i, arr)
                                 )}
                             </ul>
                         </li>
@@ -93,3 +57,77 @@ const TransactionList: FC = () => {
 };
 
 export default TransactionList;
+
+const loadingState = () => (
+    <div className="text-center p-4">
+        <CircularProgress />
+    </div>
+);
+
+const renderSubheader = (date: Date) => (
+    <ListSubheader
+        sx={{
+            backgroundColor: "background.default",
+            p: 0,
+        }}
+    >
+        <Box
+            sx={{
+                backgroundColor: "background.paper",
+                zIndex: 1000,
+                borderRadius: "5px",
+                px: 2,
+            }}
+            className="shadow-lg"
+        >
+            {formatMonthlyDate(date)}
+        </Box>
+    </ListSubheader>
+);
+
+const formatMonthlyDate = (date: Date) =>
+    `${new Date(date).toLocaleDateString("default", {
+        month: "long",
+        year: "numeric",
+    })}`;
+
+const formatDailyDate = (date: Date) =>
+    `${new Date(date).toLocaleDateString("default", {
+        day: "2-digit",
+        month: "long",
+    })}`;
+
+const renderTransaction = (
+    transaction: Record<Transaction>,
+    index: number,
+    array: Record<Transaction>[]
+) => {
+    const currDate = new Date(transaction.date);
+
+    let nextDate;
+
+    if (array[index + 1]) {
+        nextDate = new Date(array[index + 1].date);
+    }
+
+    return (
+        <div key={transaction.id}>
+            <TransactionListItem transaction={transaction} />
+            {currDate.getDay() != nextDate?.getDay() &&
+                nextDate !== undefined && (
+                    <Divider
+                        sx={{
+                            width: "75%",
+                            mx: "auto",
+                        }}
+                    >
+                        <Typography
+                            sx={{ color: "text.secondary", fontSize: 14 }}
+                        >
+                            {formatDailyDate(nextDate)}
+                        </Typography>
+                    </Divider>
+                )}
+        </div>
+    );
+};

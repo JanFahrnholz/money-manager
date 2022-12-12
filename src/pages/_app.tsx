@@ -43,6 +43,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                                 name="viewport"
                                 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
                             />
+                            <meta
+                                httpEquiv="ScreenOrientation"
+                                content="autoRotate:disabled"
+                            />
                             <title>Money Manager</title>
                         </Head>
                         <Component {...pageProps} />
