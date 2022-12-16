@@ -5580,6 +5580,11 @@ randombytes@^2.1.0:
   dependencies:
     safe-buffer "^5.1.0"
 
+react-detect-offline@^2.4.5:
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/react-detect-offline/-/react-detect-offline-2.4.5.tgz#3c242516c37b6789cf89102881031f87e70b80e6"
+  integrity sha512-sI13NPEKl3uQp95FT5CwrYzH3DnXCwNP6TnY6NRF5gFDM4NU9KDlbtA6HG2dwhDVS0RYQGXwZW/mHbdf8fCnaw==
+
 react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
