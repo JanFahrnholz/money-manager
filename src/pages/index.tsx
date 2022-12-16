@@ -1,14 +1,12 @@
-import type { GetStaticProps, NextPage } from "next";
-import Navigation from "../components/Navigation";
-import People from "../components/contacts";
-import Profile from "../components/profile";
-import Tools from "../components/tools";
-import Transactions from "../components/transactions";
-import StyledAddToHomescreen from "../components/misc/StyledAddToHomescreen";
-import { client } from "../lib/Pocketbase";
-import Landingscreen from "../components/Landingscreen";
-import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import type { NextPage } from "next";
+import { Toaster } from "react-hot-toast";
+import People from "../components/contacts";
+import Landingscreen from "../components/Landingscreen";
+import StyledAddToHomescreen from "../components/misc/StyledAddToHomescreen";
+import Navigation from "../components/Navigation";
+import Profile from "../components/profile";
+import Transactions from "../components/transactions";
 import useLoggedIn from "../hooks/useLoggedIn";
 
 const Home: NextPage = () => {
@@ -44,6 +42,11 @@ const Home: NextPage = () => {
             />
 
             <StyledAddToHomescreen />
+            <Toaster
+                toastOptions={{
+                    duration: 2000,
+                }}
+            />
         </>
     );
 };

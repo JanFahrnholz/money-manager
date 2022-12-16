@@ -1,19 +1,18 @@
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import LinkIcon from "@mui/icons-material/Link";
 import {
-    ListItem,
-    IconButton,
-    ListItemAvatar,
     Avatar,
+    IconButton,
+    ListItem,
+    ListItemAvatar,
     ListItemText,
-    Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { FC } from "react";
 import { getInitials } from "../../../lib/Contacts";
+import { client } from "../../../lib/Pocketbase";
 import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
-import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
-import { client } from "../../../lib/Pocketbase";
-import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
 
 type Props = {

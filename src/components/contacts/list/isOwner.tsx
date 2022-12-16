@@ -1,13 +1,11 @@
-import { FormControl, Input } from "@mui/material";
-import { FC, useState } from "react";
-import Contact from "../../../types/Contact";
-import Record from "../../../types/Record";
+import AddLinkIcon from "@mui/icons-material/AddLink";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import DoneIcon from "@mui/icons-material/Done";
-import AddLinkIcon from "@mui/icons-material/AddLink";
-import ConfirmationDialog from "../../misc/ConfirmationDialog";
+import { FC, useState } from "react";
 import { remove } from "../../../lib/Contacts";
+import Contact from "../../../types/Contact";
+import Record from "../../../types/Record";
+import ConfirmationDialog from "../../misc/ConfirmationDialog";
 import EditContact from "../edit";
 
 type Props = {

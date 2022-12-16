@@ -1,17 +1,16 @@
-import { useState, forwardRef, ReactElement, Ref, FC } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { DialogContent, TextField } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
+import Toolbar from "@mui/material/Toolbar";
 import { TransitionProps } from "@mui/material/transitions";
-import AddIcon from "@mui/icons-material/Add";
-import { Alert, DialogContent, Fab, TextField } from "@mui/material";
-import { create, update } from "../../lib/Contacts";
+import Typography from "@mui/material/Typography";
+import { FC, forwardRef, ReactElement, Ref, useState } from "react";
 import useLoggedIn from "../../hooks/useLoggedIn";
+import { update } from "../../lib/Contacts";
 import Contact from "../../types/Contact";
 import Record from "../../types/Record";
 
@@ -33,20 +32,14 @@ type Props = {
 const EditContact: FC<Props> = ({ open, setOpen, contact }) => {
     const [name, setName] = useState(contact.name);
     const [userId, setUserId] = useState(contact.user);
-    const [error, setError] = useState<string | null>(null);
     const loggedIn = useLoggedIn();
 
     if (!loggedIn) return <></>;
 
     const submit = () => {
-        update(contact.id, { name, user: userId })
-            .then((res) => {
-                setOpen(false);
-                setError(null);
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
+        const promise = update(contact.id, { name, user: userId })
+            .then(() => setOpen(false))
+            .catch();
     };
 
     return (
@@ -91,16 +84,6 @@ const EditContact: FC<Props> = ({ open, setOpen, contact }) => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent sx={{ bgcolor: "background.default" }}>
-                    {error && (
-                        <Alert
-                            className="mb-1"
-                            severity="error"
-                            variant="filled"
-                        >
-                            {error}
-                        </Alert>
-                    )}
-
                     <TextField
                         id="name-input"
                         value={name}

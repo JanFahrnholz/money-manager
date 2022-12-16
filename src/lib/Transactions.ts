@@ -1,11 +1,10 @@
-import { Balance } from "@mui/icons-material";
-import Contact from "../types/Contact";
 import Record from "../types/Record";
 import SortedTransactions from "../types/SortedTransactions";
 import Transaction from "../types/Transaction";
 import TransactionType from "../types/TransactionType";
 import { modifyBalance, update as updateContact } from "./Contacts";
 import { client } from "./Pocketbase";
+import toast from "react-hot-toast";
 const _ = require("lodash");
 
 type CreateProps = {
@@ -29,7 +28,7 @@ const list = (filter?: string) => {
             const res = await client
                 .collection("transactions")
                 .getList(1, 100, {
-                    sort: "-created",
+                    sort: "-date",
                     filter,
                     expand: "contact,owner",
                 });
@@ -49,7 +48,7 @@ const sort = (transactions: Record<Transaction>[]) => {
 };
 
 const create = ({ amount, info, contact, type, planned }: CreateProps) => {
-    return new Promise(async (resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
         try {
             const res = await client.collection("transactions").create({
                 amount,
@@ -82,10 +81,18 @@ const create = ({ amount, info, contact, type, planned }: CreateProps) => {
             reject(error);
         }
     });
+
+    toast.promise(promise, {
+        loading: "creating...",
+        success: () => "Transaction successfully created",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const update = (id: string, data: UpdateProps) => {
-    return new Promise(async (resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
         try {
             const res = await client
                 .collection("transactions")
@@ -95,10 +102,18 @@ const update = (id: string, data: UpdateProps) => {
             reject(error);
         }
     });
+
+    toast.promise(promise, {
+        loading: "updating...",
+        success: () => "Transaction successfully updated",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const remove = (id: string) => {
-    return new Promise(async (resolve, reject) => {
+    const promise = new Promise<void>(async (resolve, reject) => {
         try {
             const transaction = (await client
                 .collection("transactions")
@@ -119,10 +134,19 @@ const remove = (id: string) => {
                 );
 
             await client.collection("transactions").delete(id);
+            resolve();
         } catch (error) {
             reject(error);
         }
     });
+
+    toast.promise(promise, {
+        loading: "deleting...",
+        success: () => "Transaction successfully deleted",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const getColor = (type: string) => {

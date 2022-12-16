@@ -3,8 +3,6 @@ import {
     Box,
     CircularProgress,
     CssBaseline,
-    FormControl,
-    Input,
     styled,
     SwipeableDrawer,
     Table,
@@ -16,16 +14,13 @@ import {
     Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import Contact from "../../../types/Contact";
-import ConfirmationDialog from "../../misc/ConfirmationDialog";
-import { remove } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
+import { getCashflow } from "../../../lib/Statistics";
+import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
-import ContactDetailsWhenOwned from "./isOwner";
-import { getCashflow } from "../../../lib/Statistics";
 import LinkedFrom from "../../misc/LinkedFrom";
-import TransactionDetailMenu from "../../transactions/menu";
+import ContactDetailsWhenOwned from "./isOwner";
 
 interface Props {
     id: string | undefined;

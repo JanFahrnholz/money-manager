@@ -1,39 +1,31 @@
-import {
-    useState,
-    forwardRef,
-    ReactElement,
-    Ref,
-    FC,
-    useContext,
-    useEffect,
-} from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import {
+    Checkbox,
     DialogContent,
     Fab,
     FormControl,
+    FormControlLabel,
     Grid,
     InputLabel,
     MenuItem,
     Select,
     TextField,
 } from "@mui/material";
-import Numpad from "../misc/numpad";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import IconButton from "@mui/material/IconButton";
+import Slide from "@mui/material/Slide";
+import Toolbar from "@mui/material/Toolbar";
+import { TransitionProps } from "@mui/material/transitions";
+import Typography from "@mui/material/Typography";
+import { FC, forwardRef, ReactElement, Ref, useContext, useState } from "react";
+import { ContactContext } from "../../context/ContactContext";
+import useLoggedIn from "../../hooks/useLoggedIn";
 import { create } from "../../lib/Transactions";
 import TransactionType from "../../types/TransactionType";
-import Error from "../misc/Error";
-import { ContactContext } from "../../context/ContactContext";
-import { client } from "../../lib/Pocketbase";
-import useLoggedIn from "../../hooks/useLoggedIn";
+import Numpad from "../misc/numpad";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -46,7 +38,7 @@ const Transition = forwardRef(function Transition(
 
 const AddTransaction: FC = () => {
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState(null);
+    const [planned, setPlanned] = useState(false);
     const [amount, setAmount] = useState<number>(0);
     const [contact, setContact] = useState<string>("");
     const [info, setInfo] = useState<string | undefined>();
@@ -59,12 +51,12 @@ const AddTransaction: FC = () => {
     const types = ["Einnahme", "Ausgabe", "Rechnung", "Rückzahlung"];
 
     const submit = () => {
-        create({ amount, info, contact, type })
-            .then((res) => {
+        create({ amount, info, planned, contact, type })
+            .then(() => {
                 setInfo(undefined);
                 setOpen(false);
             })
-            .catch((err) => setError(err.message));
+            .catch(() => {});
     };
 
     return (
@@ -129,7 +121,6 @@ const AddTransaction: FC = () => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent sx={{ bgcolor: "background.default" }}>
-                    <Error error={error} />
                     <Typography
                         variant="h2"
                         sx={{
@@ -193,13 +184,26 @@ const AddTransaction: FC = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <TextField
-                        sx={{ mt: 1 }}
-                        placeholder="Optional: Info"
-                        fullWidth
-                        type="text"
-                        onChange={(e) => setInfo(e.target.value)}
-                    />
+                    <Grid container sx={{ mt: 1 }} columnSpacing={1}>
+                        <Grid item xs={6}>
+                            <FormControl fullWidth>
+                                <TextField
+                                    placeholder="Optional: Info"
+                                    fullWidth
+                                    type="text"
+                                    onChange={(e) => setInfo(e.target.value)}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} onClick={() => setPlanned(!planned)}>
+                            <FormControl fullWidth sx={{ p: 1 }}>
+                                <FormControlLabel
+                                    control={<Checkbox checked={planned} />}
+                                    label={"planned"}
+                                />
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                     <div className="mt-2">
                         <Numpad setter={setAmount} />
                     </div>
