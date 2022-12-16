@@ -1,10 +1,10 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import ContactContextProvider from "../context/ContactContext";
-import TransactionContextProvider from "../context/TransactionContext";
 import NavigationContextProvider from "../context/NavigationContext";
+import TransactionContextProvider from "../context/TransactionContext";
+import "../styles/globals.css";
 
 const theme = createTheme({
     palette: {
@@ -26,7 +26,8 @@ const theme = createTheme({
             secondary: "#ccc",
         },
         background: {
-            default: "#303030",
+            default:
+                "#282828                                                                                                                                                          ",
             paper: "#424242",
         },
     },

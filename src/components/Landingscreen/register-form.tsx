@@ -1,16 +1,15 @@
 import {
-    FormControl,
-    InputLabel,
     Alert,
     Button,
     CircularProgress,
-    Input,
+    FormControl,
     TextField,
 } from "@mui/material";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { m, motion } from "framer-motion";
 import { register } from "../../lib/Pocketbase";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 const LandingscreenRegisterForm: FC = () => {
     const [error, setError] = useState<string | false>();
@@ -62,6 +61,8 @@ const LandingscreenRegisterForm: FC = () => {
                         sx={{ width: 250 }}
                     />
                 </FormControl>
+                <PasswordStrengthBar password={pw} minLength={8} />
+
                 {focused && (
                     <motion.div
                         key={"register-confirm-password"}

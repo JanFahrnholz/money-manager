@@ -9,22 +9,21 @@ import {
 import { Box } from "@mui/system";
 import { FC, useContext, useEffect, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
+import { formatDailyDate, formatMonthlyDate } from "../../../lib/Formatter";
 import { list, sort } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
 import SortedTransactions from "../../../types/SortedTransactions";
 import Transaction from "../../../types/Transaction";
+import RenderInterval from "../../misc/RenderInterval";
+import EmptyTransactions from "./empty";
 import TransactionListItem from "./item";
 
 const TransactionList: FC = () => {
     const [error, setError] = useState();
     const { transactions } = useContext(TransactionContext);
-    const [sorted, setSorted] = useState<SortedTransactions | null>(null);
 
-    useEffect(() => {
-        setSorted(sort(transactions));
-    }, [transactions]);
-
-    if (!sorted) return loadingState();
+    if (!transactions) return loadingState();
+    if (transactions.length === 0) return <EmptyTransactions />;
 
     return (
         <div>
@@ -38,18 +37,30 @@ const TransactionList: FC = () => {
                         overflow: "auto",
                         "& ul": { padding: 0 },
                     }}
-                    subheader={<li />}
+                    subheader={<ListSubheader />}
                 >
-                    {sorted.map((month) => (
-                        <li key={`section-${month[0].date}`}>
-                            {renderSubheader(month[0].date)}
-                            <ul>
-                                {month.map((transaction, i, arr) =>
-                                    renderTransaction(transaction, i, arr)
-                                )}
-                            </ul>
-                        </li>
-                    ))}
+                    {transactions.map((transaction, i, arr) => {
+                        return (
+                            <>
+                                <RenderInterval
+                                    array={arr}
+                                    index={i}
+                                    // yearly={(date) =>
+                                    //     subHeader(`${date.getFullYear()}`)
+                                    // }
+                                    monthly={(date) =>
+                                        subHeader(formatMonthlyDate(date))
+                                    }
+                                    daily={(date) => dayDivider(date)}
+                                />
+
+                                <TransactionListItem
+                                    key={`item-${transaction.id}`}
+                                    transaction={transaction}
+                                />
+                            </>
+                        );
+                    })}
                 </List>
             </div>
         </div>
@@ -64,70 +75,39 @@ const loadingState = () => (
     </div>
 );
 
-const renderSubheader = (date: Date) => (
-    <ListSubheader
-        sx={{
-            backgroundColor: "background.default",
-            p: 0,
-        }}
-    >
-        <Box
-            sx={{
-                backgroundColor: "background.paper",
-                zIndex: 1000,
-                borderRadius: "5px",
-                px: 2,
-            }}
-            className="shadow-lg"
-        >
-            {formatMonthlyDate(date)}
-        </Box>
-    </ListSubheader>
-);
-
-const formatMonthlyDate = (date: Date) =>
-    `${new Date(date).toLocaleDateString("default", {
-        month: "long",
-        year: "numeric",
-    })}`;
-
-const formatDailyDate = (date: Date) =>
-    `${new Date(date).toLocaleDateString("default", {
-        day: "2-digit",
-        month: "long",
-    })}`;
-
-const renderTransaction = (
-    transaction: Record<Transaction>,
-    index: number,
-    array: Record<Transaction>[]
-) => {
-    const currDate = new Date(transaction.date);
-
-    let nextDate;
-
-    if (array[index + 1]) {
-        nextDate = new Date(array[index + 1].date);
-    }
-
+const subHeader = (text: string) => {
     return (
-        <div key={transaction.id}>
-            <TransactionListItem transaction={transaction} />
-            {currDate.getDay() != nextDate?.getDay() &&
-                nextDate !== undefined && (
-                    <Divider
-                        sx={{
-                            width: "75%",
-                            mx: "auto",
-                        }}
-                    >
-                        <Typography
-                            sx={{ color: "text.secondary", fontSize: 14 }}
-                        >
-                            {formatDailyDate(nextDate)}
-                        </Typography>
-                    </Divider>
-                )}
-        </div>
+        <ListSubheader
+            sx={{
+                backgroundColor: "transparent",
+                mb: 1,
+                p: 0,
+            }}
+        >
+            <Box
+                sx={{
+                    textAlign: "center",
+                    backgroundColor: "background.paper",
+                    zIndex: 1000,
+                    borderRadius: "5px",
+                    px: 2,
+                }}
+            >
+                {text}
+            </Box>
+        </ListSubheader>
     );
 };
+
+const dayDivider = (date: Date) => (
+    <Divider
+        sx={{
+            width: "75%",
+            mx: "auto",
+        }}
+    >
+        <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
+            {formatDailyDate(date)}
+        </Typography>
+    </Divider>
+);

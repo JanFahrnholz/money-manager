@@ -27,7 +27,13 @@ const TransactionContextProvider: FC<Props> = (props) => {
                 setTransactions(res as Record<Transaction>[]);
             })
             .catch((err) => {});
+
+        if (currentTab === 0) {
+        }
         client.collection("transactions").subscribe("*", () => trigger());
+
+        if (currentTab !== 0)
+            client.collection("transactions").unsubscribe("*");
     }, [state, currentTab == 0]);
 
     return (

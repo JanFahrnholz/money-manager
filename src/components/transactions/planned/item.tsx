@@ -17,12 +17,14 @@ import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
 import TransactionDetailMenu from "../menu";
+import useLoggedIn from "../../../hooks/useLoggedIn";
 
-const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
+const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     transaction,
 }) => {
     const [openActions, setOpenActions] = useState(false);
     const isOwner = client.authStore.model?.id == transaction.owner;
+    // console.log(transaction, client.authStore.model?.id, isOwner);
 
     const secondaryAction = () => {
         return (
@@ -34,11 +36,12 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
 
     return (
         <ListItem
+            key={transaction.id}
             alignItems="flex-start"
             sx={{
                 my: 1,
                 borderRadius: 1,
-                bgcolor: "secondary.main",
+                bgcolor: "background.paper",
                 color: "secondary.contrastText",
             }}
             className="shadow border"
@@ -91,4 +94,4 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     );
 };
 
-export default TransactionListItem;
+export default PlannedTransactionListItem;

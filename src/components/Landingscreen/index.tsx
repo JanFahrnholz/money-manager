@@ -1,12 +1,12 @@
-import { Avatar, Button, Container, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import classes from "../../styles/dotted-background.module.css";
-import LandingscreenRegisterForm from "./register-form";
-import { AnimatePresence, motion } from "framer-motion";
-import LandingscreenLoginForm from "./login-form";
 import LoginIcon from "@mui/icons-material/Login";
+import { Avatar, Button, Container, Typography } from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
+import { FC, useState } from "react";
 import useLoggedIn from "../../hooks/useLoggedIn";
+import classes from "../../styles/dotted-background.module.css";
+import LandingscreenLoginForm from "./login-form";
+import LandingscreenRegisterForm from "./register-form";
 
 const Landingscreen: FC = () => {
     const [login, setLogin] = useState(false);

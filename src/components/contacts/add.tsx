@@ -1,17 +1,17 @@
-import { useState, forwardRef, ReactElement, Ref, FC } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import { DialogContent, Fab, TextField } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
+import Toolbar from "@mui/material/Toolbar";
 import { TransitionProps } from "@mui/material/transitions";
-import AddIcon from "@mui/icons-material/Add";
-import { Alert, DialogContent, Fab, TextField } from "@mui/material";
-import { create } from "../../lib/Contacts";
+import Typography from "@mui/material/Typography";
+import { FC, forwardRef, ReactElement, Ref, useState } from "react";
 import useLoggedIn from "../../hooks/useLoggedIn";
+import { create } from "../../lib/Contacts";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -26,21 +26,17 @@ const AddContact: FC = () => {
     const [name, setName] = useState("");
     const [userId, setUserId] = useState("");
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const loggedIn = useLoggedIn();
 
     if (!loggedIn) return <></>;
 
     const submit = () => {
-        create({ name, balance: 0, user: userId })
-            .then((res) => {
+        const promise = create({ name, balance: 0, user: userId })
+            .then(() => {
                 setOpen(false);
-                setError(null);
                 setName("");
             })
-            .catch((err) => {
-                setError(err.message);
-            });
+            .catch();
     };
 
     return (
@@ -104,16 +100,6 @@ const AddContact: FC = () => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent sx={{ bgcolor: "background.default" }}>
-                    {error && (
-                        <Alert
-                            className="mb-1"
-                            severity="error"
-                            variant="filled"
-                        >
-                            {error}
-                        </Alert>
-                    )}
-
                     <TextField
                         id="name-input"
                         value={name}
@@ -137,6 +123,10 @@ const AddContact: FC = () => {
                         type={"text"}
                         className="mt-2"
                     />
+                    <Typography sx={{ mt: 1, color: "text.secondary" }}>
+                        By linking a contact, the other user can see their
+                        transactions you created.
+                    </Typography>
                 </DialogContent>
             </Dialog>
         </div>

@@ -1,6 +1,7 @@
 import Contact from "../types/Contact";
 import Record from "../types/Record";
 import { client } from "./Pocketbase";
+import toast from "react-hot-toast";
 
 type CreateProps = {
     name: string;
@@ -35,7 +36,7 @@ const list = async (): Promise<Record<Contact>[]> => {
 };
 
 const create = ({ name, balance, user }: CreateProps) => {
-    return new Promise(async (resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
         try {
             const res = await client.collection("contacts").create({
                 name,
@@ -48,10 +49,18 @@ const create = ({ name, balance, user }: CreateProps) => {
             reject(error);
         }
     });
+
+    toast.promise(promise, {
+        loading: "creating...",
+        success: () => "Contact successfully created",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const update = (id: string, data: UpdateProps) => {
-    return new Promise(async (resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
         try {
             const res = await client.collection("contacts").update(id, data);
             resolve(res);
@@ -59,6 +68,14 @@ const update = (id: string, data: UpdateProps) => {
             reject(error);
         }
     });
+
+    toast.promise(promise, {
+        loading: "updating...",
+        success: () => "Contact successfully updated",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const modifyBalance = async (id: string, modifier: number) => {
@@ -74,13 +91,21 @@ const modifyBalance = async (id: string, modifier: number) => {
 };
 
 const remove = (id: string) => {
-    return new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
         client
             .collection("contacts")
             .delete(id)
             .then((res) => resolve(res))
             .catch((err) => reject(err));
     });
+
+    toast.promise(promise, {
+        loading: "deleting...",
+        success: () => "Contact successfully deleted",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const isOwner = async (id: string) => {

@@ -1,14 +1,13 @@
 import {
-    FormControl,
-    InputLabel,
     Alert,
     Button,
     CircularProgress,
+    FormControl,
     Input,
+    InputLabel,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { m, motion } from "framer-motion";
 import { login } from "../../lib/Pocketbase";
 
 const LandingscreenLoginForm: FC = () => {

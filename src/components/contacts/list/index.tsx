@@ -1,9 +1,9 @@
-import { FC, useContext, useState } from "react";
-import ContactDetailDrawer from "./detail";
-import { AnimatePresence } from "framer-motion";
-import { ContactContext } from "../../../context/ContactContext";
-import ContactListItem from "./item";
 import { List } from "@mui/material";
+import { FC, useContext, useState } from "react";
+import { ContactContext } from "../../../context/ContactContext";
+import ContactDetailDrawer from "./detail";
+import EmptyContactList from "./empty";
+import ContactListItem from "./item";
 const ContactList: FC = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selectedContact, setSelectedContact] = useState<string>();
@@ -13,10 +13,13 @@ const ContactList: FC = () => {
     const [error, setError] = useState<false | string>(false);
     let i = 0;
 
+    if (contacts.length === 0) return <EmptyContactList />;
+
     function handleClick(c: string) {
         setSelectedContact(c);
         setOpenDrawer(!openDrawer);
     }
+
     return (
         <>
             <List sx={{ width: "100%", pb: 18 }}>

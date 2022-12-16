@@ -27,9 +27,13 @@ const ContactContextProvider: FC<Props> = (props) => {
                 setContacts(res as Record<Contact>[]);
             })
             .catch((err) => {});
-        client.collection("contacts").subscribe("*", (res) => {
-            trigger();
-        });
+
+        if (currentTab === 1)
+            client.collection("contacts").subscribe("*", (res) => {
+                trigger();
+            });
+
+        if (currentTab !== 1) client.collection("contacts").unsubscribe("*");
     }, [state, currentTab == 1]);
 
     return (
