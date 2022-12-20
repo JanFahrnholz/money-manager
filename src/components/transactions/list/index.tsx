@@ -1,5 +1,4 @@
 import {
-    Alert,
     CircularProgress,
     Divider,
     List,
@@ -7,21 +6,20 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
 import { formatDailyDate, formatMonthlyDate } from "../../../lib/Formatter";
-import { list, sort } from "../../../lib/Transactions";
-import Record from "../../../types/Record";
-import SortedTransactions from "../../../types/SortedTransactions";
-import Transaction from "../../../types/Transaction";
 import RenderInterval from "../../misc/RenderInterval";
 import EmptyTransactions from "./empty";
 import TransactionListItem from "./item";
+import PlannedTransactionListItem from "./planned-item";
 
 const TransactionList: FC = () => {
-    const { transactions } = useContext(TransactionContext);
+    const { transactions, res } = useContext(TransactionContext);
 
-    if (!transactions) return loadingState();
+    const planned = res?.items.filter((t) => t.planned);
+
+    if (!transactions || !planned) return loadingState();
     if (transactions.length === 0) return <EmptyTransactions />;
 
     return (
@@ -38,6 +36,16 @@ const TransactionList: FC = () => {
                     }}
                     subheader={<ListSubheader />}
                 >
+                    {planned.length !== 0 && (
+                        <>{subHeader("Planned transactions")}</>
+                    )}
+                    {planned.map((transaction) => (
+                        <PlannedTransactionListItem
+                            key={transaction.id}
+                            transaction={transaction}
+                        />
+                    ))}
+
                     {transactions.map((transaction, i, arr) => {
                         return (
                             <>

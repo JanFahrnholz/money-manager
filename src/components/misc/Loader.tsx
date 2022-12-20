@@ -14,6 +14,7 @@ const Loader: FC<Props> = ({ children, value }) => {
             </div>
         );
 
+    if (!children) return <></>;
     return <>{children}</>;
 };
 

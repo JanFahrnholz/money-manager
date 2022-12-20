@@ -12,11 +12,13 @@ import ActionMenu from "../../misc/ActionMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Record from "../../../types/Record";
 import { getInitials } from "../../../lib/Contacts";
-import { getColor, remove } from "../../../lib/Transactions";
+import { getColor, remove, update } from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
 import TransactionDetailMenu from "../menu";
+import DoneIcon from "@mui/icons-material/Done";
+import ClearIcon from "@mui/icons-material/Clear";
 import useLoggedIn from "../../../hooks/useLoggedIn";
 
 const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
@@ -26,11 +28,31 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     const isOwner = client.authStore.model?.id == transaction.owner;
     // console.log(transaction, client.authStore.model?.id, isOwner);
 
+    // TODO: contact will be updated on creation --> should be updated when transaction is confirmed
+    const confirm = () => {
+        update(transaction.id, { planned: false });
+    };
+    const cancel = () => {
+        remove(transaction.id);
+    };
+
     const secondaryAction = () => {
         return (
-            <IconButton onClick={() => setOpenActions(!openActions)}>
-                <MoreHorizIcon />
-            </IconButton>
+            <>
+                {isOwner && (
+                    <>
+                        <IconButton onClick={() => confirm()}>
+                            <DoneIcon />
+                        </IconButton>
+                        <IconButton onClick={() => cancel()}>
+                            <ClearIcon />
+                        </IconButton>
+                    </>
+                )}
+                <IconButton onClick={() => setOpenActions(!openActions)}>
+                    <MoreHorizIcon />
+                </IconButton>
+            </>
         );
     };
 

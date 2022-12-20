@@ -39,7 +39,7 @@ const TransactionContextProvider: FC<Props> = (props) => {
     return (
         <TransactionContext.Provider
             value={{
-                transactions: response?.items,
+                transactions: response?.items.filter((t) => !t.planned),
                 res: response,
                 reload,
             }}

@@ -22,26 +22,24 @@ const ContactList: FC = () => {
 
     return (
         <>
-            <div>
-                <FormControl sx={{ m: 1, minWidth: 80 }}>
-                    <InputLabel id="contact-sort-select-label">Sort</InputLabel>
-                    <Select
-                        labelId="contact-sort-select-label"
-                        id="contact-sort-select"
-                        value={sort.selected}
-                        onChange={(e) => sort.select(e.target.value)}
-                        autoWidth
-                        label="Sort"
-                        size="small"
-                    >
-                        {sort.options.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </div>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+                <InputLabel id="contact-sort-select-label">Sort</InputLabel>
+                <Select
+                    labelId="contact-sort-select-label"
+                    id="contact-sort-select"
+                    value={sort.selected}
+                    onChange={(e) => sort.select(e.target.value)}
+                    autoWidth
+                    label="Sort"
+                    size="small"
+                >
+                    {sort.options.map((option) => (
+                        <MenuItem key={option} value={option}>
+                            {option}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
 
             <List sx={{ width: "100%", pb: 18 }}>
                 {sort.contacts.map((c) => {

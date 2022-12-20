@@ -1,11 +1,5 @@
 import DetailDrawer from "@/components/misc/DetailDrawer";
-import { Global } from "@emotion/react";
 import {
-    Box,
-    CircularProgress,
-    CssBaseline,
-    styled,
-    SwipeableDrawer,
     Table,
     TableBody,
     TableCell,
@@ -14,15 +8,11 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { useTimeout } from "usehooks-ts";
+import { FC } from "react";
+import { toast } from "react-hot-toast";
 import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
 import { formatDailyDate } from "../../../lib/Formatter";
 import { client } from "../../../lib/Pocketbase";
-import { getCashflow } from "../../../lib/Statistics";
-import Contact from "../../../types/Contact";
-import Record from "../../../types/Record";
-import Transaction from "../../../types/Transaction";
 import LinkedFrom from "../../misc/LinkedFrom";
 import Loader from "../../misc/Loader";
 import ContactDetailsWhenOwned from "./isOwner";
@@ -43,7 +33,7 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
 
     const drawerHeight = 400;
 
-    if (error) return <ErrorDrawer open={open} setOpen={setOpen} />;
+    if (error !== undefined) <></>;
     if (loading || !data)
         return <LoadingDrawer open={open} setOpen={setOpen} />;
 
@@ -128,67 +118,6 @@ const LoadingDrawer: FC<{
     return (
         <>
             <DetailDrawer open={open} setOpen={setOpen}>
-                {/* <Typography
-                    sx={{
-                        p: 2,
-                        color: "text.secondary",
-                        bgcolor: "background.paper",
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                    }}
-                >
-                    loading...
-                </Typography>
-
-                <Typography
-                    sx={{
-                        p: 2,
-                        color: "text.secondary",
-                        bgcolor: "background.default",
-                    }}
-                >
-                    Balance: loading...
-                </Typography> */}
-
-                {/* <StampcardProcessWidget contact={contact} /> */}
-
-                <Loader value={false} />
-            </DetailDrawer>
-        </>
-    );
-};
-
-const ErrorDrawer: FC<{
-    open: boolean;
-    setOpen: (open: boolean) => void;
-}> = ({ open, setOpen }) => {
-    return (
-        <>
-            <DetailDrawer open={open} setOpen={setOpen}>
-                <Typography
-                    sx={{
-                        p: 2,
-                        color: "text.secondary",
-                        bgcolor: "background.paper",
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                    }}
-                >
-                    loading...
-                </Typography>
-
-                <Typography
-                    sx={{
-                        p: 2,
-                        color: "text.secondary",
-                        bgcolor: "background.default",
-                    }}
-                >
-                    Balance: loading...
-                </Typography>
-
-                {/* <StampcardProcessWidget contact={contact} /> */}
-
                 <Loader value={false} />
             </DetailDrawer>
         </>
