@@ -35,7 +35,7 @@ interface Props {
 const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     const { data, loading, error } = useFetchContactDetails(id);
     const isOwner = client.authStore.model?.id == data?.contact?.owner;
-    console.log(data, loading, error);
+
     const iOS =
         typeof navigator !== "undefined" &&
         /iPad|iPhone|iPod/.test(navigator.userAgent);

@@ -39,7 +39,7 @@ const useFetchContactDetails = (id: string | undefined) => {
             })
             .then((res) => {
                 const { items } = res as ApiResponse<Transaction>;
-                console.log("fetch", res);
+
                 details.transactions = items;
                 details.cashflow = getCashflow(details.transactions || []);
             })

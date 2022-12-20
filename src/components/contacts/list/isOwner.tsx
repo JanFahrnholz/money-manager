@@ -19,7 +19,7 @@ const ContactDetailsWhenOwned: FC<Props> = ({ contact, setOpen }) => {
     const isLinked = contact?.user != "";
 
     const deleteContact = () => {
-        remove(contact.id).catch((err) => console.log(err));
+        remove(contact.id).catch(() => {});
         setOpen(false);
     };
 
