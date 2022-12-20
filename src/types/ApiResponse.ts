@@ -1,10 +1,10 @@
 import Record from "./Record";
 
-type ListResponse<T> = {
+type ApiResponse<T> = {
     page: number;
     perPage: number;
     totalItems: number;
     items: Record<T>[];
 };
 
-export default ListResponse;
+export default ApiResponse;

@@ -19,7 +19,6 @@ import EmptyTransactions from "./empty";
 import TransactionListItem from "./item";
 
 const TransactionList: FC = () => {
-    const [error, setError] = useState();
     const { transactions } = useContext(TransactionContext);
 
     if (!transactions) return loadingState();

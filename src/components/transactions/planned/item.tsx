@@ -41,7 +41,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
             sx={{
                 my: 1,
                 borderRadius: 1,
-                bgcolor: "background.paper",
+                bgcolor: "secondary.main",
                 color: "secondary.contrastText",
             }}
             className="shadow border"

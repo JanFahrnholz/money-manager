@@ -20,7 +20,6 @@ import { NavigationContext } from "../context/NavigationContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { client } from "../lib/Pocketbase";
 import useLoggedIn from "../hooks/useLoggedIn";
-import { Detector } from "react-detect-offline";
 
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement];
@@ -66,7 +65,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                             <Paper
                                 sx={{
                                     width: "100vw",
-
+                                    pb: 2.5,
                                     bgcolor: "secondary.main",
                                     zIndex: 1000,
                                 }}
@@ -92,21 +91,6 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                                         icon={<ManageAccountsIcon />}
                                     />
                                 </BottomNavigation>
-                                <Detector
-                                    render={({
-                                        online,
-                                    }: {
-                                        online: boolean;
-                                    }) => (
-                                        <div
-                                            className={`text-center text-sm p-1 ${
-                                                !online && "bg-danger"
-                                            }`}
-                                        >
-                                            {!online && "you are offline"}
-                                        </div>
-                                    )}
-                                />
                             </Paper>
                         </motion.div>
                     )}

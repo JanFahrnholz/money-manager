@@ -26,7 +26,7 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
 
     const secondaryAction = () => {
         return (
-            <IconButton onClick={() => setOpenActions(!openActions)}>
+            <IconButton>
                 <MoreHorizIcon />
             </IconButton>
         );
@@ -43,6 +43,7 @@ const TransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
             }}
             className="shadow border"
             secondaryAction={secondaryAction()}
+            onClick={() => setOpenActions(!openActions)}
         >
             <ListItemAvatar>
                 <Avatar

@@ -8,7 +8,7 @@ const Transactions: FC = () => {
     return (
         <>
             <StatsHeader />
-            {/* <PlannedTransactions /> */}
+            <PlannedTransactions />
             <TransactionList />
             <AddTransaction />
         </>

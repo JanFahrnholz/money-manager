@@ -14,12 +14,16 @@ import {
     Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import { useTimeout } from "usehooks-ts";
+import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
+import { formatDailyDate } from "../../../lib/Formatter";
 import { client } from "../../../lib/Pocketbase";
 import { getCashflow } from "../../../lib/Statistics";
 import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
 import LinkedFrom from "../../misc/LinkedFrom";
+import LoadUntilDefined from "../../misc/LoadUntilDefined";
 import ContactDetailsWhenOwned from "./isOwner";
 
 interface Props {
@@ -29,15 +33,9 @@ interface Props {
 }
 
 const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
-    const [totalCashflow, setTotalCashflow] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [contact, setContact] = useState<Record<Contact>>();
-    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
-    const [currentTransaction, setCurrentTransaction] =
-        useState<Record<Transaction>>();
-    const isOwner = client.authStore.model?.id == contact?.owner;
-
+    const { data, loading, error } = useFetchContactDetails(id);
+    const isOwner = client.authStore.model?.id == data?.contact?.owner;
+    console.log(data, loading, error);
     const iOS =
         typeof navigator !== "undefined" &&
         /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -45,49 +43,98 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     const drawerBleeding = 0;
     const drawerHeight = 400;
 
-    useEffect(() => {
-        if (!id) return;
-
-        setLoading(true);
-
-        const contacts = client
-            .collection("contacts")
-            .getOne(id, { expand: "owner" })
-            .then((res: unknown) => {
-                setContact(res as Record<Contact>);
-                setLoading(false);
-            })
-            .catch((err) => console.log(err));
-
-        const transactions = client
-            .collection("transactions")
-            .getFullList(20, {
-                filter: `contact="${id}"`,
-                sort: "-created",
-            })
-            .then((res: unknown) => {
-                setTransactions(res as Record<Transaction>[]);
-                setTotalCashflow(getCashflow(res as Record<Transaction>[]));
-            })
-            .catch((err) => console.log(err));
-
-        Promise.all([transactions, contacts]).then(() => setLoading(false));
-    }, [id]);
-
-    if (!contact) return <></>;
-
-    const formatDate = (date: Date | undefined) => {
-        if (!date) return "Error";
-
-        return `${new Date(date).toLocaleDateString("default", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        })}`;
-    };
+    if (!data?.contact || !id) return <></>;
 
     if (loading) return <CircularProgress />;
 
+    return (
+        <>
+            <DetailDrawer open={open} setOpen={setOpen}>
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.paper",
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
+                    }}
+                >
+                    {isOwner ? (
+                        <ContactDetailsWhenOwned
+                            contact={data.contact}
+                            setOpen={setOpen}
+                        />
+                    ) : (
+                        <LinkedFrom txt={data.contact.owner} />
+                    )}
+                </Typography>
+
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.default",
+                    }}
+                >
+                    <>
+                        Balance: {data.contact.balance}€
+                        {isOwner && <> Cashflow: {data.cashflow}€</>}
+                    </>
+                </Typography>
+
+                {/* <StampcardProcessWidget contact={contact} /> */}
+
+                <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Amount</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Date</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <LoadUntilDefined value={data.transactions}>
+                                test
+                                {/* {data.transactions.map((t, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{t.amount}€</TableCell>
+                                        <TableCell>{t.type}</TableCell>
+                                        <TableCell>
+                                            {formatDailyDate(t.date)}
+                                        </TableCell>
+                                    </TableRow>
+                                ))} */}
+                            </LoadUntilDefined>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DetailDrawer>
+
+            {/* <TransactionDetailMenu
+                transaction={currentTransaction}
+                open={menuOpen}
+                setOpen={setMenuOpen}
+            /> */}
+        </>
+    );
+};
+
+type DetailDrawerProps = {
+    children: any;
+    open: boolean;
+    setOpen: (value: boolean) => void;
+};
+
+const DetailDrawer: FC<DetailDrawerProps> = (props) => {
+    const { children, open, setOpen } = props;
+
+    const iOS =
+        typeof navigator !== "undefined" &&
+        /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    const drawerBleeding = 0;
+    const drawerHeight = 400;
     return (
         <>
             <Root>
@@ -127,77 +174,10 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                         }}
                     >
                         <Puller />
-                        <Typography
-                            sx={{
-                                p: 2,
-                                color: "text.secondary",
-                                bgcolor: "background.paper",
-                                borderTopLeftRadius: 8,
-                                borderTopRightRadius: 8,
-                            }}
-                        >
-                            {isOwner ? (
-                                <ContactDetailsWhenOwned
-                                    contact={contact}
-                                    setOpen={setOpen}
-                                />
-                            ) : (
-                                <LinkedFrom txt={contact.owner} />
-                            )}
-                        </Typography>
-
-                        <Typography
-                            sx={{
-                                p: 2,
-                                color: "text.secondary",
-                                bgcolor: "background.default",
-                            }}
-                        >
-                            <>
-                                Balance: {contact.balance}€
-                                {isOwner && <> Cashflow: {totalCashflow}€</>}
-                            </>
-                        </Typography>
-
-                        {/* <StampcardProcessWidget contact={contact} /> */}
-
-                        <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Amount</TableCell>
-                                        <TableCell>Type</TableCell>
-                                        <TableCell>Date</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {transactions.map((t, i) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={() => {
-                                                setCurrentTransaction(t);
-                                                setMenuOpen(true);
-                                            }}
-                                        >
-                                            <TableCell>{t.amount}€</TableCell>
-                                            <TableCell>{t.type}</TableCell>
-                                            <TableCell>
-                                                {formatDate(t.date)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        {children}
                     </StyledBox>
                 </SwipeableDrawer>
             </Root>
-
-            {/* <TransactionDetailMenu
-                transaction={currentTransaction}
-                open={menuOpen}
-                setOpen={setMenuOpen}
-            /> */}
         </>
     );
 };

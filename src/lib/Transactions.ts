@@ -5,6 +5,9 @@ import TransactionType from "../types/TransactionType";
 import { modifyBalance, update as updateContact } from "./Contacts";
 import { client } from "./Pocketbase";
 import toast from "react-hot-toast";
+import TransactionRecord from "../types/TransactionRecord";
+import ApiResponse from "../types/ApiResponse";
+import { ListResult } from "pocketbase";
 const _ = require("lodash");
 
 type CreateProps = {
@@ -22,8 +25,8 @@ type UpdateProps = {
     date?: Date;
 };
 
-const list = (filter?: string) => {
-    return new Promise(async (resolve, reject) => {
+const list = (filter = "") => {
+    return new Promise<ApiResponse<Transaction>>(async (resolve, reject) => {
         try {
             const res = await client
                 .collection("transactions")
@@ -32,7 +35,7 @@ const list = (filter?: string) => {
                     filter,
                     expand: "contact,owner",
                 });
-            resolve(res.items);
+            resolve(res);
         } catch (error) {
             reject(error);
         }

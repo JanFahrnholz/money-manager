@@ -8,14 +8,6 @@ import PlannedTransactionListItem from "./item";
 const PlannedTransactions: FC = () => {
     const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
 
-    useEffect(() => {
-        list("planned=True")
-            .then((res) => {
-                setTransactions(res as Record<Transaction>[]);
-            })
-            .catch(() => {});
-    }, []);
-
     return (
         <>
             <List

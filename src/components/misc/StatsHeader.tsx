@@ -27,7 +27,7 @@ const StatsHeader: FC = () => {
     useEffect(() => {
         setPendingMoney(getPendingMoney(contacts));
         setToPay(getMoneyToPayBack(contacts));
-        setBalance(getBalance(transactions));
+        setBalance(getBalance(transactions || []));
         setLoading(false);
     }, [contacts, transactions]);
 

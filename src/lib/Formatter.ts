@@ -10,4 +10,12 @@ const formatDailyDate = (date: Date) =>
         month: "long",
     })}`;
 
-export { formatMonthlyDate, formatDailyDate };
+const formatDailyDateTime = (date: Date) =>
+    `${new Date(date).toLocaleDateString("default", {
+        day: "2-digit",
+        month: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+    })}`;
+
+export { formatMonthlyDate, formatDailyDate, formatDailyDateTime };

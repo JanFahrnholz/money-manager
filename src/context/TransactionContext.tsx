@@ -1,36 +1,36 @@
 import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { list } from "../lib/Transactions";
+import useTrigger from "../hooks/useTrigger";
 import { client } from "../lib/Pocketbase";
+import { list } from "../lib/Transactions";
+import ApiResponse from "../types/ApiResponse";
 import Record from "../types/Record";
 import Transaction from "../types/Transaction";
-import { useRouter } from "next/router";
-import usePersistantState from "../hooks/usePersistantStorage";
 import { NavigationContext } from "./NavigationContext";
-import useTrigger from "../hooks/useTrigger";
 
 type ContextProps = {
-    transactions: Record<Transaction>[];
+    transactions: Record<Transaction>[] | undefined;
+    res: ApiResponse<Transaction> | undefined;
+    reload: () => void;
 };
 
 export const TransactionContext = createContext<ContextProps>(undefined!);
 
 const TransactionContextProvider: FC<Props> = (props) => {
-    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+    const [response, setResponse] = useState<ApiResponse<Transaction>>();
     const { currentTab } = useContext(NavigationContext);
-    const [state, trigger] = useTrigger();
-    const router = useRouter();
+    const [state, reload] = useTrigger();
 
     useEffect(() => {
-        list("planned=False")
+        list()
             .then((res) => {
-                setTransactions(res as Record<Transaction>[]);
+                setResponse(res);
             })
             .catch((err) => {});
 
         if (currentTab === 0) {
         }
-        client.collection("transactions").subscribe("*", () => trigger());
+        client.collection("transactions").subscribe("*", () => reload());
 
         if (currentTab !== 0)
             client.collection("transactions").unsubscribe("*");
@@ -39,7 +39,9 @@ const TransactionContextProvider: FC<Props> = (props) => {
     return (
         <TransactionContext.Provider
             value={{
-                transactions,
+                transactions: response?.items,
+                res: response,
+                reload,
             }}
         >
             {props.children}
