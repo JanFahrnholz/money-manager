@@ -38,8 +38,8 @@ const useFetchContactDetails = (id: string | undefined) => {
                 sort: "-date",
             })
             .then((res) => {
-                const { items } = res as ApiResponse<Transaction>;
-
+                console.log("fetch", res);
+                const items = res as Transaction[];
                 details.transactions = items;
                 details.cashflow = getCashflow(details.transactions || []);
             })

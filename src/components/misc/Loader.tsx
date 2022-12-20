@@ -2,14 +2,14 @@ import { CircularProgress } from "@mui/material";
 import { FC } from "react";
 
 type Props = {
-    children: any;
+    children: any | undefined;
     value: any | undefined;
 };
 
-const LoadUntilDefined: FC<Props> = ({ children, value }) => {
-    if (value === undefined)
+const Loader: FC<Props> = ({ children, value }) => {
+    if (!value)
         return (
-            <div className="mx-auto p-4">
+            <div className="mx-auto p-4 text-center">
                 <CircularProgress />
             </div>
         );
@@ -17,4 +17,4 @@ const LoadUntilDefined: FC<Props> = ({ children, value }) => {
     return <>{children}</>;
 };
 
-export default LoadUntilDefined;
+export default Loader;

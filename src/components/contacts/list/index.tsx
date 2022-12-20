@@ -1,8 +1,6 @@
 import { FormControl, InputLabel, List, MenuItem, Select } from "@mui/material";
-import useSelect from "hooks/useSelect";
 import useSortContacts from "hooks/useSortContacts";
-import { getCashflow } from "lib/Statistics";
-import { FC, useContext, useMemo, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { ContactContext } from "../../../context/ContactContext";
 import ContactDetailDrawer from "./detail";
 import EmptyContactList from "./empty";

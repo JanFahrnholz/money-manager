@@ -1,3 +1,4 @@
+import DetailDrawer from "@/components/misc/DetailDrawer";
 import { Global } from "@emotion/react";
 import {
     Box,
@@ -23,7 +24,7 @@ import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
 import LinkedFrom from "../../misc/LinkedFrom";
-import LoadUntilDefined from "../../misc/LoadUntilDefined";
+import Loader from "../../misc/Loader";
 import ContactDetailsWhenOwned from "./isOwner";
 
 interface Props {
@@ -40,12 +41,11 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
         typeof navigator !== "undefined" &&
         /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    const drawerBleeding = 0;
     const drawerHeight = 400;
 
-    if (!data?.contact || !id) return <></>;
-
-    if (loading) return <CircularProgress />;
+    if (error) return <ErrorDrawer open={open} setOpen={setOpen} />;
+    if (loading || !data)
+        return <LoadingDrawer open={open} setOpen={setOpen} />;
 
     return (
         <>
@@ -94,9 +94,8 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <LoadUntilDefined value={data.transactions}>
-                                test
-                                {/* {data.transactions.map((t, i) => (
+                            <Loader value={!loading}>
+                                {data.transactions.map((t, i) => (
                                     <TableRow key={i}>
                                         <TableCell>{t.amount}€</TableCell>
                                         <TableCell>{t.type}</TableCell>
@@ -104,8 +103,8 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                                             {formatDailyDate(t.date)}
                                         </TableCell>
                                     </TableRow>
-                                ))} */}
-                            </LoadUntilDefined>
+                                ))}
+                            </Loader>
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -120,89 +119,78 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     );
 };
 
-type DetailDrawerProps = {
-    children: any;
+export default ContactDetailDrawer;
+
+const LoadingDrawer: FC<{
     open: boolean;
-    setOpen: (value: boolean) => void;
-};
-
-const DetailDrawer: FC<DetailDrawerProps> = (props) => {
-    const { children, open, setOpen } = props;
-
-    const iOS =
-        typeof navigator !== "undefined" &&
-        /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-    const drawerBleeding = 0;
-    const drawerHeight = 400;
+    setOpen: (open: boolean) => void;
+}> = ({ open, setOpen }) => {
     return (
         <>
-            <Root>
-                <CssBaseline />
-                <Global
-                    styles={{
-                        ".MuiDrawer-root > .MuiPaper-root": {
-                            height: `${drawerHeight}px`,
-                            overflow: "visible",
-                            borderRadius: 8,
-                            background: "#303030",
-                            opacity: 1,
-                            zIndex: 1600,
-                        },
+            <DetailDrawer open={open} setOpen={setOpen}>
+                {/* <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.paper",
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
                     }}
-                />
-                <SwipeableDrawer
-                    open={open}
-                    anchor="bottom"
-                    swipeAreaWidth={drawerBleeding}
-                    disableSwipeToOpen={false}
-                    disableBackdropTransition={!iOS}
-                    disableDiscovery={iOS}
-                    onClose={() => setOpen(false)}
-                    onOpen={() => setOpen(true)}
                 >
-                    <StyledBox
-                        sx={{
-                            position: "absolute",
-                            top: -drawerBleeding,
-                            borderTopLeftRadius: 8,
-                            borderTopRightRadius: 8,
-                            height: `${drawerHeight}px`,
-                            visibility: "visible",
-                            right: 0,
-                            left: 0,
-                        }}
-                    >
-                        <Puller />
-                        {children}
-                    </StyledBox>
-                </SwipeableDrawer>
-            </Root>
+                    loading...
+                </Typography>
+
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.default",
+                    }}
+                >
+                    Balance: loading...
+                </Typography> */}
+
+                {/* <StampcardProcessWidget contact={contact} /> */}
+
+                <Loader value={false} />
+            </DetailDrawer>
         </>
     );
 };
 
-const Root = styled("div")(({ theme }) => ({
-    height: "100%",
-    backgroundColor: theme.palette.background.default,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-}));
+const ErrorDrawer: FC<{
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}> = ({ open, setOpen }) => {
+    return (
+        <>
+            <DetailDrawer open={open} setOpen={setOpen}>
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.paper",
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
+                    }}
+                >
+                    loading...
+                </Typography>
 
-const Puller = styled(Box)(({ theme }) => ({
-    width: 30,
-    height: 6,
-    backgroundColor: theme.palette.background.default,
-    borderRadius: 3,
-    position: "absolute",
-    top: 8,
-    left: "calc(50% - 15px)",
-}));
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.default",
+                    }}
+                >
+                    Balance: loading...
+                </Typography>
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-}));
+                {/* <StampcardProcessWidget contact={contact} /> */}
 
-export default ContactDetailDrawer;
+                <Loader value={false} />
+            </DetailDrawer>
+        </>
+    );
+};
