@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import Record from "@/types/Record";
+import { useState } from "react";
 import { list } from "../lib/Transactions";
-import ApiResponse from "../types/ApiResponse";
 import Transaction from "../types/Transaction";
-import useTrigger from "./useTrigger";
 
 const useFetchTransactions = (filter?: string) => {
-    const [data, setData] = useState<ApiResponse<Transaction> | undefined>();
+    const [data, setData] = useState<Record<Transaction>[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | undefined>();
 

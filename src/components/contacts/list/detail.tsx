@@ -1,4 +1,5 @@
 import DetailDrawer from "@/components/misc/DetailDrawer";
+import LoadValue from "@/components/misc/LoadValue";
 import {
     Table,
     TableBody,
@@ -9,12 +10,10 @@ import {
     Typography,
 } from "@mui/material";
 import { FC } from "react";
-import { toast } from "react-hot-toast";
 import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
 import { formatDailyDate } from "../../../lib/Formatter";
 import { client } from "../../../lib/Pocketbase";
 import LinkedFrom from "../../misc/LinkedFrom";
-import Loader from "../../misc/Loader";
 import ContactDetailsWhenOwned from "./isOwner";
 
 interface Props {
@@ -84,17 +83,15 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <Loader value={!loading}>
-                                {data.transactions.map((t, i) => (
-                                    <TableRow key={i}>
-                                        <TableCell>{t.amount}€</TableCell>
-                                        <TableCell>{t.type}</TableCell>
-                                        <TableCell>
-                                            {formatDailyDate(t.date)}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </Loader>
+                            {data.transactions.map((t, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{t.amount}€</TableCell>
+                                    <TableCell>{t.type}</TableCell>
+                                    <TableCell>
+                                        {formatDailyDate(t.date)}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -118,7 +115,7 @@ const LoadingDrawer: FC<{
     return (
         <>
             <DetailDrawer open={open} setOpen={setOpen}>
-                <Loader value={false} />
+                <LoadValue value={undefined} />
             </DetailDrawer>
         </>
     );
