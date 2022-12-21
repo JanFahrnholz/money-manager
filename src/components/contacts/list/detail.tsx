@@ -1,10 +1,6 @@
-import { Global } from "@emotion/react";
+import DetailDrawer from "@/components/misc/DetailDrawer";
+import LoadValue from "@/components/misc/LoadValue";
 import {
-    Box,
-    CircularProgress,
-    CssBaseline,
-    styled,
-    SwipeableDrawer,
     Table,
     TableBody,
     TableCell,
@@ -13,12 +9,10 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
+import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
+import { formatDailyDate } from "../../../lib/Formatter";
 import { client } from "../../../lib/Pocketbase";
-import { getCashflow } from "../../../lib/Statistics";
-import Contact from "../../../types/Contact";
-import Record from "../../../types/Record";
-import Transaction from "../../../types/Transaction";
 import LinkedFrom from "../../misc/LinkedFrom";
 import ContactDetailsWhenOwned from "./isOwner";
 
@@ -29,169 +23,79 @@ interface Props {
 }
 
 const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
-    const [totalCashflow, setTotalCashflow] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [contact, setContact] = useState<Record<Contact>>();
-    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
-    const [currentTransaction, setCurrentTransaction] =
-        useState<Record<Transaction>>();
-    const isOwner = client.authStore.model?.id == contact?.owner;
+    const { data, loading, error } = useFetchContactDetails(id);
+    const isOwner = client.authStore.model?.id == data?.contact?.owner;
 
     const iOS =
         typeof navigator !== "undefined" &&
         /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    const drawerBleeding = 0;
     const drawerHeight = 400;
 
-    useEffect(() => {
-        if (!id) return;
-
-        setLoading(true);
-
-        const contacts = client
-            .collection("contacts")
-            .getOne(id, { expand: "owner" })
-            .then((res: unknown) => {
-                setContact(res as Record<Contact>);
-                setLoading(false);
-            })
-            .catch((err) => console.log(err));
-
-        const transactions = client
-            .collection("transactions")
-            .getFullList(20, {
-                filter: `contact="${id}"`,
-                sort: "-created",
-            })
-            .then((res: unknown) => {
-                setTransactions(res as Record<Transaction>[]);
-                setTotalCashflow(getCashflow(res as Record<Transaction>[]));
-            })
-            .catch((err) => console.log(err));
-
-        Promise.all([transactions, contacts]).then(() => setLoading(false));
-    }, [id]);
-
-    if (!contact) return <></>;
-
-    const formatDate = (date: Date | undefined) => {
-        if (!date) return "Error";
-
-        return `${new Date(date).toLocaleDateString("default", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        })}`;
-    };
-
-    if (loading) return <CircularProgress />;
+    if (error !== undefined) <></>;
+    if (loading || !data)
+        return <LoadingDrawer open={open} setOpen={setOpen} />;
 
     return (
         <>
-            <Root>
-                <CssBaseline />
-                <Global
-                    styles={{
-                        ".MuiDrawer-root > .MuiPaper-root": {
-                            height: `${drawerHeight}px`,
-                            overflow: "visible",
-                            borderRadius: 8,
-                            background: "#303030",
-                            opacity: 1,
-                            zIndex: 1600,
-                        },
+            <DetailDrawer open={open} setOpen={setOpen}>
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.paper",
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
                     }}
-                />
-                <SwipeableDrawer
-                    open={open}
-                    anchor="bottom"
-                    swipeAreaWidth={drawerBleeding}
-                    disableSwipeToOpen={false}
-                    disableBackdropTransition={!iOS}
-                    disableDiscovery={iOS}
-                    onClose={() => setOpen(false)}
-                    onOpen={() => setOpen(true)}
                 >
-                    <StyledBox
-                        sx={{
-                            position: "absolute",
-                            top: -drawerBleeding,
-                            borderTopLeftRadius: 8,
-                            borderTopRightRadius: 8,
-                            height: `${drawerHeight}px`,
-                            visibility: "visible",
-                            right: 0,
-                            left: 0,
-                        }}
-                    >
-                        <Puller />
-                        <Typography
-                            sx={{
-                                p: 2,
-                                color: "text.secondary",
-                                bgcolor: "background.paper",
-                                borderTopLeftRadius: 8,
-                                borderTopRightRadius: 8,
-                            }}
-                        >
-                            {isOwner ? (
-                                <ContactDetailsWhenOwned
-                                    contact={contact}
-                                    setOpen={setOpen}
-                                />
-                            ) : (
-                                <LinkedFrom txt={contact.owner} />
-                            )}
-                        </Typography>
+                    {isOwner ? (
+                        <ContactDetailsWhenOwned
+                            contact={data.contact}
+                            setOpen={setOpen}
+                        />
+                    ) : (
+                        <LinkedFrom txt={data.contact.owner} />
+                    )}
+                </Typography>
 
-                        <Typography
-                            sx={{
-                                p: 2,
-                                color: "text.secondary",
-                                bgcolor: "background.default",
-                            }}
-                        >
-                            <>
-                                Balance: {contact.balance}€
-                                {isOwner && <> Cashflow: {totalCashflow}€</>}
-                            </>
-                        </Typography>
+                <Typography
+                    sx={{
+                        p: 2,
+                        color: "text.secondary",
+                        bgcolor: "background.default",
+                    }}
+                >
+                    <>
+                        Balance: {data.contact.balance}€
+                        {isOwner && <> Cashflow: {data.cashflow}€</>}
+                    </>
+                </Typography>
 
-                        {/* <StampcardProcessWidget contact={contact} /> */}
+                {/* <StampcardProcessWidget contact={contact} /> */}
 
-                        <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Amount</TableCell>
-                                        <TableCell>Type</TableCell>
-                                        <TableCell>Date</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {transactions.map((t, i) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={() => {
-                                                setCurrentTransaction(t);
-                                                setMenuOpen(true);
-                                            }}
-                                        >
-                                            <TableCell>{t.amount}€</TableCell>
-                                            <TableCell>{t.type}</TableCell>
-                                            <TableCell>
-                                                {formatDate(t.date)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </StyledBox>
-                </SwipeableDrawer>
-            </Root>
+                <TableContainer sx={{ maxHeight: drawerHeight - 125 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Amount</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Date</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.transactions.map((t, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{t.amount}€</TableCell>
+                                    <TableCell>{t.type}</TableCell>
+                                    <TableCell>
+                                        {formatDailyDate(t.date)}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DetailDrawer>
 
             {/* <TransactionDetailMenu
                 transaction={currentTransaction}
@@ -202,27 +106,17 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
     );
 };
 
-const Root = styled("div")(({ theme }) => ({
-    height: "100%",
-    backgroundColor: theme.palette.background.default,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-}));
-
-const Puller = styled(Box)(({ theme }) => ({
-    width: 30,
-    height: 6,
-    backgroundColor: theme.palette.background.default,
-    borderRadius: 3,
-    position: "absolute",
-    top: 8,
-    left: "calc(50% - 15px)",
-}));
-
-const StyledBox = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-}));
-
 export default ContactDetailDrawer;
+
+const LoadingDrawer: FC<{
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}> = ({ open, setOpen }) => {
+    return (
+        <>
+            <DetailDrawer open={open} setOpen={setOpen}>
+                <LoadValue value={undefined} />
+            </DetailDrawer>
+        </>
+    );
+};

@@ -20,6 +20,7 @@ function useCopyToClipboard(): [CopiedValue, CopyFn] {
             return true;
         } catch (error) {
             console.warn("Copy failed", error);
+            toast.error("Could not copy to clipboard");
             setCopiedText(null);
             return false;
         }

@@ -65,7 +65,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                             <Paper
                                 sx={{
                                     width: "100vw",
-                                    pb: 3,
+                                    pb: 2.5,
                                     bgcolor: "secondary.main",
                                     zIndex: 1000,
                                 }}

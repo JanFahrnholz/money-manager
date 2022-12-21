@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 WORKDIR /srv/app
 COPY src /srv/app

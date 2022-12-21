@@ -4,6 +4,7 @@ import { client } from "../../lib/Pocketbase";
 import Transaction from "../../types/Transaction";
 import Record from "../../types/Record";
 import ActionMenu from "../misc/ActionMenu";
+import { formatDailyDate, formatDailyDateTime } from "../../lib/Formatter";
 
 type Props = {
     transaction: Record<Transaction> | undefined;
@@ -16,17 +17,9 @@ const TransactionDetailMenu: FC<Props> = ({ transaction, open, setOpen }) => {
 
     const isOwner = client.authStore.model?.id == transaction.owner;
 
-    const formatDate = (date: Date) => {
-        return `${new Date(date).toLocaleDateString("default", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        })}`;
-    };
-
     const actions = [
         {
-            name: formatDate(transaction.date),
+            name: formatDailyDateTime(transaction.date),
             action: undefined as undefined | Function,
             color: undefined as undefined | string,
         },

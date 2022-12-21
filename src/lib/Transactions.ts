@@ -5,6 +5,9 @@ import TransactionType from "../types/TransactionType";
 import { modifyBalance, update as updateContact } from "./Contacts";
 import { client } from "./Pocketbase";
 import toast from "react-hot-toast";
+import TransactionRecord from "../types/TransactionRecord";
+import ApiResponse from "../types/ApiResponse";
+import { ListResult } from "pocketbase";
 const _ = require("lodash");
 
 type CreateProps = {
@@ -22,17 +25,18 @@ type UpdateProps = {
     date?: Date;
 };
 
-const list = (filter?: string) => {
-    return new Promise(async (resolve, reject) => {
+const list = (filter = "") => {
+    return new Promise<Record<Transaction>[]>(async (resolve, reject) => {
         try {
             const res = await client
                 .collection("transactions")
-                .getList(1, 100, {
+                .getFullList<Record<Transaction>>(20, {
                     sort: "-date",
                     filter,
                     expand: "contact,owner",
                 });
-            resolve(res.items);
+
+            resolve(res);
         } catch (error) {
             reject(error);
         }
@@ -64,13 +68,13 @@ const create = ({ amount, info, contact, type, planned }: CreateProps) => {
                 .collection("contacts")
                 .getOne(contact);
 
-            if (type == "Rechnung") {
+            if (type == "Rechnung" && !planned) {
                 await updateContact(contact, {
                     balance: contactEntry.balance - amount,
                 });
             }
 
-            if (type == "Rückzahlung") {
+            if (type == "Rückzahlung" && !planned) {
                 await updateContact(contact, {
                     balance: contactEntry.balance + amount,
                 });
@@ -149,6 +153,45 @@ const remove = (id: string) => {
     return promise;
 };
 
+const confirm = async (transaction: Record<Transaction>) => {
+    try {
+        await update(transaction.id, { planned: false });
+
+        if (transaction.type === "Rechnung")
+            await modifyBalance(
+                transaction.expand.contact.id,
+                -transaction.amount
+            );
+
+        if (transaction.type === "Rückzahlung")
+            await modifyBalance(
+                transaction.expand.contact.id,
+                transaction.amount
+            );
+    } catch (error) {
+        return error;
+    }
+};
+
+const cancel = async (transaction: Record<Transaction>) => {
+    const promise = new Promise<void>(async (resolve, reject) => {
+        try {
+            await client.collection("transactions").delete(transaction.id);
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    });
+
+    toast.promise(promise, {
+        loading: "canceling...",
+        success: () => "Transaction successfully canceled",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
+};
+
 const getColor = (type: string) => {
     switch (type) {
         case "Einnahme":
@@ -166,4 +209,4 @@ const getColor = (type: string) => {
     }
 };
 
-export { list, sort, create, update, remove, getColor };
+export { list, sort, create, update, remove, confirm, cancel, getColor };

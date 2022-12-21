@@ -12,11 +12,19 @@ import ActionMenu from "../../misc/ActionMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Record from "../../../types/Record";
 import { getInitials } from "../../../lib/Contacts";
-import { getColor, remove } from "../../../lib/Transactions";
+import {
+    cancel,
+    confirm,
+    getColor,
+    remove,
+    update,
+} from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
 import TransactionDetailMenu from "../menu";
+import DoneIcon from "@mui/icons-material/Done";
+import ClearIcon from "@mui/icons-material/Clear";
 import useLoggedIn from "../../../hooks/useLoggedIn";
 
 const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
@@ -28,9 +36,21 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
 
     const secondaryAction = () => {
         return (
-            <IconButton onClick={() => setOpenActions(!openActions)}>
-                <MoreHorizIcon />
-            </IconButton>
+            <>
+                {isOwner && (
+                    <>
+                        <IconButton onClick={() => confirm(transaction)}>
+                            <DoneIcon />
+                        </IconButton>
+                        <IconButton onClick={() => cancel(transaction)}>
+                            <ClearIcon />
+                        </IconButton>
+                    </>
+                )}
+                <IconButton onClick={() => setOpenActions(!openActions)}>
+                    <MoreHorizIcon />
+                </IconButton>
+            </>
         );
     };
 
@@ -41,7 +61,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
             sx={{
                 my: 1,
                 borderRadius: 1,
-                bgcolor: "background.paper",
+                bgcolor: "secondary.main",
                 color: "secondary.contrastText",
             }}
             className="shadow border"

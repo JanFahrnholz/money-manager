@@ -8,6 +8,7 @@ import Navigation from "../components/Navigation";
 import Profile from "../components/profile";
 import Transactions from "../components/transactions";
 import useLoggedIn from "../hooks/useLoggedIn";
+import OfflineWarning from "../components/misc/OfflineWarning";
 
 const Home: NextPage = () => {
     const loggedIn = useLoggedIn();
@@ -32,7 +33,7 @@ const Home: NextPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
+            <OfflineWarning />
             <Navigation
                 tabs={[
                     <Transactions key={0} />,
@@ -40,7 +41,6 @@ const Home: NextPage = () => {
                     <Profile key={3} />,
                 ]}
             />
-
             <StyledAddToHomescreen />
             <Toaster
                 toastOptions={{
