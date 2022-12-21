@@ -33,20 +33,19 @@ const useFetchContactDetails = (id: string | undefined) => {
 
         const transactions = client
             .collection("transactions")
-            .getFullList(20, {
+            .getFullList<Record<Transaction>>(20, {
                 filter: `contact="${id}"`,
                 sort: "-date",
             })
             .then((res) => {
-                console.log("fetch", res);
-                const items = res as Transaction[];
-                details.transactions = items;
+                details.transactions = res;
                 details.cashflow = getCashflow(details.transactions || []);
             })
             .catch((err) => setError(err.message));
 
         Promise.all([transactions, contacts]).finally(() => {
             setLoading(false);
+            console.log(details);
             setData(details as ContactDetails);
         });
     }, [id]);

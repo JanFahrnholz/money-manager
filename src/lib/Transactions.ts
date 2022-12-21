@@ -156,13 +156,13 @@ const confirm = async (transaction: Record<Transaction>) => {
     try {
         await update(transaction.id, { planned: false });
 
-        if (transaction.type == "Rechnung")
+        if (transaction.type === "Rechnung")
             await modifyBalance(
                 transaction.expand.contact.id,
                 -transaction.amount
             );
 
-        if (transaction.type == "Rückzahlung")
+        if (transaction.type === "Rückzahlung")
             await modifyBalance(
                 transaction.expand.contact.id,
                 transaction.amount
@@ -173,11 +173,22 @@ const confirm = async (transaction: Record<Transaction>) => {
 };
 
 const cancel = async (transaction: Record<Transaction>) => {
-    try {
-        await remove(transaction.id);
-    } catch (error) {
-        return error;
-    }
+    const promise = new Promise<void>(async (resolve, reject) => {
+        try {
+            await client.collection("transactions").delete(transaction.id);
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    });
+
+    toast.promise(promise, {
+        loading: "canceling...",
+        success: () => "Transaction successfully canceled",
+        error: (err) => `Error: ${err.message}`,
+    });
+
+    return promise;
 };
 
 const getColor = (type: string) => {

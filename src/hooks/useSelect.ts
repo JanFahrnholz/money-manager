@@ -1,11 +1,5 @@
 import { useState } from "react";
 
-type Props = {
-    selected: string;
-    select: (option: string) => void;
-    options: string[];
-};
-
 function useSelect(options: string[], defaultValue = "none") {
     const [value, setValue] = useState<string>(defaultValue);
 

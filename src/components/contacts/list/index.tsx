@@ -11,7 +11,7 @@ const ContactList: FC = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selectedContact, setSelectedContact] = useState<string>();
     const { contacts } = useContext(ContactContext);
-    const sort = useSortContacts(contacts, ["updated", "balance"]);
+    const sort = useSortContacts(contacts, ["updated", "balance", "name"]);
     let i = 0;
 
     if (contacts.length === 0) return <EmptyContactList />;
