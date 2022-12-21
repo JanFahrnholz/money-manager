@@ -1,11 +1,12 @@
 import Contact from "@/types/Contact";
 import Record from "@/types/Record";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSelect from "./useSelect";
 
 const useSortContacts = (contacts: Record<Contact>[], options: string[]) => {
     const initial = [...contacts];
     const select = useSelect(options);
+    const [sortedContacts, setSortedContacts] = useState<Record<Contact>[]>([]);
 
     const sortBalance = () => {
         return [...contacts].sort((a, b) => {
@@ -21,12 +22,20 @@ const useSortContacts = (contacts: Record<Contact>[], options: string[]) => {
         });
     };
 
-    const sortedContacts = useMemo(() => {
-        if (select.value === "balance") return sortBalance();
-        if (select.value === "updated") return sortUpdated();
+    const sortName = () => {
+        return [...contacts].sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+            return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        });
+    };
 
-        return initial;
-    }, [contacts, select.value, initial]);
+    useEffect(() => {
+        if (select.value === "balance") setSortedContacts(sortBalance());
+        if (select.value === "updated") setSortedContacts(sortUpdated());
+        if (select.value === "name") setSortedContacts(sortName());
+        if (select.value === "none") setSortedContacts(initial);
+    }, [contacts, select.value]);
 
     return {
         contacts: sortedContacts,

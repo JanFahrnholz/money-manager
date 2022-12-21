@@ -1,20 +1,9 @@
-import {
-    Card,
-    CardContent,
-    CircularProgress,
-    Grid,
-    Typography,
-} from "@mui/material";
+import { Card, CardContent, Grid, Typography } from "@mui/material";
 import useUser from "hooks/useUser";
-import { get } from "lib/User";
-import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useMemo } from "react";
 import { ContactContext } from "../../context/ContactContext";
 import { TransactionContext } from "../../context/TransactionContext";
-import {
-    getBalance,
-    getMoneyToPayBack,
-    getPendingMoney,
-} from "../../lib/Statistics";
+import { getMoneyToPayBack, getPendingMoney } from "../../lib/Statistics";
 import LoadValue from "./LoadValue";
 
 const StatsHeader: FC = () => {
@@ -25,11 +14,9 @@ const StatsHeader: FC = () => {
     const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
     const toPay = useMemo(() => getMoneyToPayBack(contacts), [contacts]);
 
-    console.log(pendingMoney, toPay);
-
     return (
         <Grid container spacing={1} p={1}>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
                 <Card>
                     <CardContent>
                         <Typography
@@ -44,8 +31,8 @@ const StatsHeader: FC = () => {
                         </Typography>
                     </CardContent>
                 </Card>
-            </Grid>
-            <Grid item xs={4}>
+            </Grid> */}
+            <Grid item xs={6}>
                 <Card>
                     <CardContent>
                         <Typography
@@ -61,7 +48,7 @@ const StatsHeader: FC = () => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
                 <Card>
                     <CardContent>
                         <Typography
