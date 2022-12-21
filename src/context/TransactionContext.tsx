@@ -1,5 +1,10 @@
+import Contact from "@/types/Contact";
+import { Button } from "@mui/material";
+import { useRouter } from "next/router";
 import { Props } from "next/script";
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useBoolean } from "usehooks-ts";
 import useTrigger from "../hooks/useTrigger";
 import { client } from "../lib/Pocketbase";
 import { list } from "../lib/Transactions";
@@ -10,36 +15,108 @@ import { NavigationContext } from "./NavigationContext";
 
 type ContextProps = {
     transactions: Record<Transaction>[] | undefined;
-    res: ApiResponse<Transaction> | undefined;
+    planned: Record<Transaction>[] | undefined;
+    loading: boolean;
 };
 
 export const TransactionContext = createContext<ContextProps>(undefined!);
 
 const TransactionContextProvider: FC<Props> = (props) => {
-    const [response, setResponse] = useState<ApiResponse<Transaction>>();
-    const { currentTab } = useContext(NavigationContext);
-    const [trigger, reload] = useTrigger();
+    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const updateTransactions = async (
+        action: string,
+        record: Record<Transaction>
+    ) => {
+        if (action !== "delete") record = await expandTransaction(record);
+
+        setTransactions((prevRecords) => {
+            if (action === "create") return [record, ...prevRecords];
+            if (action === "update")
+                return prevRecords.map((r) =>
+                    r.id === record.id ? record : r
+                );
+
+            if (action === "delete")
+                return prevRecords.filter((r) => r.id !== record.id);
+            return prevRecords;
+        });
+    };
+
+    const expandTransaction = async (transaction: Record<Transaction>) => {
+        try {
+            const contact = await client
+                .collection("contacts")
+                .getOne<Record<Contact>>(transaction.contact, {
+                    $cancelKey: "expandWithContact",
+                });
+            const owner = await client
+                .collection("users")
+                .getOne<Record<Contact>>(transaction.owner, {
+                    $cancelKey: "expandWithOwner",
+                });
+
+            transaction.expand = { contact, owner };
+
+            return transaction;
+        } catch (error) {
+            return transaction;
+        }
+    };
 
     useEffect(() => {
+        setLoading(true);
         list()
             .then((res) => {
-                setResponse(res);
+                setTransactions(res);
             })
-            .catch((err) => {});
+            .catch((err) => {})
+            .finally(() => setLoading(false));
 
-        if (currentTab === 0) {
-        }
-        client.collection("transactions").subscribe("*", () => reload());
+        client
+            .collection("transactions")
+            .subscribe<Record<Transaction>>("*", async ({ action, record }) =>
+                updateTransactions(action, record)
+            )
+            .catch(() => {
+                toast(
+                    (t) => (
+                        <span>
+                            Failed to synchronize
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    router.reload();
+                                    toast.dismiss(t.id);
+                                }}
+                                sx={{ ml: 1 }}
+                                size="small"
+                            >
+                                reload
+                            </Button>
+                        </span>
+                    ),
+                    { duration: 4000 }
+                );
+            });
 
-        if (currentTab !== 0)
-            client.collection("transactions").unsubscribe("*");
-    }, [trigger, currentTab == 0]);
+        const unsubscribe = () => {
+            client
+                .collection("transactions")
+                .unsubscribe("*")
+                .catch(() => {});
+        };
+
+        return () => unsubscribe();
+    }, []);
 
     return (
         <TransactionContext.Provider
             value={{
-                transactions: response?.items.filter((t) => !t.planned),
-                res: response,
+                transactions: transactions.filter((t) => !t.planned),
+                planned: transactions.filter((t) => t.planned),
+                loading,
             }}
         >
             {props.children}

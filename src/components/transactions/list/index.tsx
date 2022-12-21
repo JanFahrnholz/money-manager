@@ -15,12 +15,12 @@ import TransactionListItem from "./item";
 import PlannedTransactionListItem from "./planned-item";
 
 const TransactionList: FC = () => {
-    const { transactions, res } = useContext(TransactionContext);
+    const { transactions, planned, loading } = useContext(TransactionContext);
+    console.log(planned, transactions);
 
-    const planned = res?.items.filter((t) => t.planned);
-
-    if (!transactions || !planned) return loadingState();
-    if (transactions.length === 0) return <EmptyTransactions />;
+    if (loading || !transactions || !planned) return loadingState();
+    if (transactions.length === 0 && planned.length === 0)
+        return <EmptyTransactions />;
 
     return (
         <div>

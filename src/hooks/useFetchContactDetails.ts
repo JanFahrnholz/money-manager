@@ -45,7 +45,6 @@ const useFetchContactDetails = (id: string | undefined) => {
 
         Promise.all([transactions, contacts]).finally(() => {
             setLoading(false);
-            console.log(details);
             setData(details as ContactDetails);
         });
     }, [id]);

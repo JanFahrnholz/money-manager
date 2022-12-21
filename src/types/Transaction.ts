@@ -6,7 +6,7 @@ type Transaction = {
     date: Date;
     planned: boolean;
     type: TransactionType;
-    user: string;
+    contact: string;
     owner: string;
 };
 

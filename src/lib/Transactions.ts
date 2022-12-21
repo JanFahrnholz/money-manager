@@ -26,15 +26,16 @@ type UpdateProps = {
 };
 
 const list = (filter = "") => {
-    return new Promise<ApiResponse<Transaction>>(async (resolve, reject) => {
+    return new Promise<Record<Transaction>[]>(async (resolve, reject) => {
         try {
             const res = await client
                 .collection("transactions")
-                .getList(1, 100, {
+                .getFullList<Record<Transaction>>(20, {
                     sort: "-date",
                     filter,
                     expand: "contact,owner",
                 });
+
             resolve(res);
         } catch (error) {
             reject(error);
