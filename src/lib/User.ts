@@ -37,7 +37,7 @@ const updateBalanceByTransaction = async (
 			.getOne<TransactionRecord>(id);
 
 		if (action === "CREATE") await updateBalanceOnCreate(before, data);
-		if (action === "UPDATE") await updateBalanceOnUpdate(before, data);
+		// if (action === "UPDATE") await updateBalanceOnUpdate(before, data);
 		if (action === "DELETE") await updateBalanceOnDelete(before);
 	} catch (error) {}
 };
@@ -64,15 +64,23 @@ const updateBalanceOnUpdate = async (
 	if (!after) return;
 	const { type, planned, amount } = before;
 
-	// TODO
+	// TODO Backend: split transactions --> transactions + planned_transaction
 
-	/* if (planned === true && after.planned === true) return;
+	/*if (planned === true && after.planned === true) return;
 
 	if (planned === true && after.planned === false) {
-		await modifyBalance();
+		switch (type) {
+			case "Ausgabe":
+				await modifyBalance(-am);
+			case "Einnahme":
+				await modifyBalance();
+			case "Rechnung":
+				await modifyBalance();
+			case "Rückzahlung":
+				await modifyBalance();
+		}
 	}
 	if (planned === false && after.planned === true) {
-		await modifyBalance();
 	}
 	if (planned === false && after.planned === false) {
 		await modifyBalance();
