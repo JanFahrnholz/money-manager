@@ -14,114 +14,114 @@ import Transaction from "../types/Transaction";
 import { NavigationContext } from "./NavigationContext";
 
 type ContextProps = {
-    transactions: Record<Transaction>[] | undefined;
-    planned: Record<Transaction>[] | undefined;
-    loading: boolean;
+	transactions: Record<Transaction>[] | undefined;
+	planned: Record<Transaction>[] | undefined;
+	loading: boolean;
 };
 
 export const TransactionContext = createContext<ContextProps>(undefined!);
 
 const TransactionContextProvider: FC<Props> = (props) => {
-    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
-    const [loading, setLoading] = useState(false);
-    const router = useRouter();
-    const updateTransactions = async (
-        action: string,
-        record: Record<Transaction>
-    ) => {
-        if (action !== "delete") record = await expandTransaction(record);
+	const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
+	const updateTransactions = async (
+		action: string,
+		record: Record<Transaction>
+	) => {
+		if (action !== "delete") record = await expandTransaction(record);
 
-        setTransactions((prevRecords) => {
-            if (action === "create") return [record, ...prevRecords];
-            if (action === "update")
-                return prevRecords.map((r) =>
-                    r.id === record.id ? record : r
-                );
+		setTransactions((prevRecords) => {
+			if (action === "create") return [record, ...prevRecords];
+			if (action === "update")
+				return prevRecords.map((r) =>
+					r.id === record.id ? record : r
+				);
 
-            if (action === "delete")
-                return prevRecords.filter((r) => r.id !== record.id);
-            return prevRecords;
-        });
-    };
+			if (action === "delete")
+				return prevRecords.filter((r) => r.id !== record.id);
+			return prevRecords;
+		});
+	};
 
-    const expandTransaction = async (transaction: Record<Transaction>) => {
-        try {
-            const contact = await client
-                .collection("contacts")
-                .getOne<Record<Contact>>(transaction.contact, {
-                    $cancelKey: "expandWithContact",
-                });
-            const owner = await client
-                .collection("users")
-                .getOne<Record<Contact>>(transaction.owner, {
-                    $cancelKey: "expandWithOwner",
-                });
+	const expandTransaction = async (transaction: Record<Transaction>) => {
+		try {
+			const contact = await client
+				.collection("contacts")
+				.getOne<Record<Contact>>(transaction.contact, {
+					$cancelKey: "expandWithContact",
+				});
+			const owner = await client
+				.collection("users")
+				.getOne<Record<Contact>>(transaction.owner, {
+					$cancelKey: "expandWithOwner",
+				});
 
-            transaction.expand = { contact, owner };
+			transaction.expand = { contact, owner };
 
-            return transaction;
-        } catch (error) {
-            return transaction;
-        }
-    };
+			return transaction;
+		} catch (error) {
+			return transaction;
+		}
+	};
 
-    useEffect(() => {
-        setLoading(true);
-        list()
-            .then((res) => {
-                setTransactions(res);
-            })
-            .catch((err) => {})
-            .finally(() => setLoading(false));
+	useEffect(() => {
+		setLoading(true);
+		list()
+			.then((res) => {
+				setTransactions(res);
+			})
+			.catch((err) => {})
+			.finally(() => setLoading(false));
 
-        client
-            .collection("transactions")
-            .subscribe<Record<Transaction>>("*", async ({ action, record }) =>
-                updateTransactions(action, record)
-            )
-            .catch(() => {
-                toast(
-                    (t) => (
-                        <span>
-                            Failed to synchronize
-                            <Button
-                                variant="contained"
-                                onClick={() => {
-                                    router.reload();
-                                    toast.dismiss(t.id);
-                                }}
-                                sx={{ ml: 1 }}
-                                size="small"
-                            >
-                                reload
-                            </Button>
-                        </span>
-                    ),
-                    { duration: 4000 }
-                );
-            });
+		client
+			.collection("transactions")
+			.subscribe<Record<Transaction>>("*", async ({ action, record }) =>
+				updateTransactions(action, record)
+			)
+			.catch(() => {
+				toast(
+					(t) => (
+						<span>
+							Failed to synchronize
+							<Button
+								variant="contained"
+								onClick={() => {
+									router.reload();
+									toast.dismiss(t.id);
+								}}
+								sx={{ ml: 1 }}
+								size="small"
+							>
+								reload
+							</Button>
+						</span>
+					),
+					{ duration: 4000 }
+				);
+			});
 
-        const unsubscribe = () => {
-            client
-                .collection("transactions")
-                .unsubscribe("*")
-                .catch(() => {});
-        };
+		const unsubscribe = () => {
+			client
+				.collection("transactions")
+				.unsubscribe("*")
+				.catch(() => {});
+		};
 
-        return () => unsubscribe();
-    }, []);
+		return () => unsubscribe();
+	}, []);
 
-    return (
-        <TransactionContext.Provider
-            value={{
-                transactions: transactions.filter((t) => !t.planned),
-                planned: transactions.filter((t) => t.planned),
-                loading,
-            }}
-        >
-            {props.children}
-        </TransactionContext.Provider>
-    );
+	return (
+		<TransactionContext.Provider
+			value={{
+				transactions: transactions.filter((t) => !t.planned),
+				planned: transactions.filter((t) => t.planned),
+				loading,
+			}}
+		>
+			{props.children}
+		</TransactionContext.Provider>
+	);
 };
 
 export default TransactionContextProvider;
