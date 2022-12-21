@@ -12,7 +12,13 @@ import ActionMenu from "../../misc/ActionMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Record from "../../../types/Record";
 import { getInitials } from "../../../lib/Contacts";
-import { getColor, remove, update } from "../../../lib/Transactions";
+import {
+    cancel,
+    confirm,
+    getColor,
+    remove,
+    update,
+} from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
@@ -28,23 +34,15 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
     const isOwner = client.authStore.model?.id == transaction.owner;
     // console.log(transaction, client.authStore.model?.id, isOwner);
 
-    // TODO: contact will be updated on creation --> should be updated when transaction is confirmed
-    const confirm = () => {
-        update(transaction.id, { planned: false });
-    };
-    const cancel = () => {
-        remove(transaction.id);
-    };
-
     const secondaryAction = () => {
         return (
             <>
                 {isOwner && (
                     <>
-                        <IconButton onClick={() => confirm()}>
+                        <IconButton onClick={() => confirm(transaction)}>
                             <DoneIcon />
                         </IconButton>
-                        <IconButton onClick={() => cancel()}>
+                        <IconButton onClick={() => cancel(transaction)}>
                             <ClearIcon />
                         </IconButton>
                     </>
