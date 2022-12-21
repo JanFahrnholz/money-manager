@@ -67,13 +67,13 @@ const create = ({ amount, info, contact, type, planned }: CreateProps) => {
                 .collection("contacts")
                 .getOne(contact);
 
-            if (type == "Rechnung") {
+            if (type == "Rechnung" && !planned) {
                 await updateContact(contact, {
                     balance: contactEntry.balance - amount,
                 });
             }
 
-            if (type == "Rückzahlung") {
+            if (type == "Rückzahlung" && !planned) {
                 await updateContact(contact, {
                     balance: contactEntry.balance + amount,
                 });
@@ -152,6 +152,34 @@ const remove = (id: string) => {
     return promise;
 };
 
+const confirm = async (transaction: Record<Transaction>) => {
+    try {
+        await update(transaction.id, { planned: false });
+
+        if (transaction.type == "Rechnung")
+            await modifyBalance(
+                transaction.expand.contact.id,
+                -transaction.amount
+            );
+
+        if (transaction.type == "Rückzahlung")
+            await modifyBalance(
+                transaction.expand.contact.id,
+                transaction.amount
+            );
+    } catch (error) {
+        return error;
+    }
+};
+
+const cancel = async (transaction: Record<Transaction>) => {
+    try {
+        await remove(transaction.id);
+    } catch (error) {
+        return error;
+    }
+};
+
 const getColor = (type: string) => {
     switch (type) {
         case "Einnahme":
@@ -169,4 +197,4 @@ const getColor = (type: string) => {
     }
 };
 
-export { list, sort, create, update, remove, getColor };
+export { list, sort, create, update, remove, confirm, cancel, getColor };

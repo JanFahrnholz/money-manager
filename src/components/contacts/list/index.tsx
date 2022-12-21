@@ -1,4 +1,5 @@
 import { FormControl, InputLabel, List, MenuItem, Select } from "@mui/material";
+import { AnimatePresence } from "framer-motion";
 import useSortContacts from "hooks/useSortContacts";
 import { FC, useContext, useState } from "react";
 import { ContactContext } from "../../../context/ContactContext";
@@ -42,14 +43,16 @@ const ContactList: FC = () => {
             </FormControl>
 
             <List sx={{ width: "100%", pb: 18 }}>
-                {sort.contacts.map((c) => {
-                    i += 0.05;
-                    return (
-                        <div key={c.id} onClick={() => handleClick(c.id)}>
-                            <ContactListItem contact={c} delay={i} />
-                        </div>
-                    );
-                })}
+                <AnimatePresence>
+                    {sort.contacts.map((c) => {
+                        i += 0.05;
+                        return (
+                            <div key={c.id} onClick={() => handleClick(c.id)}>
+                                <ContactListItem contact={c} delay={i} />
+                            </div>
+                        );
+                    })}
+                </AnimatePresence>
             </List>
 
             <ContactDetailDrawer
