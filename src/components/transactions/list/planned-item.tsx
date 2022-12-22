@@ -12,13 +12,7 @@ import ActionMenu from "../../misc/ActionMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Record from "../../../types/Record";
 import { getInitials } from "../../../lib/Contacts";
-import {
-    cancel,
-    confirm,
-    getColor,
-    remove,
-    update,
-} from "../../../lib/Transactions";
+import { confirm, getColor, remove, update } from "../../../lib/Transactions";
 import { client } from "../../../lib/Pocketbase";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkedFrom from "../../misc/LinkedFrom";
@@ -32,7 +26,6 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
 }) => {
     const [openActions, setOpenActions] = useState(false);
     const isOwner = client.authStore.model?.id == transaction.owner;
-    // console.log(transaction, client.authStore.model?.id, isOwner);
 
     const secondaryAction = () => {
         return (
@@ -42,7 +35,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                         <IconButton onClick={() => confirm(transaction)}>
                             <DoneIcon />
                         </IconButton>
-                        <IconButton onClick={() => cancel(transaction)}>
+                        <IconButton onClick={() => remove(transaction, true)}>
                             <ClearIcon />
                         </IconButton>
                     </>
