@@ -4,7 +4,6 @@ type Transaction = {
     amount: number;
     info: string;
     date: Date;
-    planned: boolean;
     type: TransactionType;
     contact: string;
     owner: string;
