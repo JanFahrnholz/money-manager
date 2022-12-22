@@ -76,7 +76,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                 </Avatar>
             </ListItemAvatar>
             <ListItemText
-                primary={`${transaction.type} ${transaction.amount}€`}
+                primary={`${transaction.type} ${transaction.amount}€ - ${transaction.info}`}
                 secondary={
                     <Typography
                         sx={{
