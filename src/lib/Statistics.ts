@@ -1,3 +1,4 @@
+import TransactionRecord from "@/types/TransactionRecord";
 import Contact from "../types/Contact";
 import Record from "../types/Record";
 import Transaction from "../types/Transaction";
@@ -54,5 +55,41 @@ const getCashflow = (transactions: Record<Transaction>[]) => {
 
     return cashflow;
 };
+
+type Weekdays = {
+    1: TransactionRecord[];
+    2: TransactionRecord[];
+    3: TransactionRecord[];
+    4: TransactionRecord[];
+    5: TransactionRecord[];
+    6: TransactionRecord[];
+    7: TransactionRecord[];
+};
+
+function calculateAverageAmountPerDay(transactions: Record<Transaction>[]) {
+    // Group the transactions by day
+    const transactionsByDay = transactions.reduce<Weekdays>((days, t) => {
+        const date = new Date(t.date);
+        const day = date.getDay();
+        if (!days[day]) {
+            days[day] = [];
+        }
+        days[day].push(t);
+        return days;
+    }, {});
+
+    // Calculate the average amount per day
+    const averageAmountPerDay = Object.values(transactionsByDay).map(
+        (dayTransactions) => {
+            const totalAmount = dayTransactions.reduce(
+                (total, t) => total + t.amount,
+                0
+            );
+            return totalAmount / dayTransactions.length;
+        }
+    );
+
+    return averageAmountPerDay;
+}
 
 export { getPendingMoney, getMoneyToPayBack, getBalance, getCashflow };
