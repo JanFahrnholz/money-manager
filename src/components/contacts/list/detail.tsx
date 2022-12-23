@@ -9,6 +9,7 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import { calculateAverageAmountPerDay } from "lib/Statistics";
 import { FC } from "react";
 import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
 import { formatDailyDate } from "../../../lib/Formatter";
@@ -67,7 +68,16 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                 >
                     <>
                         Balance: {data.contact.balance}€
-                        {isOwner && <> Cashflow: {data.cashflow}€</>}
+                        {isOwner && <>, Cashflow: {data.cashflow}€</>}
+                        {isOwner && (
+                            <>
+                                , €/day:{" "}
+                                {calculateAverageAmountPerDay(
+                                    data.transactions
+                                )}
+                                €
+                            </>
+                        )}{" "}
                     </>
                 </Typography>
 
