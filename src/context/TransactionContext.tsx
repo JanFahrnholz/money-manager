@@ -28,8 +28,6 @@ const TransactionContextProvider: FC<Props> = (props) => {
     >([]);
     const [loading, setLoading] = useState(false);
 
-    console.log(transactions, plannedTransactions);
-
     useEffect(() => {
         setLoading(true);
         const p1 = list().then((res) => {
