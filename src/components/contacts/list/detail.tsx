@@ -74,7 +74,8 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                                 , €/day:{" "}
                                 {calculateAverageAmountPerDay(
                                     data.transactions
-                                )}
+
+                                ).toFixed(2)}
                                 €
                             </>
                         )}
