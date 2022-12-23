@@ -56,19 +56,13 @@ const getCashflow = (transactions: Record<Transaction>[]) => {
     return cashflow;
 };
 
-type Weekdays = {
-    1: TransactionRecord[];
-    2: TransactionRecord[];
-    3: TransactionRecord[];
-    4: TransactionRecord[];
-    5: TransactionRecord[];
-    6: TransactionRecord[];
-    7: TransactionRecord[];
-};
+type byDay = { [day: number]: TransactionRecord[] };
 
-function calculateAverageAmountPerDay(transactions: Record<Transaction>[]) {
+function calculateAverageAmountPerDay(
+    transactions: TransactionRecord[]
+): number {
     // Group the transactions by day
-    const transactionsByDay = transactions.reduce<Weekdays>((days, t) => {
+    const transactionsByDay: byDay = transactions.reduce((days, t) => {
         const date = new Date(t.date);
         const day = date.getDay();
         if (!days[day]) {
@@ -76,10 +70,10 @@ function calculateAverageAmountPerDay(transactions: Record<Transaction>[]) {
         }
         days[day].push(t);
         return days;
-    }, {});
+    }, {} as byDay);
 
     // Calculate the average amount per day
-    const averageAmountPerDay = Object.values(transactionsByDay).map(
+    const averageAmountPerDay: number[] = Object.values(transactionsByDay).map(
         (dayTransactions) => {
             const totalAmount = dayTransactions.reduce(
                 (total, t) => total + t.amount,
@@ -89,7 +83,20 @@ function calculateAverageAmountPerDay(transactions: Record<Transaction>[]) {
         }
     );
 
-    return averageAmountPerDay;
+    const averageAmount: number = averageAmountPerDay.reduce(
+        (total, avgPerDay) => {
+            return total + avgPerDay;
+        },
+        0
+    );
+
+    return averageAmount / averageAmountPerDay.length || 0;
 }
 
-export { getPendingMoney, getMoneyToPayBack, getBalance, getCashflow };
+export {
+    getPendingMoney,
+    getMoneyToPayBack,
+    getBalance,
+    getCashflow,
+    calculateAverageAmountPerDay,
+};
