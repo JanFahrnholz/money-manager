@@ -60,36 +60,22 @@ type byDay = { [day: number]: Record<Transaction>[] };
 function calculateAverageAmountPerDay(
     transactions: Record<Transaction>[]
 ): number {
-    // Group the transactions by day
-    const transactionsByDay: byDay = transactions.reduce((days, t) => {
-        const date = new Date(t.date);
-        const day = date.getDay();
-        if (!days[day]) {
-            days[day] = [];
-        }
-        days[day].push(t);
-        return days;
-    }, {} as byDay);
+    // Calculate the number of days in the timespan
+    const startDate = new Date(transactions[0].date);
+    const endDate = new Date(transactions[transactions.length - 1].date);
+    const numDays =
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * -1);
 
-    // Calculate the average amount per day
-    const averageAmountPerDay: number[] = Object.values(transactionsByDay).map(
-        (dayTransactions) => {
-            const totalAmount = dayTransactions.reduce(
-                (total, t) => total + t.amount,
-                0
-            );
-            return totalAmount / dayTransactions.length;
-        }
-    );
-
-    const averageAmount: number = averageAmountPerDay.reduce(
-        (total, avgPerDay) => {
-            return total + avgPerDay;
-        },
+    // Calculate the total amount spent
+    const totalAmountSpent = transactions.reduce(
+        (total, t) => total + t.amount,
         0
     );
 
-    return averageAmount / averageAmountPerDay.length || 0;
+    // Calculate the average amount per day
+    const averageAmountPerDay = totalAmountSpent / numDays;
+
+    return averageAmountPerDay;
 }
 
 export {
