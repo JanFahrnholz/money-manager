@@ -16,7 +16,6 @@ import PlannedTransactionListItem from "./planned-item";
 
 const TransactionList: FC = () => {
     const { transactions, planned, loading } = useContext(TransactionContext);
-    console.log(planned, transactions);
 
     if (loading || !transactions || !planned) return loadingState();
     if (transactions.length === 0 && planned.length === 0)
