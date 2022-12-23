@@ -45,26 +45,23 @@ const getBalance = (transactions: Record<Transaction>[]) => {
     return balance;
 };
 const getCashflow = (transactions: Record<Transaction>[]) => {
-    let cashflow = 0;
-    transactions.map((t) => {
-        if (t.type === "Ausgabe") cashflow += t.amount;
-        if (t.type === "Einnahme") cashflow += t.amount;
-        if (t.type === "Rückzahlung") cashflow += t.amount;
-    });
+    const cashflow = transactions.reduce((i, t) => {
+        if (t.type === "Ausgabe") return (i += t.amount);
+        if (t.type === "Einnahme") return (i += t.amount);
+        if (t.type === "Rückzahlung") return (i += t.amount);
+        return i;
+    }, 0);
 
     return cashflow;
 };
-
-type byDay = { [day: number]: Record<Transaction>[] };
 
 function calculateAverageAmountPerDay(
     transactions: Record<Transaction>[]
 ): number {
     // Calculate the number of days in the timespan
     const startDate = new Date(transactions[0].date);
-    const endDate = new Date(transactions[transactions.length - 1].date);
     const numDays =
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * -1);
+        (new Date().getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
 
     // Calculate the total amount spent
     const totalAmountSpent = transactions.reduce(
