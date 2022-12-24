@@ -31,21 +31,58 @@ const TransactionContextProvider: FC<Props> = (props) => {
 	console.log("base", transactions);
 	useEffect(() => {
 		setLoading(true);
-		const p1 = listRegular().then((res) => {
-			setTransactions(res);
-		});
 
+		const p1 = listRegular().then((res) => setTransactions(res));
 		const p2 = listPlanned().then((res) => setPlanned(res));
 
-		Promise.all([p1, p2])
-			.catch(() => {})
-			.finally(() => {
-				setLoading(false);
+		Promise.all([p1, p2]).finally(() => setLoading(false));
+
+		client
+			.collection("transactions")
+			.subscribe<Record<Transaction>>("*", async ({ action, record }) => {
+				record = await expandTransaction(record);
+
+				setTransactions((prev) =>
+					updateTransactions(action, record, prev)
+				);
 			});
-		// subscribeTransactions("transactions", transactions, setTransactions);
-		// subscribeTransactions("planned_transactions", planned, setPlanned);
+
+		client
+			.collection("planned_transactions")
+			.subscribe<Record<Transaction>>("*", async ({ action, record }) => {
+				record = await expandTransaction(record);
+
+				setPlanned((prev) => updateTransactions(action, record, prev));
+			});
 		return () => unsubscribeTransactions();
 	}, []);
+
+	const updateTransactions = (
+		action: string,
+		record: Record<Transaction>,
+		prevRecords: Record<Transaction>[]
+	) => {
+		if (action === "delete")
+			return prevRecords.filter((r) => r.id !== record.id);
+
+		if (action === "create") return [record, ...prevRecords];
+		if (action === "update")
+			return prevRecords.map((r) => (r.id === record.id ? record : r));
+
+		return prevRecords;
+	};
+
+	const unsubscribeTransactions = () => {
+		client
+			.collection("transactions")
+			.unsubscribe("*")
+			.catch(() => {});
+
+		client
+			.collection("planned_transactions")
+			.unsubscribe("*")
+			.catch(() => {});
+	};
 
 	return (
 		<TransactionContext.Provider
@@ -61,57 +98,6 @@ const TransactionContextProvider: FC<Props> = (props) => {
 };
 
 export default TransactionContextProvider;
-
-const subscribeTransactions = (
-	collection: string,
-	transactions: Record<Transaction>[],
-	setTransactions: Dispatch<SetStateAction<Record<Transaction>[]>>
-) => {
-	try {
-		client
-			.collection(collection)
-			.subscribe<Record<Transaction>>("*", async ({ action, record }) => {
-				const res = await updateTransactions(
-					action,
-					record,
-					transactions
-				);
-
-				console.log("realtime", transactions, res);
-
-				setTransactions(res);
-			});
-	} catch (error) {}
-};
-
-const updateTransactions = async (
-	action: string,
-	record: Record<Transaction>,
-	prevRecords: Record<Transaction>[]
-) => {
-	if (action === "delete")
-		return prevRecords.filter((r) => r.id !== record.id);
-
-	record = await expandTransaction(record);
-
-	if (action === "create") return [record, ...prevRecords];
-	if (action === "update")
-		return prevRecords.map((r) => (r.id === record.id ? record : r));
-
-	return prevRecords;
-};
-
-const unsubscribeTransactions = () => {
-	client
-		.collection("transactions")
-		.unsubscribe("*")
-		.catch(() => {});
-
-	client
-		.collection("planned_transactions")
-		.unsubscribe("*")
-		.catch(() => {});
-};
 
 const reloadToast = (router: NextRouter) => {
 	toast(
