@@ -6,9 +6,7 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
-		"test": "jest",
-		"types": "aw-types generate -l typescript -c aw-gen.json -o types/"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@babel/helper-define-polyfill-provider": "^0.3.3",

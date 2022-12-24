@@ -17,9 +17,7 @@ const useUser = () => {
 
 	const fetchUser = async (id: string) => {
 		try {
-			const user = await client
-				.collection("users")
-				.getOne<User>(id, { $cancelKey: "fetchUser" });
+			const user = await client.collection("users").getOne<User>(id);
 
 			setUser(user);
 		} catch (error) {}

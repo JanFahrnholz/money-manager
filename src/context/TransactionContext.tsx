@@ -1,127 +1,136 @@
-import Contact from "@/types/Contact";
 import { Button } from "@mui/material";
-import { NextRouter, useRouter } from "next/router";
+import { NextRouter } from "next/router";
 import { Props } from "next/script";
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import { toast } from "react-hot-toast";
-import { useBoolean } from "usehooks-ts";
-import useTrigger from "../hooks/useTrigger";
 import { client } from "../lib/Pocketbase";
-import { expandTransaction, list } from "../lib/Transactions";
-import ApiResponse from "../types/ApiResponse";
+import { expandTransaction, list as listRegular } from "../lib/Transactions";
+import { list as listPlanned } from "../lib/PlannedTransactions";
 import Record from "../types/Record";
 import Transaction from "../types/Transaction";
-import { NavigationContext } from "./NavigationContext";
 
 type ContextProps = {
-    transactions: Record<Transaction>[] | undefined;
-    plannedTransactions: Record<Transaction>[] | undefined;
-    loading: boolean;
+	transactions: Record<Transaction>[] | undefined;
+	plannedTransactions: Record<Transaction>[] | undefined;
+	loading: boolean;
 };
 
 export const TransactionContext = createContext<ContextProps>(undefined!);
 
 const TransactionContextProvider: FC<Props> = (props) => {
-    const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
-    const [plannedTransactions, setPlannedTransactions] = useState<
-        Record<Transaction>[]
-    >([]);
-    const [loading, setLoading] = useState(false);
+	const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
+	const [planned, setPlanned] = useState<Record<Transaction>[]>([]);
+	const [loading, setLoading] = useState(false);
+	console.log("base", transactions);
+	useEffect(() => {
+		setLoading(true);
+		const p1 = listRegular().then((res) => {
+			setTransactions(res);
+		});
 
-    useEffect(() => {
-        setLoading(true);
-        const p1 = list().then((res) => {
-            setTransactions(res);
-        });
+		const p2 = listPlanned().then((res) => setPlanned(res));
 
-        const p2 = list("", true).then((res) => setPlannedTransactions(res));
+		Promise.all([p1, p2])
+			.catch(() => {})
+			.finally(() => {
+				setLoading(false);
+			});
+		// subscribeTransactions("transactions", transactions, setTransactions);
+		// subscribeTransactions("planned_transactions", planned, setPlanned);
+		return () => unsubscribeTransactions();
+	}, []);
 
-        Promise.all([p1, p2])
-            .catch(() => {})
-            .finally(() => setLoading(false));
-
-        subscribeTransactions("transactions", transactions, setTransactions);
-        subscribeTransactions(
-            "planned_transactions",
-            plannedTransactions,
-            setPlannedTransactions
-        );
-
-        return () => unsubscribeTransactions();
-    }, []);
-
-    return (
-        <TransactionContext.Provider
-            value={{
-                transactions,
-                plannedTransactions,
-                loading,
-            }}
-        >
-            {props.children}
-        </TransactionContext.Provider>
-    );
+	return (
+		<TransactionContext.Provider
+			value={{
+				transactions,
+				plannedTransactions: planned,
+				loading,
+			}}
+		>
+			{props.children}
+		</TransactionContext.Provider>
+	);
 };
 
 export default TransactionContextProvider;
 
 const subscribeTransactions = (
-    collection: string,
-    transactions: Record<Transaction>[],
-    setTransactions: (data: Record<Transaction>[]) => void
+	collection: string,
+	transactions: Record<Transaction>[],
+	setTransactions: Dispatch<SetStateAction<Record<Transaction>[]>>
 ) => {
-    try {
-        client
-            .collection(collection)
-            .subscribe<Record<Transaction>>("*", ({ action, record }) =>
-                updateTransactions(action, record, transactions).then((res) =>
-                    setTransactions(res)
-                )
-            );
-    } catch (error) {}
+	try {
+		client
+			.collection(collection)
+			.subscribe<Record<Transaction>>("*", async ({ action, record }) => {
+				const res = await updateTransactions(
+					action,
+					record,
+					transactions
+				);
+
+				console.log("realtime", transactions, res);
+
+				setTransactions(res);
+			});
+	} catch (error) {}
+};
+
+const updateTransactions = async (
+	action: string,
+	record: Record<Transaction>,
+	prevRecords: Record<Transaction>[]
+) => {
+	if (action === "delete")
+		return prevRecords.filter((r) => r.id !== record.id);
+
+	record = await expandTransaction(record);
+
+	if (action === "create") return [record, ...prevRecords];
+	if (action === "update")
+		return prevRecords.map((r) => (r.id === record.id ? record : r));
+
+	return prevRecords;
 };
 
 const unsubscribeTransactions = () => {
-    client
-        .collection("transactions")
-        .unsubscribe("*")
-        .catch(() => {});
-};
-const updateTransactions = async (
-    action: string,
-    record: Record<Transaction>,
-    prevRecords: Record<Transaction>[]
-) => {
-    if (action === "delete")
-        return prevRecords.filter((r) => r.id !== record.id);
+	client
+		.collection("transactions")
+		.unsubscribe("*")
+		.catch(() => {});
 
-    record = await expandTransaction(record);
-
-    if (action === "create") return [record, ...prevRecords];
-    if (action === "update")
-        return prevRecords.map((r) => (r.id === record.id ? record : r));
-
-    return prevRecords;
+	client
+		.collection("planned_transactions")
+		.unsubscribe("*")
+		.catch(() => {});
 };
 
 const reloadToast = (router: NextRouter) => {
-    toast(
-        (t) => (
-            <span>
-                Failed to synchronize
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        router.reload();
-                        toast.dismiss(t.id);
-                    }}
-                    sx={{ ml: 1 }}
-                    size="small"
-                >
-                    reload
-                </Button>
-            </span>
-        ),
-        { duration: 4000 }
-    );
+	toast(
+		(t) => (
+			<span>
+				Failed to synchronize
+				<Button
+					variant="contained"
+					onClick={() => {
+						router.reload();
+						toast.dismiss(t.id);
+					}}
+					sx={{ ml: 1 }}
+					size="small"
+				>
+					reload
+				</Button>
+			</span>
+		),
+		{ duration: 4000 }
+	);
 };

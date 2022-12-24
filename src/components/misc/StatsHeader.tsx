@@ -12,7 +12,6 @@ const StatsHeader: FC = () => {
 	const { transactions } = useContext(TransactionContext);
 
 	const user = useUser();
-	console.log(user);
 
 	const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
 	const toPay = useMemo(() => getMoneyToPayBack(contacts), [contacts]);
