@@ -15,10 +15,12 @@ import TransactionListItem from "./item";
 import PlannedTransactionListItem from "./planned-item";
 
 const TransactionList: FC = () => {
-    const { transactions, planned, loading } = useContext(TransactionContext);
+    const { transactions, plannedTransactions, loading } =
+        useContext(TransactionContext);
 
-    if (loading || !transactions || !planned) return loadingState();
-    if (transactions.length === 0 && planned.length === 0)
+
+    if (loading || !transactions || !plannedTransactions) return loadingState();
+    if (transactions.length === 0 && plannedTransactions.length === 0)
         return <EmptyTransactions />;
 
     return (
@@ -35,10 +37,10 @@ const TransactionList: FC = () => {
                     }}
                     subheader={<ListSubheader />}
                 >
-                    {planned.length !== 0 && (
+                    {plannedTransactions.length !== 0 && (
                         <>{subHeader("Planned transactions")}</>
                     )}
-                    {planned.map((transaction) => (
+                    {plannedTransactions.map((transaction) => (
                         <PlannedTransactionListItem
                             key={transaction.id}
                             transaction={transaction}
@@ -51,9 +53,6 @@ const TransactionList: FC = () => {
                                 <RenderInterval
                                     array={arr}
                                     index={i}
-                                    // yearly={(date) =>
-                                    //     subHeader(`${date.getFullYear()}`)
-                                    // }
                                     monthly={(date) =>
                                         subHeader(formatMonthlyDate(date))
                                     }
