@@ -28,7 +28,6 @@ const TransactionContextProvider: FC<Props> = (props) => {
 	const [transactions, setTransactions] = useState<Record<Transaction>[]>([]);
 	const [planned, setPlanned] = useState<Record<Transaction>[]>([]);
 	const [loading, setLoading] = useState(false);
-	console.log("base", transactions);
 	useEffect(() => {
 		setLoading(true);
 

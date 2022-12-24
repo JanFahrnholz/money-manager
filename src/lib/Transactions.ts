@@ -101,7 +101,6 @@ const expandTransaction = async (transaction: Record<Transaction>) => {
 
 		return transaction;
 	} catch (error) {
-		console.log("expanding", error);
 		return transaction;
 	}
 };
