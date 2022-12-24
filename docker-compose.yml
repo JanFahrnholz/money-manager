@@ -1,9 +1,11 @@
 services:
   debt-calculator:
-    build:
-      context: .
-      dockerfile: dev.Dockerfile
+    image: node:18
     ports:
       - "3000:3000"
     volumes:
       - "./src:/srv/app"
+    networks:
+      - nginx
+    working_dir: "/srv/app"
+    command: [ "yarn", "dev" ]
