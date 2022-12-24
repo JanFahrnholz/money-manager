@@ -14,10 +14,14 @@ import { TransactionContext } from "../../context/TransactionContext";
 import { getMoneyToPayBack, getPendingMoney } from "../../lib/Statistics";
 import LoadValue from "./LoadValue";
 import EditIcon from "@mui/icons-material/Edit";
+import PrivacyMode from "./PrivacyMode";
+import usePersistentState from "hooks/usePersistentStorage";
+import { PrivacyModeContext } from "context/PrivacyModeContext";
 const StatsHeader: FC = () => {
 	const { contacts } = useContext(ContactContext);
 	const { transactions } = useContext(TransactionContext);
 
+	const { toggle } = useContext(PrivacyModeContext);
 	const user = useUser();
 
 	const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
@@ -95,9 +99,10 @@ const StatsHeader: FC = () => {
 			</Grid>
 			{netWorth && (
 				<div className="bg-dark-900 p-2 m-2 mt-0 text-center rounded ">
-					Net worth: {netWorth.toFixed(2)}€
+					<PrivacyMode>Net worth: {netWorth.toFixed(2)}€</PrivacyMode>
 				</div>
 			)}
+			<Button onClick={() => toggle()}>pricvay</Button>
 		</>
 	);
 };
