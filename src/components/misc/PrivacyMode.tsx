@@ -16,9 +16,7 @@ const PrivacyMode: FC<Props> = ({ children, disableIcon, disableCenter }) => {
 	if (active)
 		return (
 			<span className="inline align-middle">
-				{/* <div className={`flex ${!disableCenter && "justify-center"}`}> */}
 				<VisibilityOffIcon fontSize="small" sx={{ m: 0, p: 0 }} />
-				{/* </div> */}
 			</span>
 		);
 
