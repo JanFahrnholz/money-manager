@@ -50,7 +50,9 @@ const StatsHeader: FC = () => {
 								balance
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={user?.balance} />€
+								<PrivacyMode>
+									<LoadValue value={user?.balance} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
@@ -75,7 +77,9 @@ const StatsHeader: FC = () => {
 								pending
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={pendingMoney} />€
+								<PrivacyMode>
+									<LoadValue value={pendingMoney} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
@@ -91,18 +95,21 @@ const StatsHeader: FC = () => {
 								to pay
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={toPay} />€
+								<PrivacyMode>
+									<LoadValue value={toPay} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
 				</Grid>
 			</Grid>
 			{netWorth && (
-				<div className="bg-dark-900 p-2 m-2 mt-0 text-center rounded ">
-					<PrivacyMode>Net worth: {netWorth.toFixed(2)}€</PrivacyMode>
-				</div>
+				<PrivacyMode disableIcon>
+					<div className="bg-dark-900 p-2 m-2 mt-0 text-center rounded ">
+						Net worth: {netWorth.toFixed(2)}€
+					</div>
+				</PrivacyMode>
 			)}
-			<Button onClick={() => toggle()}>pricvay</Button>
 		</>
 	);
 };

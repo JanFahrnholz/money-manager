@@ -9,6 +9,7 @@ import Profile from "../components/profile";
 import Transactions from "../components/transactions";
 import useLoggedIn from "../hooks/useLoggedIn";
 import OfflineWarning from "../components/misc/OfflineWarning";
+import PrivacyModeToggle from "@/components/misc/PrivacyModeToggle";
 
 const Home: NextPage = () => {
 	const loggedIn = useLoggedIn();
@@ -41,6 +42,8 @@ const Home: NextPage = () => {
 					<Profile key={3} />,
 				]}
 			/>
+
+			<PrivacyModeToggle />
 
 			<StyledAddToHomescreen />
 			<Toaster
