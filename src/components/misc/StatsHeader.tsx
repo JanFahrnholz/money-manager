@@ -14,10 +14,14 @@ import { TransactionContext } from "../../context/TransactionContext";
 import { getMoneyToPayBack, getPendingMoney } from "../../lib/Statistics";
 import LoadValue from "./LoadValue";
 import EditIcon from "@mui/icons-material/Edit";
+import PrivacyMode from "./PrivacyMode";
+import usePersistentState from "hooks/usePersistentStorage";
+import { PrivacyModeContext } from "context/PrivacyModeContext";
 const StatsHeader: FC = () => {
 	const { contacts } = useContext(ContactContext);
 	const { transactions } = useContext(TransactionContext);
 
+	const { toggle } = useContext(PrivacyModeContext);
 	const user = useUser();
 
 	const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
@@ -46,7 +50,9 @@ const StatsHeader: FC = () => {
 								balance
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={user?.balance} />€
+								<PrivacyMode>
+									<LoadValue value={user?.balance} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
@@ -71,7 +77,9 @@ const StatsHeader: FC = () => {
 								pending
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={pendingMoney} />€
+								<PrivacyMode>
+									<LoadValue value={pendingMoney} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
@@ -87,16 +95,20 @@ const StatsHeader: FC = () => {
 								to pay
 							</Typography>
 							<Typography variant="h5">
-								<LoadValue value={toPay} />€
+								<PrivacyMode>
+									<LoadValue value={toPay} />€
+								</PrivacyMode>
 							</Typography>
 						</CardContent>
 					</Card>
 				</Grid>
 			</Grid>
 			{netWorth && (
-				<div className="bg-dark-900 p-2 m-2 mt-0 text-center rounded ">
-					Net worth: {netWorth.toFixed(2)}€
-				</div>
+				<PrivacyMode disableIcon>
+					<div className="bg-dark-900 p-2 m-2 mt-0 text-center rounded ">
+						Net worth: {netWorth.toFixed(2)}€
+					</div>
+				</PrivacyMode>
 			)}
 		</>
 	);
