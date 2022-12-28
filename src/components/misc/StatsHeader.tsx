@@ -1,4 +1,11 @@
-import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	Grid,
+	Typography,
+} from "@mui/material";
 import useUser from "hooks/useUser";
 import { modifyBalance } from "lib/User";
 import { FC, useContext, useMemo } from "react";
@@ -6,13 +13,12 @@ import { ContactContext } from "../../context/ContactContext";
 import { TransactionContext } from "../../context/TransactionContext";
 import { getMoneyToPayBack, getPendingMoney } from "../../lib/Statistics";
 import LoadValue from "./LoadValue";
-
+import EditIcon from "@mui/icons-material/Edit";
 const StatsHeader: FC = () => {
 	const { contacts } = useContext(ContactContext);
 	const { transactions } = useContext(TransactionContext);
 
 	const user = useUser();
-	console.log(user);
 
 	const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
 	const toPay = useMemo(() => getMoneyToPayBack(contacts), [contacts]);
@@ -34,6 +40,15 @@ const StatsHeader: FC = () => {
 						</Typography>
 					</CardContent>
 				</Card>
+				{/* <Typography
+					sx={{
+						color: "text.secondary",
+						textAlign: "center",
+						mt: 1,
+					}}
+				>
+					<EditIcon fontSize="small" sx={{ scale: 0.5 }} />
+				</Typography> */}
 			</Grid>
 			<Grid item xs={4}>
 				<Card>

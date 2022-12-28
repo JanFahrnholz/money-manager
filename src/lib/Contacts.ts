@@ -2,6 +2,7 @@ import Contact from "../types/Contact";
 import Record from "../types/Record";
 import { client } from "./Pocketbase";
 import toast from "react-hot-toast";
+import TransactionRecord from "@/types/TransactionRecord";
 
 type CreateProps = {
 	name: string;
@@ -116,7 +117,6 @@ const isOwner = async (id: string) => {
 		return contact.owner == id;
 	} catch (error) {}
 };
-const isUser = async (id: string) => {};
 
 const getInitials = (name: string) => {
 	let names = name.split(" "),
@@ -128,4 +128,27 @@ const getInitials = (name: string) => {
 	return initials;
 };
 
-export { list, create, update, remove, modifyBalance, getInitials };
+const updateContactOnCreate = async (transaction: TransactionRecord) => {
+	const { amount, type, contact } = transaction;
+
+	type === "Rechnung" && (await modifyBalance(contact, -amount));
+	type === "Rückzahlung" && (await modifyBalance(contact, amount));
+};
+
+const updateContactOnDelete = async (transaction: TransactionRecord) => {
+	const { amount, type, contact } = transaction;
+
+	type === "Rechnung" && (await modifyBalance(contact, amount));
+	type === "Rückzahlung" && (await modifyBalance(contact, -amount));
+};
+
+export {
+	list,
+	create,
+	update,
+	remove,
+	modifyBalance,
+	getInitials,
+	updateContactOnCreate,
+	updateContactOnDelete,
+};

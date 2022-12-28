@@ -10,9 +10,7 @@ const modifyBalance = async (modifier: number) => {
 	const id = client.authStore.model?.id;
 	if (!id) return;
 	try {
-		const contact = await client
-			.collection("users")
-			.getOne(id, { $cancelKey: "modifyUserBalance" });
+		const contact = await client.collection("users").getOne(id);
 
 		await update(id, { balance: contact.balance + modifier });
 	} catch (error) {}
@@ -26,73 +24,18 @@ const update = async (id: string, data: Partial<User>) => {
 	}
 };
 
-const updateBalanceByTransaction = async (
-	id: string,
-	data: Partial<Transaction> | null,
-	action: CrudAction
-) => {
-	try {
-		const before = await client
-			.collection("transactions")
-			.getOne<TransactionRecord>(id);
+const updateBalanceOnCreate = async (transaction: TransactionRecord) => {
+	const { amount, type } = transaction;
 
-		if (action === "CREATE") await updateBalanceOnCreate(before, data);
-		// if (action === "UPDATE") await updateBalanceOnUpdate(before, data);
-		if (action === "DELETE") await updateBalanceOnDelete(before);
-	} catch (error) {}
+	if (type === "Einnahme") await modifyBalance(amount);
+	if (type === "Ausgabe") await modifyBalance(-amount);
 };
 
-const updateBalanceOnCreate = async (
-	before: TransactionRecord,
-	after: Partial<Transaction> | null
-) => {
-	if (!after) return;
-	if (after.amount === undefined) return;
-	const { type, planned } = before;
-	const amountBefore = before.amount;
-	const amountAfter = after.amount;
+const updateBalanceOnDelete = async (transaction: TransactionRecord) => {
+	const { type, amount } = transaction;
 
-	if (planned) return;
-	if (type === "Einnahme") await modifyBalance(amountAfter - amountBefore);
-	if (type === "Ausgabe") await modifyBalance(-(amountAfter - amountBefore));
-};
-
-const updateBalanceOnUpdate = async (
-	before: TransactionRecord,
-	after: Partial<Transaction> | null
-) => {
-	if (!after) return;
-	const { type, planned, amount } = before;
-
-	// TODO Backend: split transactions --> transactions + planned_transaction
-
-	/*if (planned === true && after.planned === true) return;
-
-	if (planned === true && after.planned === false) {
-		switch (type) {
-			case "Ausgabe":
-				await modifyBalance(-am);
-			case "Einnahme":
-				await modifyBalance();
-			case "Rechnung":
-				await modifyBalance();
-			case "Rückzahlung":
-				await modifyBalance();
-		}
-	}
-	if (planned === false && after.planned === true) {
-	}
-	if (planned === false && after.planned === false) {
-		await modifyBalance();
-	} */
-};
-
-const updateBalanceOnDelete = async (before: TransactionRecord) => {
-	const { type, planned, amount } = before;
-
-	if (planned) return;
 	if (type === "Einnahme") await modifyBalance(-amount);
 	if (type === "Ausgabe") await modifyBalance(amount);
 };
 
-export { update, modifyBalance, updateBalanceByTransaction };
+export { update, modifyBalance, updateBalanceOnCreate, updateBalanceOnDelete };

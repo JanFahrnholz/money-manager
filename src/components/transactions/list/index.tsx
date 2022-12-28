@@ -18,6 +18,7 @@ const TransactionList: FC = () => {
     const { transactions, plannedTransactions, loading } =
         useContext(TransactionContext);
 
+
     if (loading || !transactions || !plannedTransactions) return loadingState();
     if (transactions.length === 0 && plannedTransactions.length === 0)
         return <EmptyTransactions />;
