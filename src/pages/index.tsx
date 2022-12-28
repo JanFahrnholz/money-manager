@@ -9,46 +9,50 @@ import Profile from "../components/profile";
 import Transactions from "../components/transactions";
 import useLoggedIn from "../hooks/useLoggedIn";
 import OfflineWarning from "../components/misc/OfflineWarning";
+import PrivacyModeToggle from "@/components/misc/PrivacyModeToggle";
 
 const Home: NextPage = () => {
-    const loggedIn = useLoggedIn();
+	const loggedIn = useLoggedIn();
 
-    return (
-        <>
-            <AnimatePresence>
-                {!loggedIn && (
-                    <motion.div
-                        key={"landingscreen-overlay"}
-                        style={{
-                            position: "fixed",
-                            width: "100vw",
-                            height: "100vh",
-                        }}
-                        initial={{ y: "-100%" }}
-                        animate={{ y: 0 }}
-                        exit={{ y: "-100%" }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Landingscreen />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-            <OfflineWarning />
-            <Navigation
-                tabs={[
-                    <Transactions key={0} />,
-                    <People key={1} />,
-                    <Profile key={3} />,
-                ]}
-            />
-            <StyledAddToHomescreen />
-            <Toaster
-                toastOptions={{
-                    duration: 2000,
-                }}
-            />
-        </>
-    );
+	return (
+		<>
+			<AnimatePresence>
+				{!loggedIn && (
+					<motion.div
+						key={"landingscreen-overlay"}
+						style={{
+							position: "fixed",
+							width: "100vw",
+							height: "100vh",
+						}}
+						initial={{ y: "-100%" }}
+						animate={{ y: 0 }}
+						exit={{ y: "-100%" }}
+						transition={{ duration: 0.5 }}
+					>
+						<Landingscreen />
+					</motion.div>
+				)}
+			</AnimatePresence>
+			<OfflineWarning />
+			<Navigation
+				tabs={[
+					<Transactions key={0} />,
+					<People key={1} />,
+					<Profile key={3} />,
+				]}
+			/>
+
+			<PrivacyModeToggle />
+
+			<StyledAddToHomescreen />
+			<Toaster
+				toastOptions={{
+					duration: 2000,
+				}}
+			/>
+		</>
+	);
 };
 
 export default Home;

@@ -2,6 +2,7 @@ import PocketBase from "pocketbase";
 import ShortUniqueId from "short-unique-id";
 
 const client = new PocketBase(process.env.PB_URL);
+client.autoCancellation(false);
 
 const register = (password: string, passwordConfirm: string) => {
 	return new Promise<any>(async (resolve, reject) => {
