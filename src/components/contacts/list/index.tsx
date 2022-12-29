@@ -20,7 +20,6 @@ const ContactList: FC = () => {
 	const [selectedContact, setSelectedContact] = useState<string>();
 	const { contacts } = useContext(ContactContext);
 	const [rotation, setRotation] = useState(0);
-	console.log("🚀 ~ file: index.tsx:23 ~ rotation", rotation);
 	const sort = useSortContacts(contacts, ["updated", "balance", "name"]);
 	let i = 0;
 
