@@ -7,19 +7,18 @@ const withPWA = require("next-pwa")({
 });
 
 module.exports = withPWA({
-	reactStrictMode: true,
-	env: {
-		PB_URL:
-			process.env.NODE_ENV === "production"
-				? "https://pb.industed.com/"
-				: "https://pb-staging.industed.com/",
-	},
-	webpack(config) {
-		config.module.rules.push({
-			test: /\.svg$/,
-			use: ["@svgr/webpack"],
-		});
-
+    reactStrictMode: true,
+    env: {
+        PB_URL:
+            process.env.NODE_ENV === "production"
+                ? "https://pb.industed.com/"
+                : "https://pb-staging.industed.com/",
+    },
+    webpack(config) {
+        config.module.rules.push({
+            test: /\.svg$/,
+            use: ["@svgr/webpack"],
+        });
 		return config;
 	},
 });

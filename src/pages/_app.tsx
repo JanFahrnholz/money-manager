@@ -1,7 +1,9 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import PrivacyModeContextProvider from "context/PrivacyModeContext";
+import useOnVersionChange from "hooks/useOnVersionChange";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import toast from "react-hot-toast";
 import ContactContextProvider from "../context/ContactContext";
 import NavigationContextProvider from "../context/NavigationContext";
 import TransactionContextProvider from "../context/TransactionContext";
@@ -27,14 +29,16 @@ const theme = createTheme({
 			secondary: "#ccc",
 		},
 		background: {
-			default:
-				"#282828                                                                                                                                                          ",
+			default: "#282828",
 			paper: "#424242",
 		},
 	},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+	useOnVersionChange((version) => {
+		toast.loading(`Updating to version ${version}`);
+	});
 	return (
 		<ThemeProvider theme={theme}>
 			<NavigationContextProvider>
