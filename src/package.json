@@ -34,7 +34,7 @@
 		"react-password-strength-bar": "^0.4.1",
 		"react-pwa-add-to-homescreen": "^1.1.7",
 		"react-viewport-list": "^6.1.0",
-		"react-virtualized": "^9.22.3",
+		"react-virtuoso": "^4.0.3",
 		"short-unique-id": "^4.4.4",
 		"styled-components": "^5.3.5",
 		"tailwindcss": "^3.1.8",
