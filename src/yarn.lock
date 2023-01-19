@@ -2350,10 +2350,27 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-virtualized@^9.21.21":
+  version "9.21.21"
+  resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.21.21.tgz#65c96f25314f0fb3d40536929dc78112753b49e1"
+  integrity sha512-Exx6I7p4Qn+BBA1SRyj/UwQlZ0I0Pq7g7uhAp0QQ4JWzZunqEqNBGTmCmMmS/3N9wFgAGWuBD16ap7k8Y14VPA==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/react" "^17"
+
 "@types/react@*", "@types/react@18.0.18":
   version "18.0.18"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.0.18.tgz"
   integrity sha512-6hI08umYs6NaiHFEEGioXnxJ+oEhY3eRz8VCUaudZmGdtvPviCJB8mgaMxaDWAdPSYd4eFavrPk2QIolwbLYrg==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^17":
+  version "17.0.52"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.52.tgz#10d8b907b5c563ac014a541f289ae8eaa9bf2e9b"
+  integrity sha512-vwk8QqVODi0VaZZpDXQCmEmiOuyjEFPY7Ttaw5vjM112LOq37yz1CDJGrRJwA1fYEq4Iitd5rnjd1yWAc/bT+A==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -5572,6 +5589,11 @@ react-viewport-list@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/react-viewport-list/-/react-viewport-list-6.1.0.tgz#5177adc885c856f93e1212d86afd13817d7cd449"
   integrity sha512-6YeKKwbivq97uoa4IwoToVqVIf003tGCwqsZPzZFNfLN1zwR23V3VX2EZV3UzToclyLaYMq3j0CIhsmawxVSow==
+
+react-virtuoso@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.0.3.tgz#0dc8b10978095852d985b064157639b9fb9d9b1e"
+  integrity sha512-tyqt8FBWxO+smve/kUgJbhCI2MEOvH2hHgFYPKWBMA2cJmV+cHIDDh1BL/6w4pg/dcCdlHCNVwi6aiztPxWttw==
 
 react@18.2.0:
   version "18.2.0"
