@@ -1,3 +1,4 @@
+import TransactionRecord from "@/types/TransactionRecord";
 import {
     CircularProgress,
     Divider,
@@ -6,10 +7,11 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
 import { formatDailyDate, formatMonthlyDate } from "../../../lib/Formatter";
 import RenderInterval from "../../misc/RenderInterval";
+import TransactionDetailMenu from "../menu";
 import EmptyTransactions from "./empty";
 import TransactionListItem from "./item";
 import PlannedTransactionListItem from "./planned-item";
@@ -18,6 +20,10 @@ const TransactionList: FC = () => {
     const { transactions, plannedTransactions, loading } =
         useContext(TransactionContext);
 
+    const [menuTransaction, setMenuTransaction] = useState<
+        TransactionRecord | undefined
+    >();
+    const [openActions, setOpenActions] = useState(false);
 
     if (loading || !transactions || !plannedTransactions) return loadingState();
     if (transactions.length === 0 && plannedTransactions.length === 0)
@@ -62,11 +68,20 @@ const TransactionList: FC = () => {
                                 <TransactionListItem
                                     key={`item-${transaction.id}`}
                                     transaction={transaction}
+                                    onClick={() => {
+                                        setMenuTransaction(transaction);
+                                        setOpenActions(!openActions);
+                                    }}
                                 />
                             </>
                         );
                     })}
                 </List>
+                <TransactionDetailMenu
+                    transaction={menuTransaction}
+                    open={openActions}
+                    setOpen={setOpenActions}
+                />
             </div>
         </div>
     );
