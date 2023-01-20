@@ -8,6 +8,7 @@ aw-gen.json
 /node_modules
 /.pnp
 .pnp.js
+yarn.lock
 
 # testing
 /coverage
