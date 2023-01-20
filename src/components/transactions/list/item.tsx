@@ -19,7 +19,7 @@ import TransactionDetailMenu from "../menu";
 
 interface Props {
     transaction: Record<Transaction>;
-    onClick: Function;
+    onClick?: Function;
 }
 
 const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
@@ -44,7 +44,7 @@ const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
             }}
             className="shadow border"
             secondaryAction={secondaryAction()}
-            onClick={() => onClick()}
+            onClick={() => onClick && onClick()}
         >
             <ListItemAvatar>
                 <Avatar
