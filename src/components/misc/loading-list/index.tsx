@@ -50,7 +50,7 @@ const TransactionLoadingList = () => {
                 style={{ height: "calc(80vh - 50px)", paddingBottom: "50px" }}
                 data={data}
                 endReached={() => loadMoreRows()}
-                itemContent={(index) => (
+                itemContent={(index: number) => (
                     <>
                         <RenderInterval
                             array={data}
