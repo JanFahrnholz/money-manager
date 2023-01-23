@@ -4,11 +4,12 @@ import TransactionRecord from "@/types/TransactionRecord";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { formatDailyDate, formatMonthlyDate } from "lib/Formatter";
 import { client } from "lib/Pocketbase";
-import { useEffect, useRef, useState } from "react";
+import { ListResult } from "pocketbase";
+import { FC, useEffect, useRef, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 import RenderInterval from "../RenderInterval";
 
-const TransactionLoadingList = () => {
+const TransactionLoadingList: FC = () => {
     const [menuTransaction, setMenuTransaction] = useState<
         TransactionRecord | undefined
     >();
@@ -17,44 +18,51 @@ const TransactionLoadingList = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(false);
     const [page, setPage] = useState(1);
-    const [reloading, setReloading] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
     const perPage = 10;
     const ref = useRef();
-    console.log(page, reloading, data);
+    console.log(page, totalPages, data);
 
     useEffect(() => {
+        async function fetchData(reloading = false) {
+            setIsLoading(true);
+            try {
+                reloading && setData([]);
+                reloading && setPage(1);
+                const response = await client
+                    .collection("transactions")
+                    .getList<TransactionRecord>(page, perPage, {
+                        sort: "-date",
+                        expand: "contact,owner",
+                    });
+
+                setIsLoading(false);
+                setValues(response);
+            } catch (err) {
+                console.log(err);
+                setIsLoading(false);
+            }
+        }
         fetchData();
     }, [page]);
 
-    async function fetchData() {
-        setIsLoading(true);
-        try {
-            !reloading && setData([]);
-            !reloading && setPage(1);
-            const response = await client
-                .collection("transactions")
-                .getList<TransactionRecord>(page, perPage, {
-                    sort: "-date",
-                    expand: "contact,owner",
-                });
-            setData((data) => [...data, ...response.items]);
-            setIsLoading(false);
-            setHasMore(response.page < response.totalPages);
-        } catch (err) {
-            console.log(err);
-            setIsLoading(false);
-        }
-    }
+    const setValues = (res: ListResult<TransactionRecord> | undefined) => {
+        if (!res) return;
+        setData((data) => {
+            console.log(data[0], res.items[0]);
+            return [...data, ...res.items];
+        });
+        setTotalPages(res.totalPages);
+    };
 
     const loadMoreRows = () => {
-        if (hasMore) setPage(page + 1);
+        console.log("load more");
+        if (page < totalPages || totalPages === 1) {
+            setPage(page + 1);
+        }
     };
 
-    const reload = async () => {
-        setReloading(true);
-        await fetchData();
-        setReloading(false);
-    };
+    const reload = async () => {};
 
     const handleClick = (transaction: TransactionRecord) => {
         setMenuTransaction(transaction);

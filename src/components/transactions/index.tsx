@@ -8,8 +8,8 @@ const Transactions: FC = () => {
     return (
         <>
             <StatsHeader />
-            <TransactionList />
-            {/* <TransactionLoadingList /> */}
+            {/* <TransactionList /> */}
+            <TransactionLoadingList />
             <AddTransaction />
         </>
     );
