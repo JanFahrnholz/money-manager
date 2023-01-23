@@ -53,7 +53,6 @@ const TransactionContextProvider: FC<Props> = (props) => {
 
 				setPlanned((prev) => updateTransactions(action, record, prev));
 			});
-		return () => unsubscribeTransactions();
 	}, []);
 
 	const updateTransactions = (
@@ -69,18 +68,6 @@ const TransactionContextProvider: FC<Props> = (props) => {
 			return prevRecords.map((r) => (r.id === record.id ? record : r));
 
 		return prevRecords;
-	};
-
-	const unsubscribeTransactions = () => {
-		client
-			.collection("transactions")
-			.unsubscribe("*")
-			.catch(() => {});
-
-		client
-			.collection("planned_transactions")
-			.unsubscribe("*")
-			.catch(() => {});
 	};
 
 	return (
