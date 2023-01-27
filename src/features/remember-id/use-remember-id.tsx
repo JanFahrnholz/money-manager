@@ -2,29 +2,31 @@ import usePersistentState from "hooks/usePersistentStorage";
 import { useEffect, useState } from "react";
 
 const useRememberId = () => {
-	const [id, setIdInternal] = useState("");
-	const [remember, setRemember] = usePersistentState("remember_me_id", "");
-	const [enabled, setEnabledInternal] = usePersistentState(
-		"remember_me_enabled",
-		false
-	);
+    const [id, setIdInternal] = useState("");
+    const [remember, setRemember] = usePersistentState("remember_me_id", "");
+    const [enabled, setEnabledInternal] = useState(false);
 
-	useEffect(() => {
-		if (enabled) setId(remember);
-	}, [enabled, remember]);
+    console.log(`id: '${id}'`, "rem:", remember, enabled);
 
-	const setEnabled = (value: boolean) => {
-		if (!value) setRemember("");
-		if (value) setRemember(id);
-		setEnabledInternal(value);
-	};
+    useEffect(() => {
+        if (remember !== "" && remember) {
+            setEnabledInternal(true);
+            setId(remember);
+        }
+    }, [remember]);
 
-	const setId = (value: string) => {
-		setIdInternal(value);
-		if (enabled) setRemember(id);
-	};
+    const setEnabled = (value: boolean) => {
+        value && setRemember(id);
+        !value && setRemember("");
+        setEnabledInternal(value);
+    };
 
-	return [id, setId, enabled, setEnabled];
+    const setId = (value: string) => {
+        setIdInternal(value);
+        enabled && setRemember(value);
+    };
+
+    return { id, setId, enabled, setEnabled };
 };
 
 export default useRememberId;
