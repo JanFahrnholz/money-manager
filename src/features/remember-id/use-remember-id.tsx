@@ -6,8 +6,6 @@ const useRememberId = () => {
     const [remember, setRemember] = usePersistentState("remember_me_id", "");
     const [enabled, setEnabledInternal] = useState(false);
 
-    console.log(`id: '${id}'`, "rem:", remember, enabled);
-
     useEffect(() => {
         if (remember !== "" && remember) {
             setEnabledInternal(true);
