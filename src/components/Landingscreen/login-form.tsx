@@ -6,6 +6,8 @@ import {
     Input,
     InputLabel,
 } from "@mui/material";
+import RememberUserIdCheckbox from "features/remember-id/checkbox";
+import useRememberId from "features/remember-id/use-remember-id";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { login } from "../../lib/Pocketbase";
@@ -13,7 +15,7 @@ import { login } from "../../lib/Pocketbase";
 const LandingscreenLoginForm: FC = () => {
     const [error, setError] = useState<string | false>();
     const [pw, setPw] = useState<string>("");
-    const [id, setId] = useState<string>("");
+    const { id, setId, enabled, setEnabled } = useRememberId();
     const [status, setStatus] = useState<any>("Access ID");
 
     const router = useRouter();
@@ -60,6 +62,10 @@ const LandingscreenLoginForm: FC = () => {
                         onChange={(e) => setPw(e.target.value)}
                     />
                 </FormControl>
+                <RememberUserIdCheckbox
+                    enabled={enabled}
+                    setEnabled={setEnabled}
+                />
                 {error && (
                     <Alert className="mt-4" severity="error" variant="filled">
                         {error}

@@ -20,7 +20,6 @@ const TransactionLoadingList = () => {
     const [reloading, setReloading] = useState(false);
     const perPage = 10;
     const ref = useRef();
-    console.log(page, reloading, data);
 
     useEffect(() => {
         fetchData();
