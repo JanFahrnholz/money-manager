@@ -2,16 +2,14 @@ import { client } from "lib/Pocketbase";
 import { useContext } from "react";
 import { ProfileContext } from "../context";
 
-const useProfile = (userId?: string) => {
+const useProfile = () => {
     const { profile } = useContext(ProfileContext);
 
-    const getProfile = async (id: string) => {
+    const get = async (id: string) => {
         await client.collection("profiles").getOne(id);
     };
 
-    if (!userId) return profile;
-
-    return getProfile(userId);
+    return { profile, get };
 };
 
 export default useProfile;

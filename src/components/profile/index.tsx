@@ -22,7 +22,7 @@ import ProfileAvatar from "./avatar";
 import ProfileHeader from "./header";
 
 const Profile: FC = () => {
-    const profile = useProfile();
+    const { profile } = useProfile();
     console.log(profile);
     return (
         <>

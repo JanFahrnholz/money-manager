@@ -8,7 +8,7 @@ import useProfile from "../hooks/useProfile";
 const DeleteProfile: FC = () => {
     const [open, setOpen] = useState(false);
     const remove = useDelete();
-    const profile = useProfile();
+    const { profile } = useProfile();
 
     if (!profile) return <></>;
 
