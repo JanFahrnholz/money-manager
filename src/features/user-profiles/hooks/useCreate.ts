@@ -1,6 +1,7 @@
 import Profile from "@/types/Profile";
 import { client } from "lib/Pocketbase";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 import { ProfileContext } from "../context";
 
 export default function useCreate() {
@@ -10,10 +11,15 @@ export default function useCreate() {
         const id = client.authStore.model?.id;
         if (!id) return;
 
-        const profile = await client
-            .collection("profiles")
-            .create<Profile>({ user: id });
-        setProfile(profile);
+        try {
+            const profile = await client
+                .collection("profiles")
+                .create<Profile>({ user: id });
+            setProfile(profile);
+            toast.success("Profile created");
+        } catch (error) {
+            toast.error("Could not create profile");
+        }
     };
 
     return create;

@@ -11,18 +11,6 @@ const CreateProfile: FC = () => {
     const [loading, setLoading] = useState(false);
     const create = useCreate();
 
-    const createProfile = async () => {
-        setLoading(true);
-        try {
-            await create();
-            toast.success("Profile created");
-        } catch (error) {
-            toast.error("Could not create profile");
-            console.log(error);
-        }
-        setLoading(false);
-    };
-
     if (profile) return <></>;
 
     return (
@@ -33,7 +21,7 @@ const CreateProfile: FC = () => {
                 >
                     You are completely anonymous, no public profile
                 </Typography>
-                <Button variant="outlined" onClick={() => createProfile()}>
+                <Button variant="outlined" onClick={() => create()}>
                     Create profile
                 </Button>
             </div>

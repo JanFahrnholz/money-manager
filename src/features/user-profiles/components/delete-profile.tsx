@@ -12,15 +12,6 @@ const DeleteProfile: FC = () => {
 
     if (!profile) return <></>;
 
-    const deleteProfile = async () => {
-        try {
-            await remove();
-            toast.success("Successfully deleted profile");
-        } catch (error) {
-            toast.error("Could not delete profile");
-        }
-    };
-
     return (
         <>
             <ConfirmationDialog
@@ -30,7 +21,7 @@ const DeleteProfile: FC = () => {
                 content={"Are you sure you want to delete your profile?"}
                 agreeText={"Delete"}
                 disagreeText={"Cancel"}
-                action={deleteProfile}
+                action={remove}
             />
             <div className="text-center text-dark-700">
                 <Typography

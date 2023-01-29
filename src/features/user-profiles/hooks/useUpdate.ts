@@ -6,9 +6,9 @@ import { ProfileContext } from "../context";
 const useUpdate = () => {
     const { profile, setProfile } = useContext(ProfileContext);
 
-    const update = (params: Partial<Profile>) => {
+    const update = async (params: Partial<Profile>) => {
         if (!profile?.id) return;
-        client.collection("profiles").update(profile.id, params);
+        await client.collection("profiles").update(profile.id, params);
     };
 
     return update;
