@@ -4,7 +4,7 @@ import { ProfileContext } from "features/user-profiles/context";
 import { FC, useContext } from "react";
 
 interface Props {
-    prop: string;
+    prop: keyof Profile;
     placeholder: string;
     helperText?: string;
 }
@@ -16,6 +16,8 @@ const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
         setProfile({ ...profile, [prop]: input } as Profile);
     };
 
+    const val = profile ? profile[prop] : "";
+
     return (
         <ListItem>
             <Grid container>
@@ -26,7 +28,7 @@ const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
                     <TextField
                         size="small"
                         fullWidth
-                        value={profile[prop] || ""}
+                        value={val}
                         onChange={(e) => handleChange(e.target.value)}
                         placeholder={placeholder}
                         helperText={helperText}
