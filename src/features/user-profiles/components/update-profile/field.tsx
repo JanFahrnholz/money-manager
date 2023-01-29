@@ -14,7 +14,6 @@ const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
 
     const handleChange = (input: string) => {
         setProfile({ ...profile, [prop]: input } as Profile);
-        console.log(input);
     };
 
     return (
