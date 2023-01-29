@@ -8,7 +8,10 @@ const useUpdate = () => {
 
     const update = async (params: Partial<Profile>) => {
         if (!profile?.id) return;
-        await client.collection("profiles").update(profile.id, params);
+        const p = await client
+            .collection("profiles")
+            .update<Profile>(profile.id, params);
+        setProfile(p);
     };
 
     return update;

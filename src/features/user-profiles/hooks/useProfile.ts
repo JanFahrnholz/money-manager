@@ -6,7 +6,9 @@ const useProfile = () => {
     const { profile } = useContext(ProfileContext);
 
     const get = async (id: string) => {
-        await client.collection("profiles").getOne(id);
+        return await client
+            .collection("profiles")
+            .getFirstListItem(`user.id="${id}"`);
     };
 
     return { profile, get };

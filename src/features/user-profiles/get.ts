@@ -1,5 +1,4 @@
 import Profile from "@/types/Profile";
-import useUser from "hooks/useUser";
 import { client } from "lib/Pocketbase";
 
 export default async function get() {

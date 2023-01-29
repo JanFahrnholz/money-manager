@@ -1,26 +1,32 @@
-import { Box, Grid, List, ListItem, TextField } from "@mui/material";
+import { Button, List, ListItem } from "@mui/material";
+import { ProfileContext } from "features/user-profiles/context";
 import useProfile from "features/user-profiles/hooks/useProfile";
-import useUpdate from "features/user-profiles/hooks/useUpdate";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import ProfileUpdateField from "./field";
 
 const UpdateProfile: FC = () => {
-    const profile = useProfile();
-    const update = useUpdate();
+    const { profile } = useProfile();
+    const { unsaved, save } = useContext(ProfileContext);
 
     if (!profile) return <></>;
 
     return (
         <>
             <List>
-                <ListItem>
-                    <ProfileUpdateField
-                        prop="username"
-                        placeholder="john-doe"
-                        helperText="max. 10 charakters"
-                    />
-                </ListItem>
+                <ProfileUpdateField
+                    prop="username"
+                    placeholder="john-doe"
+                    helperText="max. 10 characters"
+                />
             </List>
+            <Button
+                variant="contained"
+                fullWidth
+                disabled={!unsaved}
+                onClick={() => save()}
+            >
+                Save
+            </Button>
         </>
     );
 };

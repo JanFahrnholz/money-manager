@@ -1,13 +1,10 @@
-import { Typography, Button } from "@mui/material";
-import { FC, useContext, useState } from "react";
-import { toast } from "react-hot-toast";
-import { ProfileContext } from "../context";
+import { Button, Typography } from "@mui/material";
+import { FC, useState } from "react";
 import useCreate from "../hooks/useCreate";
-import create from "../hooks/useCreate";
 import useProfile from "../hooks/useProfile";
 
 const CreateProfile: FC = () => {
-    const {profile} = useProfile();
+    const { profile } = useProfile();
     const [loading, setLoading] = useState(false);
     const create = useCreate();
 

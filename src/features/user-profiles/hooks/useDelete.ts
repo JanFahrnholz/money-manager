@@ -10,7 +10,7 @@ export default function useDelete() {
 
     const remove = async () => {
         if (!profile?.id) return;
-        console.log(profile);
+
         try {
             await client.collection("profiles").delete(profile.id);
             toast.success("Successfully deleted profile");

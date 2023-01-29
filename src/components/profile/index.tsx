@@ -1,29 +1,14 @@
-import {
-    Avatar,
-    Box,
-    Button,
-    Divider,
-    ListItem,
-    ListItemText,
-    Typography,
-} from "@mui/material";
+import { Divider } from "@mui/material";
 import CreateProfile from "features/user-profiles/components/create-profile";
 import DeleteProfile from "features/user-profiles/components/delete-profile";
 import UpdateProfile from "features/user-profiles/components/update-profile";
-import useProfile from "features/user-profiles/hooks/useProfile";
-import useUser from "hooks/useUser";
 import { FC } from "react";
-import { client } from "../../lib/Pocketbase";
-import AppVersion from "../misc/AppVersion";
-import DeleteIdButton from "../misc/DeleteIdButton";
 import UserIdCopy from "../misc/UserIdCopy";
 import Watermark from "../misc/watermark";
 import ProfileAvatar from "./avatar";
 import ProfileHeader from "./header";
 
 const Profile: FC = () => {
-    const { profile } = useProfile();
-    console.log(profile);
     return (
         <>
             <ProfileHeader />

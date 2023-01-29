@@ -6,8 +6,6 @@ const useInputDelay = (delay: number, callback: Function) => {
         const timer = setTimeout(() => {
             if (Date.now() - lastChanged >= delay) callback();
         }, delay);
-
-        return () => clearTimeout(timer);
     }, [lastChanged]);
 
     const reset = () => setLastChanged(Date.now());

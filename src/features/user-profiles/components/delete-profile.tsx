@@ -1,7 +1,6 @@
 import ConfirmationDialog from "@/components/misc/ConfirmationDialog";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { FC, useState } from "react";
-import { toast } from "react-hot-toast";
 import useDelete from "../hooks/useDelete";
 import useProfile from "../hooks/useProfile";
 
