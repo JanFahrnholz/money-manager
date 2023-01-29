@@ -61,7 +61,7 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
 							setOpen={setOpen}
 						/>
 					) : (
-						<LinkedFrom txt={data.contact.owner} />
+						<LinkedFrom owner={data.contact.owner} />
 					)}
 				</Typography>
 

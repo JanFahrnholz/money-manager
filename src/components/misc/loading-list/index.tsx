@@ -40,7 +40,6 @@ const TransactionLoadingList = () => {
             setIsLoading(false);
             setHasMore(response.page < response.totalPages);
         } catch (err) {
-            console.log(err);
             setIsLoading(false);
         }
     }

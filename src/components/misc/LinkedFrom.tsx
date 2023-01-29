@@ -1,13 +1,30 @@
 import { Typography } from "@mui/material";
-import { FC } from "react";
+import useProfile from "features/user-profiles/hooks/useProfile";
+import { FC, useEffect, useState } from "react";
 import Contact from "../../types/Contact";
 import Record from "../../types/Record";
 
 type Props = {
-    txt: string;
+    owner: string;
 };
 
-const LinkedFrom: FC<Props> = ({ txt }) => {
+const LinkedFrom: FC<Props> = ({ owner }) => {
+    const [txt, setTxt] = useState(owner);
+    const { get } = useProfile();
+
+    const setUsername = async () => {
+        try {
+            const p = await get(owner);
+            console.log("fetched", p);
+            if (!p.username) return;
+            if (p.username === "") return;
+            setTxt(p.username);
+        } catch (error) {}
+    };
+
+    useEffect(() => {
+        setUsername();
+    });
     return (
         <>
             <Typography

@@ -79,7 +79,7 @@ const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
                                 )}
                             </>
                         ) : (
-                            <LinkedFrom txt={transaction.owner} />
+                            <LinkedFrom owner={transaction.owner} />
                         )}
                     </Typography>
                 }
