@@ -1,16 +1,16 @@
 import { Typography } from "@mui/material";
 import { FC } from "react";
-import useLoggedIn from "../../../hooks/useLoggedIn";
-import AppVersion from "../../misc/AppVersion";
+import useLoggedIn from "../../hooks/useLoggedIn";
+import AppVersion from "./AppVersion";
 
-const AboutSection: FC = () => {
+const Watermark: FC = () => {
     const loggedIn = useLoggedIn();
 
     if (!loggedIn) return <></>;
 
     return (
         <>
-            <Typography sx={{ color: "text.secondary" }}>
+            <Typography>
                 MoneyManager <AppVersion />
                 <br />© 2022 Industed - All rights resevered
             </Typography>
@@ -18,4 +18,4 @@ const AboutSection: FC = () => {
     );
 };
 
-export default AboutSection;
+export default Watermark;

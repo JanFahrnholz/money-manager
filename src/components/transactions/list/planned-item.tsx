@@ -3,12 +3,12 @@ import DoneIcon from "@mui/icons-material/Done";
 import LinkIcon from "@mui/icons-material/Link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
-	Avatar,
-	IconButton,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
-	Typography,
+    Avatar,
+    IconButton,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Typography,
 } from "@mui/material";
 import { confirm, remove } from "lib/PlannedTransactions";
 import { FC, useState } from "react";
@@ -21,30 +21,30 @@ import LinkedFrom from "../../misc/LinkedFrom";
 import TransactionDetailMenu from "../menu";
 
 const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
-	transaction,
+    transaction,
 }) => {
-	const [openActions, setOpenActions] = useState(false);
-	const isOwner = client.authStore.model?.id == transaction.owner;
+    const [openActions, setOpenActions] = useState(false);
+    const isOwner = client.authStore.model?.id == transaction.owner;
 
-	const secondaryAction = () => {
-		return (
-			<>
-				{isOwner && (
-					<>
-						<IconButton onClick={() => confirm(transaction)}>
-							<DoneIcon />
-						</IconButton>
-						<IconButton onClick={() => remove(transaction)}>
-							<ClearIcon />
-						</IconButton>
-					</>
-				)}
-				<IconButton onClick={() => setOpenActions(!openActions)}>
-					<MoreHorizIcon />
-				</IconButton>
-			</>
-		);
-	};
+    const secondaryAction = () => {
+        return (
+            <>
+                {isOwner && (
+                    <>
+                        <IconButton onClick={() => confirm(transaction)}>
+                            <DoneIcon />
+                        </IconButton>
+                        <IconButton onClick={() => remove(transaction)}>
+                            <ClearIcon />
+                        </IconButton>
+                    </>
+                )}
+                <IconButton onClick={() => setOpenActions(!openActions)}>
+                    <MoreHorizIcon />
+                </IconButton>
+            </>
+        );
+    };
 
     return (
         <ListItem
@@ -92,7 +92,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                                 )}
                             </>
                         ) : (
-                            <LinkedFrom txt={transaction.owner} />
+                            <LinkedFrom owner={transaction.owner} />
                         )}
                     </Typography>
                 }
