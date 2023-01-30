@@ -1,4 +1,5 @@
 import { Divider, List, ListItem, Typography } from "@mui/material";
+import useProfile from "features/user-profiles/hooks/useProfile";
 import { FC, useContext } from "react";
 import { MarketplaceContext } from "../context";
 import CreateProduct from "./create-product";
@@ -7,21 +8,27 @@ import ProductItem from "./product-item";
 
 const YourProducts: FC = () => {
     const { products, linkedProducts } = useContext(MarketplaceContext);
-
+    const { profile } = useProfile();
+    const isSeller = profile ? profile.seller : false;
     return (
         <>
-            <Typography variant="h5" sx={{ mt: 1 }}>
-                Your products
-            </Typography>
-            {products.length === 0 && <EmptyProducts />}
-            {products.length > 0 && (
-                <List>
-                    {products.map((p) => (
-                        <ProductItem key={p.id} product={p} />
-                    ))}
-                </List>
+            {isSeller && (
+                <>
+                    <Typography variant="h5" sx={{ mt: 1 }}>
+                        Your products
+                    </Typography>
+                    {products.length === 0 && <EmptyProducts />}
+                    {products.length > 0 && (
+                        <List>
+                            {products.map((p) => (
+                                <ProductItem key={p.id} product={p} />
+                            ))}
+                        </List>
+                    )}
+                    <CreateProduct />
+                    <Divider sx={{ my: 2 }} />
+                </>
             )}
-            <CreateProduct />
 
             <Typography variant="h5" sx={{ mt: 1 }}>
                 Linked products

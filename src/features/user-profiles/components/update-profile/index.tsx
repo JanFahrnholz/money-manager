@@ -2,7 +2,8 @@ import { Button, List, ListItem } from "@mui/material";
 import { ProfileContext } from "features/user-profiles/context";
 import useProfile from "features/user-profiles/hooks/useProfile";
 import { FC, useContext } from "react";
-import ProfileUpdateField from "./field";
+import ProfileUpdateFieldBoolean from "./field-boolean";
+import ProfileUpdateFieldString from "./field-string";
 
 const UpdateProfile: FC = () => {
     const { profile } = useProfile();
@@ -13,11 +14,12 @@ const UpdateProfile: FC = () => {
     return (
         <>
             <List>
-                <ProfileUpdateField
+                <ProfileUpdateFieldString
                     prop="username"
                     placeholder="john-doe"
                     helperText="max. 10 characters"
                 />
+                <ProfileUpdateFieldBoolean prop="seller" />
             </List>
             <Button
                 variant="contained"
