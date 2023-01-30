@@ -3,6 +3,7 @@ import Contact from "../types/Contact";
 import Record from "../types/Record";
 import Transaction from "../types/Transaction";
 import { client } from "./Pocketbase";
+import moment from "moment";
 
 const getPendingMoney = (contacts: Record<Contact>[]): number => {
     let pending = 0;
@@ -77,10 +78,51 @@ function calculateAverageAmountPerDay(
     return averageAmountPerDay;
 }
 
+type IndexObject = {
+    [key: number]: TransactionRecord[];
+};
+
+const calcAvgAmountPerWeek = (transactions: TransactionRecord[]) => {
+    transactions = transactions.filter(
+        (t) => t.type === "Einnahme" || t.type === "Rechnung"
+    );
+
+    const groupedTransactions = transactions.reduce(
+        (acc: IndexObject, transaction) => {
+            const week = moment(transaction.date).week();
+            if (!acc[week]) {
+                acc[week] = [];
+            }
+            acc[week].push(transaction);
+            return acc;
+        },
+        {}
+    );
+    console.log(
+        "🚀 ~ file: Statistics.ts:101 ~ calcAvgAmountPerWeek ~ groupedTransactions",
+        groupedTransactions
+    );
+
+    const sumByWeek = Object.values(groupedTransactions).map(
+        (weekTransactions) =>
+            weekTransactions.reduce(
+                (sum, transaction) => sum + transaction.amount,
+                0
+            )
+    );
+
+    const averageAmountPerWeek =
+        sumByWeek.reduce((sum, weekAmount) => sum + weekAmount, 0) /
+        sumByWeek.length;
+
+    return averageAmountPerWeek;
+};
+
 export {
     getPendingMoney,
     getMoneyToPayBack,
     getBalance,
     getCashflow,
     calculateAverageAmountPerDay,
+    calcAvgAmountPerWeek,
 };
