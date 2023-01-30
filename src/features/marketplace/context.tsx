@@ -8,7 +8,7 @@ import {
     useEffect,
     useState,
 } from "react";
-import { Product, ProductRecord } from "./types/Product";
+import { ProductRecord } from "./types/Product";
 
 type ContextProps = {
     products: ProductRecord[];

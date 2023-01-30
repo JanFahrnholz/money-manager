@@ -6,16 +6,16 @@ import Record from "../../types/Record";
 
 type Props = {
     owner: string;
+    asText?: boolean;
 };
 
-const LinkedFrom: FC<Props> = ({ owner }) => {
+const LinkedFrom: FC<Props> = ({ owner, asText }) => {
     const [txt, setTxt] = useState(owner);
     const { get } = useProfile();
 
     const setUsername = async () => {
         try {
             const p = await get(owner);
-            console.log("fetched", p);
             if (!p.username) return;
             if (p.username === "") return;
             setTxt(p.username);
@@ -25,6 +25,7 @@ const LinkedFrom: FC<Props> = ({ owner }) => {
     useEffect(() => {
         setUsername();
     });
+    if (asText) return <>{txt}</>;
     return (
         <>
             <Typography

@@ -2,6 +2,7 @@ import { Divider, List, ListItem, Typography } from "@mui/material";
 import { FC, useContext } from "react";
 import { MarketplaceContext } from "../context";
 import CreateProduct from "./create-product";
+import LinkedProductItem from "./linked-product-item";
 import ProductItem from "./product-item";
 
 const YourProducts: FC = () => {
@@ -29,7 +30,7 @@ const YourProducts: FC = () => {
             {linkedProducts.length > 0 && (
                 <List>
                     {linkedProducts.map((p) => (
-                        <ProductItem key={p.id} product={p} />
+                        <LinkedProductItem key={p.id} product={p} />
                     ))}
                 </List>
             )}
