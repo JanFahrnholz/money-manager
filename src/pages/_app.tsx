@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import PrivacyModeContextProvider from "context/PrivacyModeContext";
+import MarketplaceContextProvider from "features/marketplace/context";
 import ProfileContextProvider from "features/user-profiles/context";
 import useOnVersionChange from "hooks/useOnVersionChange";
 import type { AppProps } from "next/app";
@@ -22,7 +23,7 @@ const theme = createTheme({
         secondary: {
             main: "#313131",
             light: "#5a5a5a",
-            dark: "#080808",
+            dark: "#1F1F1F",
             contrastText: "#ffffff",
         },
         text: {
@@ -43,26 +44,28 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider theme={theme}>
             <ProfileContextProvider>
-                <NavigationContextProvider>
-                    <TransactionContextProvider>
-                        <ContactContextProvider>
-                            <PrivacyModeContextProvider>
-                                <Head>
-                                    <meta
-                                        name="viewport"
-                                        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                                    />
-                                    <meta
-                                        httpEquiv="ScreenOrientation"
-                                        content="autoRotate:disabled"
-                                    />
-                                    <title>Money Manager</title>
-                                </Head>
-                                <Component {...pageProps} />
-                            </PrivacyModeContextProvider>
-                        </ContactContextProvider>
-                    </TransactionContextProvider>
-                </NavigationContextProvider>
+                <MarketplaceContextProvider>
+                    <NavigationContextProvider>
+                        <TransactionContextProvider>
+                            <ContactContextProvider>
+                                <PrivacyModeContextProvider>
+                                    <Head>
+                                        <meta
+                                            name="viewport"
+                                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                                        />
+                                        <meta
+                                            httpEquiv="ScreenOrientation"
+                                            content="autoRotate:disabled"
+                                        />
+                                        <title>Money Manager</title>
+                                    </Head>
+                                    <Component {...pageProps} />
+                                </PrivacyModeContextProvider>
+                            </ContactContextProvider>
+                        </TransactionContextProvider>
+                    </NavigationContextProvider>
+                </MarketplaceContextProvider>
             </ProfileContextProvider>
         </ThemeProvider>
     );
