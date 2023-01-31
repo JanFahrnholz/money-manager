@@ -4,8 +4,17 @@ import { ProductRecord } from "./Product";
 
 export type Order = {
     product: ProductRecord;
-    quantity: number;
     contact: Record<Contact>;
+    quantity: number;
+    status: OrderStatus;
+    message: string;
 };
+
+export type OrderStatus =
+    | "open"
+    | "accepted"
+    | "declined"
+    | "packaged"
+    | "delivered";
 
 export type OrderRecord = Record<Order>;

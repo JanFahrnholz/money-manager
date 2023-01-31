@@ -14,6 +14,8 @@ import "../styles/globals.css";
 const theme = createTheme({
     palette: {
         mode: "dark",
+        danger: { main: "#ff1c1c" },
+        success: { main: "#62D836" },
         primary: {
             main: "#ffd600",
             light: "#ffff52",

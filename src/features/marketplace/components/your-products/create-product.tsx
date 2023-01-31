@@ -9,7 +9,7 @@ import {
     Typography,
 } from "@mui/material";
 import { FC, useState } from "react";
-import useCreateProduct from "../hooks/useCreateProduct";
+import useCreateProduct from "../../hooks/useCreateProduct";
 
 const CreateProduct: FC = () => {
     const [open, setOpen] = useState(false);

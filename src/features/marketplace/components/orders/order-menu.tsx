@@ -1,11 +1,11 @@
 import FullscreenMenu from "@/components/misc/FullscreenMenu";
 import LinkedFrom from "@/components/misc/LinkedFrom";
 import Numpad from "@/components/misc/numpad";
-import { Grid, Typography } from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
 import { FC, useContext, useState } from "react";
-import { MarketplaceContext } from "../context";
-import useOrder from "../hooks/useOrder";
-import { ProductRecord } from "../types/Product";
+import { MarketplaceContext } from "../../context";
+import useOrder from "../../hooks/useOrder";
+import { ProductRecord } from "../../types/Product";
 interface Props {
     product: ProductRecord;
     open: boolean;
@@ -13,9 +13,10 @@ interface Props {
 }
 const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
     const [qty, setQty] = useState(0);
+    const [message, setMessage] = useState("");
     const { create } = useOrder();
     const submit = async () => {
-        create(product, qty).then(() => setOpen(false));
+        create(product, qty, message).then(() => setOpen(false));
     };
     return (
         <>
@@ -52,6 +53,14 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                     </Grid>
                     <Grid xs={6} item>
                         Price: {qty * product.price}€
+                    </Grid>
+                    <Grid xs={12} item>
+                        <TextField
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            label="optional: message"
+                            fullWidth
+                        />
                     </Grid>
                 </Grid>
                 <div className="mt-4">

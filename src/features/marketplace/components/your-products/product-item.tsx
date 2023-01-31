@@ -1,12 +1,12 @@
 import { Divider, IconButton, ListItem, ListItemText } from "@mui/material";
 import { FC, useState } from "react";
-import { ProductRecord } from "../types/Product";
+import { ProductRecord } from "../../types/Product";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ActionMenu from "@/components/misc/ActionMenu";
 import { client } from "lib/Pocketbase";
 import { formatDailyDateTime } from "lib/Formatter";
-import useDeleteProduct from "../hooks/useDeleteProduct";
-import useUpdateProduct from "../hooks/useUpdateProduct";
+import useDeleteProduct from "../../hooks/useDeleteProduct";
+import useUpdateProduct from "../../hooks/useUpdateProduct";
 
 interface Props {
     product: ProductRecord;
@@ -51,7 +51,7 @@ const ProductItem: FC<Props> = ({ product }) => {
         <>
             <ListItem
                 sx={{
-                    my: 1,
+                    mt: 1,
                     borderRadius: 1,
                     bgcolor: product.disabled
                         ? "secondary.dark"
@@ -72,6 +72,7 @@ const ProductItem: FC<Props> = ({ product }) => {
                     secondary={`${product.price}€ per ${product.unit}`}
                 />
                 <ListItemText
+                    primary={`${product.description}`}
                     secondary={`Stock: ${product.stock || 0}${product.unit}`}
                 />
             </ListItem>
