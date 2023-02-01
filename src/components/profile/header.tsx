@@ -46,7 +46,7 @@ const ProfileHeader: FC = () => {
                         <DeleteForeverIcon
                             className="hover:cursor-pointer"
                             onClick={() => setOpen(!open)}
-                            sx={{ color: "danger.main", mt: 1, mr: 2.5 }}
+                            sx={{ color: "error.main", mt: 1, mr: 2.5 }}
                         />
                         <LogoutIcon
                             className="hover:cursor-pointer"

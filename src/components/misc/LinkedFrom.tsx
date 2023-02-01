@@ -7,10 +7,11 @@ import Record from "../../types/Record";
 type Props = {
     owner: string;
     asText?: boolean;
+    disableId?: boolean;
 };
 
-const LinkedFrom: FC<Props> = ({ owner, asText }) => {
-    const [txt, setTxt] = useState(owner);
+const LinkedFrom: FC<Props> = ({ owner, asText, disableId }) => {
+    const [txt, setTxt] = useState(disableId ? "" : owner);
     const { get } = useProfile();
 
     const setUsername = async () => {

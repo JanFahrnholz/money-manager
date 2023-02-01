@@ -5,6 +5,7 @@ import useTotalStockValue from "../../hooks/useTotalStockValue";
 
 const TotalStockValue: FC = () => {
     const stockValue = useTotalStockValue();
+    if (stockValue === 0) return <></>;
     return (
         <Typography
             sx={{

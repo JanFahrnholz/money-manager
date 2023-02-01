@@ -22,11 +22,11 @@ const LinkedProducts: FC = () => {
             </Typography>
             <Button
                 sx={{ mt: 1 }}
-                variant="outlined"
+                variant="contained"
                 fullWidth
                 onClick={() => push("/orders")}
             >
-                my orders
+                orders
             </Button>
             {linkedProducts.length === 0 && <EmptyProducts />}
             {linkedProducts.length > 0 && (

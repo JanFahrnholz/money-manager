@@ -11,6 +11,7 @@ import {
     StepIcon,
     Typography,
 } from "@mui/material";
+import { Box } from "@mui/system";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { ProductRecord } from "features/marketplace/types/Product";
 import { FC, useState } from "react";
@@ -19,12 +20,13 @@ interface Props {
     order: OrderRecord;
 }
 
-const IncomingOrderCardStatus: FC<Props> = ({ order }) => {
+const OrderCardStatus: FC<Props> = ({ order }) => {
     const product = order.expand.product as ProductRecord;
     const contact = order.expand.contact as Contact;
 
     let activeStep = 0;
     const isDeclined = order.status === "declined";
+    const isCanceled = order.status === "canceled";
     switch (order.status) {
         case "open":
             activeStep = 1;
@@ -46,15 +48,23 @@ const IncomingOrderCardStatus: FC<Props> = ({ order }) => {
             activeStep = 4;
             break;
 
+        case "canceled":
+            activeStep = 1;
+            break;
+
         default:
             break;
     }
+
+    let step2 = "accepted";
+    if (isDeclined) step2 = "declined";
+    if (isCanceled) step2 = "canceled";
 
     return (
         <>
             <Stepper
                 orientation="vertical"
-                sx={{ mt: 1 }}
+                sx={{ my: 1 }}
                 activeStep={activeStep}
                 connector={
                     <StepConnector
@@ -68,10 +78,8 @@ const IncomingOrderCardStatus: FC<Props> = ({ order }) => {
                     <StepLabel>open</StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel error={isDeclined}>
-                        <Typography>
-                            {isDeclined ? "declined" : "accepted"}
-                        </Typography>
+                    <StepLabel error={isDeclined || isCanceled}>
+                        <Typography>{step2}</Typography>
                     </StepLabel>
                 </Step>
                 <Step>
@@ -85,4 +93,4 @@ const IncomingOrderCardStatus: FC<Props> = ({ order }) => {
     );
 };
 
-export default IncomingOrderCardStatus;
+export default OrderCardStatus;

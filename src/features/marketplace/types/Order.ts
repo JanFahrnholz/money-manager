@@ -8,6 +8,7 @@ export type Order = {
     quantity: number;
     status: OrderStatus;
     message: string;
+    payDirectly: boolean;
 };
 
 export type OrderStatus =
@@ -15,6 +16,7 @@ export type OrderStatus =
     | "accepted"
     | "declined"
     | "packaged"
-    | "delivered";
+    | "delivered"
+    | "canceled";
 
 export type OrderRecord = Record<Order>;

@@ -1,7 +1,13 @@
 import FullscreenMenu from "@/components/misc/FullscreenMenu";
 import LinkedFrom from "@/components/misc/LinkedFrom";
 import Numpad from "@/components/misc/numpad";
-import { Grid, TextField, Typography } from "@mui/material";
+import {
+    FormControlLabel,
+    Grid,
+    Switch,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { FC, useContext, useState } from "react";
 import { MarketplaceContext } from "../../context";
 import useOrder from "../../hooks/useOrder";
@@ -13,10 +19,11 @@ interface Props {
 }
 const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
     const [qty, setQty] = useState(0);
+    const [payDirectly, setPayDirectly] = useState(true);
     const [message, setMessage] = useState("");
     const { create } = useOrder();
     const submit = async () => {
-        create(product, qty, message).then(() => setOpen(false));
+        create(product, qty, message, payDirectly).then(() => setOpen(false));
     };
     return (
         <>
@@ -42,17 +49,26 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
 
                 <Grid container spacing={2}>
                     <Grid xs={6} item>
-                        <span className="text-dark-600">Name: </span>
-                        {product.name}
-                    </Grid>
-                    <Grid xs={6} item>
-                        {product.description}
+                        {product.name} {product.description}
                     </Grid>
                     <Grid xs={6} item>
                         from <LinkedFrom owner={product.owner} asText />
                     </Grid>
                     <Grid xs={6} item>
                         Price: {qty * product.price}€
+                    </Grid>
+                    <Grid xs={6} item>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={payDirectly}
+                                    onChange={() =>
+                                        setPayDirectly(!payDirectly)
+                                    }
+                                />
+                            }
+                            label="pay directly"
+                        />
                     </Grid>
                     <Grid xs={12} item>
                         <TextField

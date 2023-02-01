@@ -21,7 +21,7 @@ const YourProducts: FC = () => {
                 Your products
             </Typography>
             <Typography sx={{ color: "text.secondary" }}>
-                Only linked contacts can see your products
+                Only linked contacts can see and order your products
             </Typography>
             {products.length === 0 && <EmptyProducts />}
             {products.length > 0 && (

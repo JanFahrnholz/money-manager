@@ -1,18 +1,25 @@
 import SubSiteHeader from "@/components/misc/SubSiteHeader";
 import { Box, CssBaseline } from "@mui/material";
-import IncomingOrder from "features/marketplace/components/orders/incoming-order";
+import Orders from "features/marketplace/components/orders";
+
 import useOrder from "features/marketplace/hooks/useOrder";
 import { NextPage } from "next";
+import { Toaster } from "react-hot-toast";
 
-const Orders: NextPage = () => {
+const OrdersPage: NextPage = () => {
     return (
         <>
             <CssBaseline />
-            <SubSiteHeader title="my orders">
-                <IncomingOrder />
+            <SubSiteHeader title="orders">
+                <Orders />
             </SubSiteHeader>
+            <Toaster
+                toastOptions={{
+                    duration: 2000,
+                }}
+            />
         </>
     );
 };
 
-export default Orders;
+export default OrdersPage;

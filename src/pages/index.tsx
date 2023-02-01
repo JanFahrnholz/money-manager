@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
-import { Toaster } from "react-hot-toast";
 import People from "../components/contacts";
 import Landingscreen from "../components/Landingscreen";
 import StyledAddToHomescreen from "../components/misc/StyledAddToHomescreen";
@@ -11,6 +10,7 @@ import useLoggedIn from "../hooks/useLoggedIn";
 import OfflineWarning from "../components/misc/OfflineWarning";
 import PrivacyModeToggle from "@/components/misc/PrivacyModeToggle";
 import Marketplace from "@/components/marketplace";
+import { Toaster } from "react-hot-toast";
 
 const Home: NextPage = () => {
     const loggedIn = useLoggedIn();
@@ -46,13 +46,12 @@ const Home: NextPage = () => {
             />
 
             <PrivacyModeToggle />
-
-            <StyledAddToHomescreen />
             <Toaster
                 toastOptions={{
                     duration: 2000,
                 }}
             />
+            <StyledAddToHomescreen />
         </>
     );
 };

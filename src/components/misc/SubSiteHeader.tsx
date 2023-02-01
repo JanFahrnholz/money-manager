@@ -2,13 +2,14 @@ import { Box, Grid, Paper } from "@mui/material";
 import { FC, ReactNode } from "react";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useRouter } from "next/router";
+import ReplayIcon from "@mui/icons-material/Replay";
 interface Props {
     title: string;
     children: ReactNode;
 }
 
 const SubSiteHeader: FC<Props> = ({ children, title }) => {
-    const { back } = useRouter();
+    const { back, reload } = useRouter();
     return (
         <>
             <Grid
@@ -36,7 +37,13 @@ const SubSiteHeader: FC<Props> = ({ children, title }) => {
                 <Grid xs={4} item sx={{ textAlign: "center" }}>
                     {title}
                 </Grid>
-                <Grid xs={4} item sx={{ textAlign: "right" }}></Grid>
+                <Grid
+                    xs={4}
+                    item
+                    sx={{ textAlign: "right", color: "primary.main" }}
+                >
+                    <ReplayIcon onClick={() => reload()} />
+                </Grid>
             </Grid>
 
             <Box sx={{ p: 1 }}>
