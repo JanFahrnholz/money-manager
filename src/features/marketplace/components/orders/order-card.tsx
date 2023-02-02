@@ -1,39 +1,21 @@
-import LinkedFrom from "@/components/misc/LinkedFrom";
 import Contact from "@/types/Contact";
-import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    Grid,
-    ListItem,
-    ListItemText,
-    Step,
-    StepConnector,
-    StepLabel,
-    Stepper,
-    Typography,
-} from "@mui/material";
-import { minHeight } from "@mui/system";
+import { Card, Grid, Typography } from "@mui/material";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { ProductRecord } from "features/marketplace/types/Product";
 import { client } from "lib/Pocketbase";
 import { FC } from "react";
-import OrderCardSellerActions from "./order-card-seller-actions";
+import ReactTimeAgo from "react-time-ago";
+import OrderCardAlert from "./oder-card-alert";
 import OrderCardBuyerActions from "./order-card-buyer-actions";
 import OrderCardDetails from "./order-card-details";
+import OrderCardLocationInfo from "./order-card-location-info";
+import OrderCardSellerActions from "./order-card-seller-actions";
 import OrderCardStatus from "./order-card-status";
-import useOrder from "features/marketplace/hooks/useOrder";
-import useUpdateProduct from "features/marketplace/hooks/useUpdateProduct";
-import OrderCardAlert from "./oder-card-alert";
 
 interface Props {
     order: OrderRecord;
 }
 const OrderCard: FC<Props> = ({ order }) => {
-    const { remove } = useOrder();
     const product = order.expand.product as ProductRecord;
     const contact = order.expand.contact as Contact;
     if (!product || !contact) return <></>;
@@ -53,8 +35,27 @@ const OrderCard: FC<Props> = ({ order }) => {
                         <OrderCardStatus order={order} />
                     </Grid>
                 </Grid>
-                {isSeller && <OrderCardSellerActions order={order} />}
-                {isBuyer && <OrderCardBuyerActions order={order} />}
+                <OrderCardLocationInfo order={order} />
+                <Grid container>
+                    <Grid item xs={8}>
+                        {isSeller && <OrderCardSellerActions order={order} />}
+                        {isBuyer && <OrderCardBuyerActions order={order} />}
+                    </Grid>
+                    <Grid item xs={4} sx={{ p: 1.5 }}>
+                        <Typography
+                            fontSize={"small"}
+                            color="text.secondary"
+                            textAlign={"right"}
+                        >
+                            updated{" "}
+                            <ReactTimeAgo
+                                date={order.updated}
+                                timeStyle="twitter"
+                            />{" "}
+                            ago
+                        </Typography>
+                    </Grid>
+                </Grid>
             </Card>
         </>
     );

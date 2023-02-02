@@ -2,39 +2,44 @@ import Contact from "@/types/Contact";
 import { client } from "lib/Pocketbase";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
-import { OrderRecord } from "../types/Order";
+import { Order, OrderRecord } from "../types/Order";
 import { ProductRecord } from "../types/Product";
 import useUpdateProduct from "./useUpdateProduct";
 
 import { create as createTransaction } from "lib/Transactions";
 import Transaction from "@/types/Transaction";
+import { useContext } from "react";
+import { MarketplaceContext } from "../context";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
     const { reload } = useRouter();
+    const { setOrders } = useContext(MarketplaceContext);
     const updateProduct = useUpdateProduct();
     const create = async (
-        product: ProductRecord,
-        quantity: number,
-        message: string,
-        payDirectly: boolean
+        order: Partial<OrderRecord>,
+        product: ProductRecord
     ) => {
         if (!id) return;
+
         try {
             const contact = await client
                 .collection("contacts")
                 .getFirstListItem<Contact>(
                     `user.id="${id}" && owner.id="${product.owner}"`
                 );
-            console.log(contact, id, quantity);
-            await client.collection("orders").create({
-                product: product.id,
-                contact: contact.id,
-                quantity,
-                message,
-                status: "open",
-                payDirectly,
-            });
+            const newOrder = await client
+                .collection("orders")
+                .create<OrderRecord>(
+                    {
+                        ...order,
+                        status: "open",
+                        product: product.id,
+                        contact: contact.id,
+                    },
+                    { expand: "product,contact" }
+                );
+            setOrders((prev) => [newOrder, ...prev]);
             toast.success("Your order has been placed");
         } catch (error) {
             toast.error("Couldnt place order");
@@ -45,11 +50,18 @@ const useOrder = () => {
     const update = async (order: Partial<OrderRecord>) => {
         if (!order.id) return;
         try {
-            await client
+            const newOrder = await client
                 .collection("orders")
-                .update<ProductRecord>(order.id, order);
+                .update<OrderRecord>(order.id, order, {
+                    expand: "product,contact",
+                });
+
+            setOrders((prev) =>
+                prev.map((order) =>
+                    order.id === newOrder.id ? newOrder : order
+                )
+            );
             toast.success("order updated");
-            reload();
         } catch (error) {
             toast.error("could not update orders");
         }
@@ -59,7 +71,7 @@ const useOrder = () => {
         try {
             await client.collection("orders").delete(id);
             toast.success("order deleted");
-            reload();
+            setOrders((prev) => prev.filter((o) => o.id !== id));
         } catch (error) {
             toast.error("could not delete order");
         }

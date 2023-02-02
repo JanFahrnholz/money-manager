@@ -9,6 +9,8 @@ export type Order = {
     status: OrderStatus;
     message: string;
     payDirectly: boolean;
+    when: Date;
+    location: string;
 };
 
 export type OrderStatus =

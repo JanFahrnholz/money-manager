@@ -4,27 +4,40 @@ import Numpad from "@/components/misc/numpad";
 import {
     FormControlLabel,
     Grid,
+    MenuItem,
+    Select,
     Switch,
     TextField,
     Typography,
 } from "@mui/material";
-import { FC, useContext, useState } from "react";
-import { MarketplaceContext } from "../../context";
+import { getDeliveryDateObject } from "lib/Formatter";
+import { FC, useState } from "react";
 import useOrder from "../../hooks/useOrder";
 import { ProductRecord } from "../../types/Product";
+import SelectDeliveryTime from "../misc/select-delivery-time";
 interface Props {
     product: ProductRecord;
     open: boolean;
     setOpen: (value: boolean) => void;
 }
 const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
-    const [qty, setQty] = useState(0);
+    const [quantity, setQuantity] = useState(0);
     const [payDirectly, setPayDirectly] = useState(true);
     const [message, setMessage] = useState("");
+    const [whenDate, setWhenDate] = useState("today");
+    const [whenDatetime, setWhenDatetime] = useState("");
     const { create } = useOrder();
     const submit = async () => {
-        create(product, qty, message, payDirectly).then(() => setOpen(false));
+        const data = {
+            quantity,
+            payDirectly,
+            message,
+            when: getDeliveryDateObject(whenDate, whenDatetime),
+        };
+        console.log(data);
+        create(data, product).then(() => setOpen(false));
     };
+
     return (
         <>
             <FullscreenMenu
@@ -43,7 +56,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                         letterSpacing: 1.5,
                     }}
                 >
-                    {qty}
+                    {quantity}
                     {product.unit}
                 </Typography>
 
@@ -55,7 +68,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                         from <LinkedFrom owner={product.owner} asText />
                     </Grid>
                     <Grid xs={6} item>
-                        Price: {(qty * product.price).toFixed(2)}€
+                        Price: {(quantity * product.price).toFixed(2)}€
                     </Grid>
                     <Grid xs={6} item>
                         <FormControlLabel
@@ -70,6 +83,24 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                             label="pay directly"
                         />
                     </Grid>
+                    <Grid xs={6} item>
+                        <Select
+                            fullWidth
+                            value={whenDate}
+                            onChange={(e) => setWhenDate(e.target.value)}
+                        >
+                            <MenuItem value="today">Today</MenuItem>
+                            <MenuItem value="tomorrow">Tomorrow</MenuItem>
+                        </Select>
+                    </Grid>
+                    <Grid xs={6} item>
+                        <SelectDeliveryTime
+                            fullWidth
+                            time={whenDatetime}
+                            setTime={setWhenDatetime}
+                        />
+                    </Grid>
+
                     <Grid xs={12} item>
                         <TextField
                             value={message}
@@ -80,7 +111,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                     </Grid>
                 </Grid>
                 <div className="mt-4">
-                    <Numpad setter={setQty} />
+                    <Numpad setter={setQuantity} />
                 </div>
             </FullscreenMenu>
         </>

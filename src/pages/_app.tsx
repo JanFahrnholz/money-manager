@@ -10,6 +10,8 @@ import ContactContextProvider from "../context/ContactContext";
 import NavigationContextProvider from "../context/NavigationContext";
 import TransactionContextProvider from "../context/TransactionContext";
 import "../styles/globals.css";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
 
 const theme = createTheme({
     palette: {
@@ -40,6 +42,7 @@ const theme = createTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+    TimeAgo.addDefaultLocale(en);
     useOnVersionChange((version) => {
         toast.loading(`Updating to version ${version}`);
     });

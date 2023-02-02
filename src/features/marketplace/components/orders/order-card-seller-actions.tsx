@@ -6,6 +6,7 @@ import { ProductRecord } from "features/marketplace/types/Product";
 import { create } from "lib/PlannedTransactions";
 import { FC, ReactNode, useState } from "react";
 import { toast } from "react-hot-toast";
+import UpdateDeliveryMenu from "../misc/update-delivery-menu";
 interface Props {
     order: OrderRecord;
 }
@@ -65,9 +66,8 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
                     >
                         Package
                     </Button>
-                    {/* <Button size="small" onClick={() => planTransaction()}>
-                        plan transaction
-                    </Button> */}
+
+                    <UpdateDeliveryMenu order={order} />
                 </>
             ),
         },
@@ -78,9 +78,12 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
         {
             status: "packaged",
             content: (
-                <Button size="small" onClick={() => deliver(order)}>
-                    Deliver
-                </Button>
+                <>
+                    <Button size="small" onClick={() => deliver(order)}>
+                        Deliver
+                    </Button>
+                    <UpdateDeliveryMenu order={order} />
+                </>
             ),
         },
         {

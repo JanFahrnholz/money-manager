@@ -27,11 +27,7 @@ const OrderCardAlert: FC<Props> = ({ order }) => {
                     severity="error"
                     variant="outlined"
                     action={
-                        <Button
-                            size="small"
-                            color="error"
-                            onClick={() => handleEnable()}
-                        >
+                        <Button size="small" onClick={() => handleEnable()}>
                             Enable
                         </Button>
                     }

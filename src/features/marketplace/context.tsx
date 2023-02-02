@@ -8,21 +8,28 @@ import {
     useEffect,
     useState,
 } from "react";
+import { OrderRecord } from "./types/Order";
 import { ProductRecord } from "./types/Product";
+const _ = require("lodash");
 
 type ContextProps = {
     products: ProductRecord[];
     setProducts: Dispatch<SetStateAction<ProductRecord[]>>;
     linkedProducts: ProductRecord[];
+    orders: OrderRecord[];
+    setOrders: Dispatch<SetStateAction<OrderRecord[]>>;
 };
+
 export const MarketplaceContext = createContext<ContextProps>(undefined!);
 
 const MarketplaceContextProvider: FC<Props> = (props) => {
     const [products, setProducts] = useState<ProductRecord[]>([]);
     const [linkedProducts, setLinkedProducts] = useState<ProductRecord[]>([]);
+    const [orders, setOrders] = useState<OrderRecord[]>(undefined!);
     const id = client.authStore.model?.id;
+
     useEffect(() => {
-        const fetch = async () => {
+        const fetchProducts = async () => {
             const products = await client
                 .collection("products")
                 .getFullList<ProductRecord>();
@@ -36,7 +43,20 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
             setProducts(result.a);
             setLinkedProducts(result.b);
         };
-        fetch();
+        const fetchOrders = async () => {
+            try {
+                const orders = await client
+                    .collection("orders")
+                    .getFullList<OrderRecord>(10, {
+                        expand: "product,contact",
+                        sort: "-updated",
+                    });
+                setOrders(orders ? orders : []);
+            } catch (error) {}
+        };
+        fetchProducts();
+        fetchOrders();
+        client.collection("orders").subscribe("*", () => fetchOrders());
     }, []);
 
     return (
@@ -45,6 +65,8 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
                 products,
                 setProducts,
                 linkedProducts,
+                orders,
+                setOrders,
             }}
         >
             {props.children}
