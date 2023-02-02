@@ -55,7 +55,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                         from <LinkedFrom owner={product.owner} asText />
                     </Grid>
                     <Grid xs={6} item>
-                        Price: {qty * product.price}€
+                        Price: {(qty * product.price).toFixed(2)}€
                     </Grid>
                     <Grid xs={6} item>
                         <FormControlLabel

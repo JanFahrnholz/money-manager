@@ -9,7 +9,7 @@ interface Props {
 }
 
 const SubSiteHeader: FC<Props> = ({ children, title }) => {
-    const { back, reload } = useRouter();
+    const { back, reload, push } = useRouter();
     return (
         <>
             <Grid
@@ -30,7 +30,7 @@ const SubSiteHeader: FC<Props> = ({ children, title }) => {
                     xs={4}
                     item
                     sx={{ color: "primary.main" }}
-                    onClick={() => back()}
+                    onClick={() => push("/")}
                 >
                     <NavigateBeforeIcon />
                 </Grid>
