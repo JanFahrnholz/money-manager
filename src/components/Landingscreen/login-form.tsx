@@ -35,6 +35,7 @@ const LandingscreenLoginForm: FC = () => {
             .then((res) => {
                 setError(false);
                 setStatus("Success!");
+                setTimeout(() => router.reload(), 500);
             })
             .catch((err) => {
                 setError(err.message);

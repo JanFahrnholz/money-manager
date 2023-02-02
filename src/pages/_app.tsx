@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import PrivacyModeContextProvider from "context/PrivacyModeContext";
+import MarketplaceContextProvider from "features/marketplace/context";
 import ProfileContextProvider from "features/user-profiles/context";
 import useOnVersionChange from "hooks/useOnVersionChange";
 import type { AppProps } from "next/app";
@@ -9,10 +10,14 @@ import ContactContextProvider from "../context/ContactContext";
 import NavigationContextProvider from "../context/NavigationContext";
 import TransactionContextProvider from "../context/TransactionContext";
 import "../styles/globals.css";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
 
 const theme = createTheme({
     palette: {
         mode: "dark",
+        error: { main: "#ff1c1c" },
+        success: { main: "#62D836" },
         primary: {
             main: "#ffd600",
             light: "#ffff52",
@@ -22,7 +27,7 @@ const theme = createTheme({
         secondary: {
             main: "#313131",
             light: "#5a5a5a",
-            dark: "#080808",
+            dark: "#1F1F1F",
             contrastText: "#ffffff",
         },
         text: {
@@ -37,32 +42,35 @@ const theme = createTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+    TimeAgo.addDefaultLocale(en);
     useOnVersionChange((version) => {
         toast.loading(`Updating to version ${version}`);
     });
     return (
         <ThemeProvider theme={theme}>
             <ProfileContextProvider>
-                <NavigationContextProvider>
-                    <TransactionContextProvider>
-                        <ContactContextProvider>
-                            <PrivacyModeContextProvider>
-                                <Head>
-                                    <meta
-                                        name="viewport"
-                                        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                                    />
-                                    <meta
-                                        httpEquiv="ScreenOrientation"
-                                        content="autoRotate:disabled"
-                                    />
-                                    <title>Money Manager</title>
-                                </Head>
-                                <Component {...pageProps} />
-                            </PrivacyModeContextProvider>
-                        </ContactContextProvider>
-                    </TransactionContextProvider>
-                </NavigationContextProvider>
+                <MarketplaceContextProvider>
+                    <NavigationContextProvider>
+                        <TransactionContextProvider>
+                            <ContactContextProvider>
+                                <PrivacyModeContextProvider>
+                                    <Head>
+                                        <meta
+                                            name="viewport"
+                                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                                        />
+                                        <meta
+                                            httpEquiv="ScreenOrientation"
+                                            content="autoRotate:disabled"
+                                        />
+                                        <title>Money Manager</title>
+                                    </Head>
+                                    <Component {...pageProps} />
+                                </PrivacyModeContextProvider>
+                            </ContactContextProvider>
+                        </TransactionContextProvider>
+                    </NavigationContextProvider>
+                </MarketplaceContextProvider>
             </ProfileContextProvider>
         </ThemeProvider>
     );
