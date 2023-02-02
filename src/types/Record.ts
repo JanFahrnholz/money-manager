@@ -7,4 +7,6 @@ type Record<T> = {
     updated: Date;
 } & T;
 
+type ExpandedData<A> = {};
+
 export default Record;

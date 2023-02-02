@@ -1,22 +1,21 @@
 import Profile from "@/types/Profile";
-import { Grid, ListItem, TextField } from "@mui/material";
+import { Grid, ListItem, Switch, TextField } from "@mui/material";
 import { ProfileContext } from "features/user-profiles/context";
 import { FC, useContext } from "react";
 
 interface Props {
     prop: keyof Profile;
-    placeholder: string;
-    helperText?: string;
 }
 
-const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
+const ProfileUpdateFieldBoolean: FC<Props> = ({ prop }) => {
     const { profile, setProfile } = useContext(ProfileContext);
 
-    const handleChange = (input: string) => {
+    const handleChange = (input: boolean) => {
+        console.log(input);
         setProfile({ ...profile, [prop]: input } as Profile);
     };
 
-    const val = profile ? profile[prop] : "";
+    const val = profile ? profile[prop] : false;
 
     return (
         <ListItem>
@@ -25,13 +24,10 @@ const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
                     <span className="flex items-center m-2 ">{prop}</span>
                 </Grid>
                 <Grid xs={6} item>
-                    <TextField
-                        size="small"
-                        fullWidth
+                    <Switch
                         value={val}
-                        onChange={(e) => handleChange(e.target.value)}
-                        placeholder={placeholder}
-                        helperText={helperText}
+                        checked={val}
+                        onChange={() => handleChange(!val)}
                     />
                 </Grid>
             </Grid>
@@ -39,4 +35,4 @@ const ProfileUpdateField: FC<Props> = ({ prop, placeholder, helperText }) => {
     );
 };
 
-export default ProfileUpdateField;
+export default ProfileUpdateFieldBoolean;
