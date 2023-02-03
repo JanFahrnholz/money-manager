@@ -70,12 +70,11 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                                         setCurrentTab(newValue);
                                     }}
                                 >
-                                    {profile?.seller && (
-                                        <BottomNavigationAction
-                                            label="Transactions"
-                                            icon={<RestoreIcon />}
-                                        />
-                                    )}
+                                    <BottomNavigationAction
+                                        label="Transactions"
+                                        icon={<RestoreIcon />}
+                                    />
+
                                     <BottomNavigationAction
                                         label="Contacts"
                                         icon={<PeopleIcon />}
