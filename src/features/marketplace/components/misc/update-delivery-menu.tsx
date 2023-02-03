@@ -10,7 +10,11 @@ import {
 } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord } from "features/marketplace/types/Order";
-import { getDeliveryDateObject, getDeliveryTime } from "lib/Formatter";
+import {
+    getDeliveryDateObject,
+    getDeliveryTime,
+    setDeliveryTime,
+} from "lib/Formatter";
 import { FC, useState } from "react";
 import { toast } from "react-hot-toast";
 import SelectDeliveryTime from "./select-delivery-time";
@@ -25,13 +29,21 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
     const [location, setLocation] = useState(order.location);
     const [time, setTime] = useState("");
     const { update } = useOrder();
+    console.log("order", order);
 
     const handleUpdate = async () => {
-        await update({
+        const data = {
             ...order,
             location,
-            when: getDeliveryDateObject(order.when, time),
-        });
+            when: setDeliveryTime(order.when, time),
+        };
+
+        console.log(
+            "🚀 ~ file: update-delivery-menu.tsx:31 ~ handleUpdate ~ data",
+            data,
+            time
+        );
+        await update(data);
         setOpen(false);
     };
     return (

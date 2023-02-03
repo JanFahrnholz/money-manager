@@ -11,7 +11,6 @@ const ProfileUpdateFieldBoolean: FC<Props> = ({ prop }) => {
     const { profile, setProfile } = useContext(ProfileContext);
 
     const handleChange = (input: boolean) => {
-        console.log(input);
         setProfile({ ...profile, [prop]: input } as Profile);
     };
 
