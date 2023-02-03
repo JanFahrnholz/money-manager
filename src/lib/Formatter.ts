@@ -42,31 +42,35 @@ const parseDeliveryDate = (date: Date | undefined) => {
     ) {
         return `tomorrow ${time}`;
     }
-    return date.toLocaleDateString("de-DE", {});
+    return date.toLocaleDateString("de-DE", {
+        minute: "2-digit",
+        hour: "2-digit",
+    });
 };
 
-const getDeliveryDateObject = (inputDate: string | Date, inputTime: string) => {
+const getDeliveryDateObject = (inputDate: string, inputTime: string) => {
     const now = new Date();
     const [hours, minutes] = inputTime
         .split(":")
         .map((val) => parseInt(val, 10));
 
-    if (typeof inputDate != "string")
-        return new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDay(),
-            hours,
-            minutes
-        );
-
     const date = new Date(
         now.getFullYear(),
         now.getMonth(),
-        inputDate === "today" ? now.getDate() : now.getDate() + 1,
+        inputDate === "tomorrow" ? now.getDate() + 1 : now.getDate(),
         hours,
         minutes
     );
+    return date;
+};
+
+const setDeliveryTime = (date: Date, time: string) => {
+    date = new Date(date);
+    const [hours, minutes] = time.split(":").map((val) => parseInt(val, 10));
+
+    date.setHours(hours);
+    date.setMinutes(minutes);
+
     return date;
 };
 
@@ -77,4 +81,5 @@ export {
     getDeliveryTime,
     parseDeliveryDate,
     getDeliveryDateObject,
+    setDeliveryTime,
 };

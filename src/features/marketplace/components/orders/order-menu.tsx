@@ -34,7 +34,6 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
             message,
             when: getDeliveryDateObject(whenDate, whenDatetime),
         };
-        console.log(data);
         create(data, product).then(() => setOpen(false));
     };
 
