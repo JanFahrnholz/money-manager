@@ -56,6 +56,7 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
         };
         fetchProducts();
         fetchOrders();
+        client.collection("products").subscribe("*", () => fetchProducts());
         client.collection("orders").subscribe("*", () => fetchOrders());
     }, []);
 
