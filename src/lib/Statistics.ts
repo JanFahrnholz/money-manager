@@ -98,10 +98,6 @@ const calcAvgAmountPerWeek = (transactions: TransactionRecord[]) => {
         },
         {}
     );
-    console.log(
-        "🚀 ~ file: Statistics.ts:101 ~ calcAvgAmountPerWeek ~ groupedTransactions",
-        groupedTransactions
-    );
 
     const sumByWeek = Object.values(groupedTransactions).map(
         (weekTransactions) =>

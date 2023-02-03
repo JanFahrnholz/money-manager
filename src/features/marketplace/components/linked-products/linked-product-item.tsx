@@ -14,6 +14,7 @@ const LinkedProductItem: FC<Props> = ({ product }) => {
     return (
         <>
             <ListItem
+                onClick={() => setOpen(!open)}
                 sx={{
                     my: 1,
                     borderRadius: 1,
@@ -22,7 +23,7 @@ const LinkedProductItem: FC<Props> = ({ product }) => {
                         : "secondary.main",
                 }}
                 secondaryAction={
-                    <IconButton onClick={() => setOpen(!open)}>
+                    <IconButton>
                         <ShoppingBagIcon />
                     </IconButton>
                 }
