@@ -11,6 +11,7 @@ import { ReactElement, useContext } from "react";
 import { NavigationContext } from "../context/NavigationContext";
 import useLoggedIn from "../hooks/useLoggedIn";
 import StoreIcon from "@mui/icons-material/Store";
+import useProfile from "features/user-profiles/hooks/useProfile";
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
 };
@@ -18,6 +19,8 @@ type Props = {
 const Navigation: React.FC<Props> = ({ tabs }) => {
     const { currentTab, setCurrentTab } = useContext(NavigationContext);
     const loggedIn = useLoggedIn();
+
+    const { profile } = useProfile();
 
     return (
         <div>
@@ -71,6 +74,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                                         label="Transactions"
                                         icon={<RestoreIcon />}
                                     />
+
                                     <BottomNavigationAction
                                         label="Contacts"
                                         icon={<PeopleIcon />}

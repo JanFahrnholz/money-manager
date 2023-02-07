@@ -35,7 +35,7 @@ const LinkedFrom: FC<Props> = ({ owner, asText, disableId }) => {
                     display: "inline",
                 }}
             >
-                linked from{" "}
+                linked by{" "}
             </Typography>
             <Typography
                 sx={{

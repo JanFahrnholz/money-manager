@@ -111,7 +111,7 @@ const calcAvgAmountPerWeek = (transactions: TransactionRecord[]) => {
         sumByWeek.reduce((sum, weekAmount) => sum + weekAmount, 0) /
         sumByWeek.length;
 
-    return averageAmountPerWeek;
+    return averageAmountPerWeek ? averageAmountPerWeek : 0;
 };
 
 export {
