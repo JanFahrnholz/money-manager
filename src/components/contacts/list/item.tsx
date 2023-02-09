@@ -51,9 +51,7 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                         {isOwner ? (
                             <>{getInitials(contact.name)}</>
                         ) : (
-                            <>
-                                <LinkIcon />
-                            </>
+                            <LinkIcon />
                         )}
                     </Avatar>
                 </ListItemAvatar>
@@ -63,7 +61,7 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                             <LinkedFrom owner={contact.owner} />
                         ) : (
                             <>
-                                {!isOwner && "imported"}
+                                {!isOwner && "imported "}
                                 {contact.name}
                                 {contact.user && (
                                     <span className="pl-1">🔗</span>

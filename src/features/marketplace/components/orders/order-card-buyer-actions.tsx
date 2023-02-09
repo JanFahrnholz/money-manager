@@ -15,20 +15,23 @@ type IncomingOrderCardAction = {
 };
 
 const OrderCardBuyerActions: FC<Props> = ({ order }) => {
-    const { update, remove } = useOrder();
-    const product = order.expand.product as ProductRecord;
-    const contact = order.expand.contact as Contact;
+    const { update, remove, loading } = useOrder();
 
     const cancelButton = () => (
         <Button
             size="small"
             onClick={() => update({ ...order, status: "canceled" })}
+            disabled={loading}
         >
             cancel order
         </Button>
     );
     const deleteButton = () => (
-        <Button size="small" onClick={() => remove(order.id)}>
+        <Button
+            size="small"
+            onClick={() => remove(order.id)}
+            disabled={loading}
+        >
             delete order
         </Button>
     );

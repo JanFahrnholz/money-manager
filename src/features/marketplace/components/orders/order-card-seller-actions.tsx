@@ -17,8 +17,7 @@ type IncomingOrderCardAction = {
 };
 
 const OrderCardSellerActions: FC<Props> = ({ order }) => {
-    const { update, remove, deliver } = useOrder();
-    const [loading, setLoading] = useState(false);
+    const { update, remove, deliver, loading } = useOrder();
     const product = order.expand.product as ProductRecord;
     const contact = order.expand.contact as Contact;
 
@@ -32,7 +31,11 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
     };
 
     const deleteButton = () => (
-        <Button size="small" onClick={() => remove(order.id)}>
+        <Button
+            size="small"
+            onClick={() => remove(order.id)}
+            disabled={loading}
+        >
             delete order
         </Button>
     );
@@ -44,12 +47,14 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
                     <Button
                         size="small"
                         onClick={() => update({ ...order, status: "accepted" })}
+                        disabled={loading}
                     >
                         Accept
                     </Button>
                     <Button
                         size="small"
                         onClick={() => update({ ...order, status: "declined" })}
+                        disabled={loading}
                     >
                         Decline
                     </Button>
@@ -63,6 +68,7 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
                     <Button
                         size="small"
                         onClick={() => update({ ...order, status: "packaged" })}
+                        disabled={loading}
                     >
                         Package
                     </Button>
@@ -79,7 +85,11 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
             status: "packaged",
             content: (
                 <>
-                    <Button size="small" onClick={() => deliver(order)}>
+                    <Button
+                        size="small"
+                        onClick={() => deliver(order)}
+                        disabled={loading}
+                    >
                         Deliver
                     </Button>
                     <UpdateDeliveryMenu order={order} />

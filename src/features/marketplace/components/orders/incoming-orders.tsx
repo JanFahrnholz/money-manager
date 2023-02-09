@@ -36,7 +36,7 @@ const IncomingOrders: FC = () => {
             </>
         );
 
-    const placedOrders = orders
+    const incomingOrders = orders
         .filter((order) => order.expand.product.owner === id)
         .sort((a, b) => {
             const dateA = new Date(a.updated);
@@ -47,8 +47,8 @@ const IncomingOrders: FC = () => {
     return (
         <>
             {header()}
-            {placedOrders.length === 0 && noOrders()}
-            {placedOrders.map((order) => (
+            {incomingOrders.length === 0 && noOrders()}
+            {incomingOrders.map((order) => (
                 <OrderCard key={order.id} order={order} />
             ))}
         </>

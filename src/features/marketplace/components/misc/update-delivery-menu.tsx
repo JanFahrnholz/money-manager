@@ -28,8 +28,7 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
     const [open, setOpen] = useState(false);
     const [location, setLocation] = useState(order.location);
     const [time, setTime] = useState("");
-    const { update } = useOrder();
-    console.log("order", order);
+    const { update, loading } = useOrder();
 
     const handleUpdate = async () => {
         const data = {
@@ -38,17 +37,16 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
             when: setDeliveryTime(order.when, time),
         };
 
-        console.log(
-            "🚀 ~ file: update-delivery-menu.tsx:31 ~ handleUpdate ~ data",
-            data,
-            time
-        );
         await update(data);
         setOpen(false);
     };
     return (
         <>
-            <Button size="small" onClick={() => setOpen(true)}>
+            <Button
+                size="small"
+                onClick={() => setOpen(true)}
+                disabled={loading}
+            >
                 edit
             </Button>
 
@@ -85,7 +83,11 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)}>Cancel</Button>
-                    <Button variant="outlined" onClick={() => handleUpdate()}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => handleUpdate()}
+                        disabled={loading}
+                    >
                         update
                     </Button>
                 </DialogActions>

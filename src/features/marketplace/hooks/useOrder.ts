@@ -8,19 +8,23 @@ import useUpdateProduct from "./useUpdateProduct";
 
 import { create as createTransaction } from "lib/Transactions";
 import Transaction from "@/types/Transaction";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MarketplaceContext } from "../context";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
     const { reload } = useRouter();
     const { setOrders } = useContext(MarketplaceContext);
+    const [loading, setLoading] = useState(false);
+
     const updateProduct = useUpdateProduct();
+
     const create = async (
         order: Partial<OrderRecord>,
         product: ProductRecord
     ) => {
         if (!id) return;
+        setLoading(true);
 
         try {
             const contact = await client
@@ -44,11 +48,14 @@ const useOrder = () => {
         } catch (error) {
             toast.error("Couldnt place order");
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const update = async (order: Partial<OrderRecord>) => {
         if (!order.id) return;
+        setLoading(true);
         try {
             const newOrder = await client
                 .collection("orders")
@@ -64,21 +71,27 @@ const useOrder = () => {
             toast.success("order updated");
         } catch (error) {
             toast.error("could not update orders");
+        } finally {
+            setLoading(false);
         }
     };
 
     const remove = async (id: string) => {
+        setLoading(true);
         try {
             await client.collection("orders").delete(id);
             toast.success("order deleted");
             setOrders((prev) => prev.filter((o) => o.id !== id));
         } catch (error) {
             toast.error("could not delete order");
+        } finally {
+            setLoading(false);
         }
     };
 
     const deliver = async (order: OrderRecord) => {
         if (order.status !== "packaged") return;
+        setLoading(true);
 
         const product = order.expand.product as ProductRecord;
         const contact = order.expand.contact as Contact;
@@ -98,10 +111,13 @@ const useOrder = () => {
             await updateProduct({ ...product, stock });
             await createTransaction(transaction);
             await update({ ...order, status: "delivered" });
-        } catch (error) {}
+        } catch (error) {
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return { create, update, remove, deliver };
+    return { create, update, remove, deliver, loading };
 };
 
 export default useOrder;
