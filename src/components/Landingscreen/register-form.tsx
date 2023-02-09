@@ -40,6 +40,7 @@ const LandingscreenRegisterForm: FC = () => {
             .then((res) => {
                 setStatus("Success!");
                 setError(false);
+                setTimeout(() => router.reload(), 500);
             })
             .catch((err) => {
                 setStatus("Try again");

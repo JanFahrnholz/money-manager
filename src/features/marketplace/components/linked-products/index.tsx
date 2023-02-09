@@ -13,7 +13,7 @@ const LinkedProducts: FC = () => {
     const { push } = useRouter();
 
     return (
-        <Box sx={{ pb: 18 }}>
+        <Box sx={{ pb: 2 }}>
             <Typography variant="h5" sx={{ mt: 1 }}>
                 Linked products
             </Typography>
@@ -43,7 +43,9 @@ const LinkedProducts: FC = () => {
 const EmptyProducts: FC = () => {
     return (
         <div className="p-4 text-center">
-            <span className="text-sm font-medium">No products yet</span>
+            <span className="text-sm font-medium">
+                No products yet, share your user ID with a seller
+            </span>
         </div>
     );
 };
