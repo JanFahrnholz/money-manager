@@ -54,12 +54,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
     };
 
     return (
-        <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            sx={{ maxHeight: "6rem" }}
-        >
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {buttons}
 
             <Grid item xs={4}>
