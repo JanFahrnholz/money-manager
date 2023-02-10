@@ -2,6 +2,7 @@ import { Divider } from "@mui/material";
 import CreateProfile from "features/user-profiles/components/create-profile";
 import DeleteProfile from "features/user-profiles/components/delete-profile";
 import UpdateProfile from "features/user-profiles/components/update-profile";
+import UpdateUser from "features/user-settings/components";
 import { FC } from "react";
 import UserIdCopy from "../misc/UserIdCopy";
 import Watermark from "../misc/watermark";
@@ -20,6 +21,8 @@ const Profile: FC = () => {
                     </div>
                 </div>
 
+                <UpdateUser />
+
                 <div className="my-4">
                     <Divider sx={{ color: "text.secondary" }}>
                         Your profile
@@ -30,9 +33,7 @@ const Profile: FC = () => {
                 <UpdateProfile />
                 <DeleteProfile />
 
-                <div className="fixed bottom-8 left-1/2 mb-14 center-anchor text-dark-700 z-0 w-3/4 text-center">
-                    <Watermark />
-                </div>
+                <Watermark />
             </div>
         </>
     );

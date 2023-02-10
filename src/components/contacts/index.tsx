@@ -19,7 +19,16 @@ const People: FC = () => {
                     </Typography>
                     <br />
                     <Typography>
-                        Every contacts has a balance which is zero by default.
+                        Every contact has a balance which is zero by default.
+                        <br />
+                    </Typography>
+                    <Typography>
+                        A negative balance means the contact owes you money.
+                        <br />A positive balance means you owe the contact
+                        money.
+                        <br />
+                    </Typography>
+                    <Typography>
                         The contact balance can be modified by transactions.
                     </Typography>
                     <br />
@@ -29,8 +38,8 @@ const People: FC = () => {
                     </Typography>
                     <br />
                     <Typography>
-                        if a user linked your id, the contact will be displayed
-                        here
+                        If a user linked your id, the contact will also be
+                        displayed here
                     </Typography>
                 </Paper>
             </UserHelp>

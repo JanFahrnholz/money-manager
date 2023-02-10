@@ -1,13 +1,9 @@
-import { Button, Divider, List, ListItem, Typography } from "@mui/material";
+import { Button, List, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import useProfile from "features/user-profiles/hooks/useProfile";
 import { useRouter } from "next/router";
 import { FC, useContext } from "react";
 import { MarketplaceContext } from "../../context";
-import CreateProduct from "../your-products/create-product";
 import LinkedProductItem from "./linked-product-item";
-import ProductItem from "../your-products/product-item";
-import IncomingOrderCountBadge from "../misc/incoming-order-count-badge";
 
 const LinkedProducts: FC = () => {
     const { linkedProducts } = useContext(MarketplaceContext);
@@ -21,16 +17,16 @@ const LinkedProducts: FC = () => {
             <Typography sx={{ color: "text.secondary" }}>
                 Products you can see and order from others
             </Typography>
-            <IncomingOrderCountBadge>
-                <Button
-                    sx={{ mt: 1 }}
-                    variant="contained"
-                    fullWidth
-                    onClick={() => push("/orders")}
-                >
-                    your orders
-                </Button>
-            </IncomingOrderCountBadge>
+
+            <Button
+                sx={{ mt: 1 }}
+                variant="contained"
+                fullWidth
+                onClick={() => push("/orders")}
+            >
+                your orders
+            </Button>
+
             {linkedProducts.length === 0 && <EmptyProducts />}
             {linkedProducts.length > 0 && (
                 <List>

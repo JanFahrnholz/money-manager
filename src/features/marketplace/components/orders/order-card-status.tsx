@@ -1,20 +1,14 @@
 import Contact from "@/types/Contact";
-import { Check } from "@mui/icons-material";
 import {
-    Stepper,
-    StepConnector,
     Step,
+    StepConnector,
     StepLabel,
-    styled,
-    StepIconProps,
-    Icon,
-    StepIcon,
+    Stepper,
     Typography,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { ProductRecord } from "features/marketplace/types/Product";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 interface Props {
     order: OrderRecord;

@@ -2,16 +2,17 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Fab } from "@mui/material";
 import { PrivacyModeContext } from "context/PrivacyModeContext";
-import useProfile from "features/user-profiles/hooks/useProfile";
+import useSetting from "features/user-settings/hooks/useSetting";
+import useUser from "features/user-settings/hooks/useUser";
 import useLoggedIn from "hooks/useLoggedIn";
 import { FC, useContext } from "react";
 
 const PrivacyModeToggle: FC = () => {
     const { active, toggle } = useContext(PrivacyModeContext);
-    const { profile } = useProfile();
+    const enabled = useSetting("enablePrivacyMode");
     const loggedIn = useLoggedIn();
 
-    if (!profile?.seller) return <></>;
+    if (!enabled) return <></>;
 
     return (
         <>

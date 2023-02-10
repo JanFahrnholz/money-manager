@@ -1,8 +1,8 @@
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Alert } from "@mui/material";
 import { OrderRecord } from "features/marketplace/types/Order";
-import { FC } from "react";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { parseDeliveryDate } from "lib/Formatter";
+import { FC } from "react";
 interface Props {
     order: OrderRecord;
 }

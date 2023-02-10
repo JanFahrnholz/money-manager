@@ -1,4 +1,4 @@
-import { Button, List, ListItem } from "@mui/material";
+import { Button, List } from "@mui/material";
 import { ProfileContext } from "features/user-profiles/context";
 import useProfile from "features/user-profiles/hooks/useProfile";
 import { FC, useContext } from "react";
@@ -16,10 +16,22 @@ const UpdateProfile: FC = () => {
             <List>
                 <ProfileUpdateFieldString
                     prop="username"
+                    title="username"
+                    subTitle="visible for linked users"
                     placeholder="john-doe"
                     helperText="max. 10 characters"
                 />
-                <ProfileUpdateFieldBoolean prop="seller" />
+                <ProfileUpdateFieldBoolean
+                    prop="seller"
+                    title="become a seller"
+                    subTitle="lets you create your own products"
+                />
+                <ProfileUpdateFieldBoolean
+                    prop="enableStatistics"
+                    title="enable statistics"
+                    subTitle="e.g. total order count (work in progress)"
+                    disabled
+                />
             </List>
             <Button
                 variant="contained"

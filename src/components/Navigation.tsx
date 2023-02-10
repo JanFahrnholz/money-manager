@@ -12,6 +12,7 @@ import { NavigationContext } from "../context/NavigationContext";
 import useLoggedIn from "../hooks/useLoggedIn";
 import StoreIcon from "@mui/icons-material/Store";
 import useProfile from "features/user-profiles/hooks/useProfile";
+import useSetting from "features/user-settings/hooks/useSetting";
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
 };
@@ -20,7 +21,7 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
     const { currentTab, setCurrentTab } = useContext(NavigationContext);
     const loggedIn = useLoggedIn();
 
-    const { profile } = useProfile();
+    const transactionTab = useSetting("enableTransactionsTab");
 
     return (
         <div>
@@ -70,10 +71,12 @@ const Navigation: React.FC<Props> = ({ tabs }) => {
                                         setCurrentTab(newValue);
                                     }}
                                 >
-                                    <BottomNavigationAction
-                                        label="Transactions"
-                                        icon={<RestoreIcon />}
-                                    />
+                                    {transactionTab && (
+                                        <BottomNavigationAction
+                                            label="Transactions"
+                                            icon={<RestoreIcon />}
+                                        />
+                                    )}
 
                                     <BottomNavigationAction
                                         label="Contacts"
