@@ -12,16 +12,14 @@ const MarketplaceUserHelp: FC = () => {
                     user ID in a contact.
                 </Typography>
                 <Typography>
-                    Share your user ID with a seller, to start ordering
+                    Share your user ID with a seller who has products, to start
+                    ordering.
                 </Typography>
                 <br />
                 <Typography>
                     In case you want to sell items, create a profile and
                     activate the seller option. After that you will be able to
                     create your own products.
-                </Typography>
-                <Typography>
-                    As a seller the privacy mode will be enabled.
                 </Typography>
                 <Divider sx={{ my: 2 }}>Data privacy</Divider>
                 <Typography>
