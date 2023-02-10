@@ -1,9 +1,6 @@
-import LinkedFrom from "@/components/misc/LinkedFrom";
-import Contact from "@/types/Contact";
-import { CardActions, Button, Typography } from "@mui/material";
+import { Button, CardActions } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord, OrderStatus } from "features/marketplace/types/Order";
-import { ProductRecord } from "features/marketplace/types/Product";
 import { FC, ReactNode } from "react";
 interface Props {
     order: OrderRecord;

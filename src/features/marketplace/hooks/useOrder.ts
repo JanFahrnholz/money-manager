@@ -2,12 +2,12 @@ import Contact from "@/types/Contact";
 import { client } from "lib/Pocketbase";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
-import { Order, OrderRecord } from "../types/Order";
+import { OrderRecord } from "../types/Order";
 import { ProductRecord } from "../types/Product";
 import useUpdateProduct from "./useUpdateProduct";
 
-import { create as createTransaction } from "lib/Transactions";
 import Transaction from "@/types/Transaction";
+import { create as createTransaction } from "lib/Transactions";
 import { useContext, useState } from "react";
 import { MarketplaceContext } from "../context";
 

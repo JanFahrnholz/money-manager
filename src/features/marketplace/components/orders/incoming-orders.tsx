@@ -1,9 +1,8 @@
-import { Typography, Divider, CircularProgress } from "@mui/material";
+import { CircularProgress, Divider, Typography } from "@mui/material";
 import { MarketplaceContext } from "features/marketplace/context";
-import { OrderRecord } from "features/marketplace/types/Order";
 import useProfile from "features/user-profiles/hooks/useProfile";
 import { client } from "lib/Pocketbase";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import OrderCard from "./order-card";
 
 const IncomingOrders: FC = () => {

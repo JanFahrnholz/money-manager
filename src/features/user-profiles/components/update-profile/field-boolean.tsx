@@ -1,13 +1,21 @@
 import Profile from "@/types/Profile";
-import { Grid, ListItem, Switch, TextField } from "@mui/material";
+import { ListItem, ListItemText, Switch } from "@mui/material";
 import { ProfileContext } from "features/user-profiles/context";
 import { FC, useContext } from "react";
 
 interface Props {
     prop: keyof Profile;
+    title?: string;
+    subTitle?: string;
+    disabled?: boolean;
 }
 
-const ProfileUpdateFieldBoolean: FC<Props> = ({ prop }) => {
+const ProfileUpdateFieldBoolean: FC<Props> = ({
+    prop,
+    title,
+    subTitle,
+    disabled,
+}) => {
     const { profile, setProfile } = useContext(ProfileContext);
 
     const handleChange = (input: boolean) => {
@@ -17,19 +25,14 @@ const ProfileUpdateFieldBoolean: FC<Props> = ({ prop }) => {
     const val = profile ? profile[prop] : false;
 
     return (
-        <ListItem>
-            <Grid container>
-                <Grid xs={6} item>
-                    <span className="flex items-center m-2 ">{prop}</span>
-                </Grid>
-                <Grid xs={6} item>
-                    <Switch
-                        value={val}
-                        checked={val}
-                        onChange={() => handleChange(!val)}
-                    />
-                </Grid>
-            </Grid>
+        <ListItem disabled={disabled}>
+            <ListItemText primary={title || prop} secondary={subTitle} />
+            <Switch
+                disabled={disabled}
+                value={val}
+                checked={val}
+                onChange={() => handleChange(!val)}
+            />
         </ListItem>
     );
 };

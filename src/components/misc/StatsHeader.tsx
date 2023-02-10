@@ -6,7 +6,7 @@ import {
     Grid,
     Typography,
 } from "@mui/material";
-import useUser from "hooks/useUser";
+
 import { modifyBalance, update } from "lib/User";
 import { FC, useContext, useMemo, useState } from "react";
 import { ContactContext } from "../../context/ContactContext";
@@ -20,12 +20,13 @@ import { PrivacyModeContext } from "context/PrivacyModeContext";
 import FullscreenMenu from "./FullscreenMenu";
 import Numpad from "./numpad";
 import { client } from "lib/Pocketbase";
+import useUser from "features/user-settings/hooks/useUser";
 const StatsHeader: FC = () => {
     const { contacts } = useContext(ContactContext);
     const { transactions } = useContext(TransactionContext);
     const [open, setOpen] = useState(false);
     const { toggle } = useContext(PrivacyModeContext);
-    const user = useUser();
+    const { user } = useUser();
 
     const pendingMoney = useMemo(() => getPendingMoney(contacts), [contacts]);
     const toPay = useMemo(() => getMoneyToPayBack(contacts), [contacts]);
