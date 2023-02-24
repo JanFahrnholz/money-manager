@@ -26,12 +26,6 @@ const UpdateProfile: FC = () => {
                     title="become a seller"
                     subTitle="lets you create your own products"
                 />
-                <ProfileUpdateFieldBoolean
-                    prop="enableStatistics"
-                    title="enable statistics"
-                    subTitle="e.g. total order count (work in progress)"
-                    disabled
-                />
             </List>
             <Button
                 variant="contained"
