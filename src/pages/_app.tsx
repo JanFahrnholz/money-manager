@@ -3,6 +3,8 @@ import PrivacyModeContextProvider from "context/PrivacyModeContext";
 import MarketplaceContextProvider from "features/marketplace/context";
 import ProfileContextProvider from "features/user-profiles/context";
 import useOnVersionChange from "hooks/useOnVersionChange";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import toast from "react-hot-toast";
@@ -10,8 +12,7 @@ import ContactContextProvider from "../context/ContactContext";
 import NavigationContextProvider from "../context/NavigationContext";
 import TransactionContextProvider from "../context/TransactionContext";
 import "../styles/globals.css";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
+import TagManager from "react-gtm-module";
 
 const theme = createTheme({
     palette: {
@@ -40,8 +41,13 @@ const theme = createTheme({
         },
     },
 });
+if (process.browser) {
+    TagManager.initialize({
+        gtmId: process.env.GTM_ID || "",
+    });
+}
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     TimeAgo.addDefaultLocale(en);
     useOnVersionChange((version) => {
         toast.loading(`Updating to version ${version}`);
