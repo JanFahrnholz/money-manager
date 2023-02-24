@@ -33,6 +33,7 @@
 		"react-chartjs-2": "^5.2.0",
 		"react-detect-offline": "^2.4.5",
 		"react-dom": "18.2.0",
+		"react-gtm-module": "^2.0.11",
 		"react-hot-toast": "^2.4.0",
 		"react-password-strength-bar": "^0.4.1",
 		"react-pwa-add-to-homescreen": "^1.1.7",
