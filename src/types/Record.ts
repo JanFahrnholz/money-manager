@@ -1,12 +1,5 @@
-type Record<T> = {
-    CollectionId: number;
-    CollectionName: string;
-    expand: any;
-    id: string;
-    created: Date;
-    updated: Date;
-} & T;
+import { Record as PocketbaseRecord } from "pocketbase";
 
-type ExpandedData<A> = {};
+type Record<T> = PocketbaseRecord & T;
 
 export default Record;
