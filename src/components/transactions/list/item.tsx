@@ -1,4 +1,3 @@
-import Contact from "@/types/Contact";
 import LinkIcon from "@mui/icons-material/Link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -9,14 +8,13 @@ import {
     ListItemText,
     Typography,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { getInitials } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
 import { getColor } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
 import LinkedFrom from "../../misc/LinkedFrom";
-import TransactionDetailMenu from "../menu";
 
 interface Props {
     transaction: Record<Transaction>;
