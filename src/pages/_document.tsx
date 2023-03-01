@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import TagManager from "react-gtm-module";
 import { Toaster } from "react-hot-toast";
 
 class MyDocument extends Document {
