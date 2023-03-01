@@ -11,7 +11,7 @@ import {
     Typography,
 } from "@mui/material";
 import { getDeliveryDateObject } from "lib/Formatter";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import useOrder from "../../hooks/useOrder";
 import { ProductRecord } from "../../types/Product";
 import SelectDeliveryTime from "../misc/select-delivery-time";
@@ -21,12 +21,21 @@ interface Props {
     setOpen: (value: boolean) => void;
 }
 const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
-    const [quantity, setQuantity] = useState(0);
+    const [amount, setAmount] = useState(0);
     const [payDirectly, setPayDirectly] = useState(true);
     const [message, setMessage] = useState("");
     const [whenDate, setWhenDate] = useState("today");
     const [whenDatetime, setWhenDatetime] = useState("");
     const { create } = useOrder();
+
+    const quantity = product.divisible
+        ? amount / product.price
+        : Math.floor(amount / product.price);
+
+    useEffect(() => {
+        setAmount(quantity * product.price);
+    }, [quantity]);
+
     const submit = async () => {
         const data = {
             quantity,
@@ -55,19 +64,19 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                         letterSpacing: 1.5,
                     }}
                 >
-                    {quantity}
-                    {product.unit}
+                    {amount}€
                 </Typography>
 
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     <Grid xs={6} item>
-                        {product.name} {product.description}
+                        Price: {product.price}€/{product.unit}
                     </Grid>
                     <Grid xs={6} item>
                         from <LinkedFrom owner={product.owner} asText />
                     </Grid>
                     <Grid xs={6} item>
-                        Price: {(quantity * product.price).toFixed(2)}€
+                        Quantity: {quantity}
+                        {product.unit}
                     </Grid>
                     <Grid xs={6} item>
                         <FormControlLabel
@@ -110,7 +119,10 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                     </Grid>
                 </Grid>
                 <div className="mt-4">
-                    <Numpad setter={setQuantity} />
+                    <Numpad
+                        setter={setAmount}
+                        disableDot={!product.divisible}
+                    />
                 </div>
             </FullscreenMenu>
         </>

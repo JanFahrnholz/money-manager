@@ -7,6 +7,7 @@ export type Product = {
     unit: string;
     stock?: number;
     owner: string;
+    divisible?: boolean;
     disabled?: boolean;
 };
 

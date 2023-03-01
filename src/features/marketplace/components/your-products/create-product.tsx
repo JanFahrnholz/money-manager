@@ -4,7 +4,11 @@ import {
     Box,
     Button,
     Container,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
     Grid,
+    Switch,
     TextField,
     Typography,
 } from "@mui/material";
@@ -18,6 +22,7 @@ const CreateProduct: FC = () => {
     const [description, setDescription] = useState("");
     const [stock, setStock] = useState(0);
     const [unit, setUnit] = useState("");
+    const [divisible, setDivisible] = useState(true);
     const create = useCreateProduct();
 
     const submit = async () => {
@@ -27,12 +32,21 @@ const CreateProduct: FC = () => {
             price,
             stock,
             unit,
+            divisible,
         };
         try {
             const done = await create(data);
             setOpen(!done);
         } catch (error) {}
     };
+
+    const exInput = price * 1.5;
+
+    const quantity = divisible ? exInput / price : Math.floor(exInput / price);
+
+    const divExample = `${exInput.toFixed(
+        2
+    )}€ / ${price}€/${unit} = ${quantity}${unit} `;
 
     return (
         <div className="text-center">
@@ -94,6 +108,22 @@ const CreateProduct: FC = () => {
                             onChange={(e) => setUnit(e.target.value)}
                             fullWidth
                         />
+                    </Grid>
+                    <Grid xs={6} item>
+                        <FormControl>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={divisible}
+                                        onChange={() =>
+                                            setDivisible(!divisible)
+                                        }
+                                    />
+                                }
+                                label="is divisible"
+                            />
+                            <FormHelperText>{divExample}</FormHelperText>
+                        </FormControl>
                     </Grid>
                 </Grid>
                 <div className="mt-4">
