@@ -9,17 +9,13 @@ interface Props {
 }
 
 const UserHelp: FC<Props> = ({ children, storageKey }) => {
-    const [show, setShow] = usePersistentState(storageKey, true);
-
-    const toggleButton = () => (
-        <Button onClick={() => setShow(!show)}>Dismiss</Button>
-    );
+    const [show, setShow] = usePersistentState(storageKey, false);
 
     return (
         <>
             {show && <>{children}</>}
             <div className="text-center">
-                <Button sx={{ my: 2, mb: 12 }} onClick={() => setShow(!show)}>
+                <Button sx={{ my: 2, mb: 22 }} onClick={() => setShow(!show)}>
                     {show ? "Dismiss" : <HelpOutlineOutlinedIcon />}
                 </Button>
             </div>

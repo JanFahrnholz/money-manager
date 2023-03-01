@@ -9,9 +9,15 @@ interface Props {
     prop: keyof User;
     title?: string;
     subTitle?: string;
+    disabled?: boolean;
 }
 
-const UserUpdateFieldBoolean: FC<Props> = ({ prop, title, subTitle }) => {
+const UserUpdateFieldBoolean: FC<Props> = ({
+    prop,
+    title,
+    subTitle,
+    disabled,
+}) => {
     const { user, update } = useUser();
     const init = useSetting(prop);
     const [value, setValue] = useState(init || false);
@@ -27,12 +33,13 @@ const UserUpdateFieldBoolean: FC<Props> = ({ prop, title, subTitle }) => {
     };
 
     return (
-        <ListItem>
+        <ListItem disabled={disabled}>
             <ListItemText primary={title || prop} secondary={subTitle} />
             <Switch
                 value={value}
                 checked={value}
                 onChange={() => handleChange(!value)}
+                disabled={disabled}
             />
         </ListItem>
     );

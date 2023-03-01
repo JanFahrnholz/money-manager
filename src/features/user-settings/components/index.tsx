@@ -21,6 +21,12 @@ const UpdateUser: FC = () => {
                     title="Enable privacy mode"
                     subTitle="allows you to hide sensitive information"
                 />
+                <UserUpdateField
+                    prop="enableInsights"
+                    title="Enable insights"
+                    subTitle="e.g. total order count (work in progress)"
+                    disabled
+                />
             </List>
         </>
     );

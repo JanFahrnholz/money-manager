@@ -10,9 +10,16 @@ interface Props {
     subTitle?: string;
     placeholder?: string;
     helperText?: string;
+    disabled?: boolean;
 }
 
-const UserUpdateField: FC<Props> = ({ prop, title, subTitle, placeholder }) => {
+const UserUpdateField: FC<Props> = ({
+    prop,
+    title,
+    subTitle,
+    placeholder,
+    disabled,
+}) => {
     const { user } = useUser();
     const setting = useSetting(prop);
     if (!user) return <></>;
@@ -33,6 +40,7 @@ const UserUpdateField: FC<Props> = ({ prop, title, subTitle, placeholder }) => {
                 prop={prop}
                 title={title}
                 subTitle={subTitle}
+                disabled={disabled}
             />
         );
 

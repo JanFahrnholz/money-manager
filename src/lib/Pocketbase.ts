@@ -5,48 +5,50 @@ const client = new PocketBase(process.env.PB_URL);
 client.autoCancellation(false);
 
 const register = (password: string, passwordConfirm: string) => {
-	return new Promise<any>(async (resolve, reject) => {
-		const id: string = new ShortUniqueId({ length: 15 })();
+    return new Promise<any>(async (resolve, reject) => {
+        const id: string = new ShortUniqueId({ length: 15 })();
 
-		try {
-			await client.collection("users").create({
-				id,
-				username: id,
-				password,
-				passwordConfirm,
-			});
+        try {
+            await client.collection("users").create({
+                id,
+                username: id,
+                password,
+                passwordConfirm,
+            });
 
-			const res = await client
-				.collection("users")
-				.authWithPassword(id, password);
+            const res = await client
+                .collection("users")
+                .authWithPassword(id, password);
 
-			resolve(res);
-		} catch (error) {
-			reject(error);
-		}
-	});
+            resolve(res);
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 const login = (id: string, password: string) => {
-	return new Promise(async (resolve, reject) => {
-		try {
-			const res = await client
-				.collection("users")
-				.authWithPassword(id, password);
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res = await client
+                .collection("users")
+                .authWithPassword(id, password);
 
-			resolve(res);
-		} catch (error) {
-			reject(error);
-		}
-	});
+            resolve(res);
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 const deleteId = async (id: string) => {
-	try {
-		if (id === undefined) return;
+    try {
+        if (id === undefined) return;
 
-		await client.collection("users").delete(id);
-	} catch (error) {}
+        await client.collection("users").delete(id);
+    } catch (error) {}
 };
 
-export { client, register, login, deleteId };
+const userId = client.authStore.model?.id;
+
+export { client, register, login, deleteId, userId };

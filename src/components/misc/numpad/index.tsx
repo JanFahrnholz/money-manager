@@ -3,9 +3,10 @@ import { FC, useState } from "react";
 
 type NumpadProps = {
     setter: (data: number) => void;
+    disableDot?: boolean;
 };
 
-const Numpad: FC<NumpadProps> = ({ setter }) => {
+const Numpad: FC<NumpadProps> = ({ setter, disableDot }) => {
     const buttons = [];
     const [innerValue, setValue] = useState<string>("");
     const [dotted, setDotted] = useState(false);
@@ -83,7 +84,7 @@ const Numpad: FC<NumpadProps> = ({ setter }) => {
             {!dotted && (
                 <Grid item xs={4}>
                     <Button
-                        disabled={disabled}
+                        disabled={disabled || disableDot}
                         variant="outlined"
                         sx={{ height: "10vh", fontSize: 26 }}
                         fullWidth
