@@ -12,13 +12,12 @@ import Insights from "./types/Insights";
 const _ = require("lodash");
 
 type ContextProps = {
-    children: ReactNode;
     insights: Insights | undefined;
     setInsights: Dispatch<SetStateAction<Insights | undefined>>;
 };
 export const InsightContext = createContext<ContextProps>(undefined!);
 
-const InsightContextProvider: FC = (props) => {
+const InsightContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [insights, setInsights] = useState<Insights | undefined>();
 
     useEffect(() => {
@@ -39,7 +38,7 @@ const InsightContextProvider: FC = (props) => {
                 setInsights,
             }}
         >
-            {props.children}
+            {children}
         </InsightContext.Provider>
     );
 };
