@@ -1,3 +1,4 @@
+import Contact from "@/types/Contact";
 import LinkIcon from "@mui/icons-material/Link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {

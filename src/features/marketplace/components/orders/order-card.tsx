@@ -49,7 +49,7 @@ const OrderCard: FC<Props> = ({ order }) => {
                         >
                             updated{" "}
                             <ReactTimeAgo
-                                date={order.updated}
+                                date={new Date(order.updated)}
                                 timeStyle="twitter"
                             />{" "}
                             ago
