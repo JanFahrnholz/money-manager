@@ -31,7 +31,8 @@ const OrderCardDetails: FC<Props> = ({ order }) => {
 				{orderFrom}
 			</Typography>
 			<Typography variant="h5" component="div" sx={{ my: 1 }}>
-				{product.name} {order.quantity.toFixed(2)}
+				{product.name}{" "}
+				{order.quantity.toFixed(product.divisible ? 2 : 0)}
 				{product.unit}
 			</Typography>
 			<Typography variant="body2">

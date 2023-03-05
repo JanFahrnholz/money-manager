@@ -74,7 +74,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
 					from <LinkedFrom owner={product.owner} asText />
 				</Grid>
 				<Grid xs={6} item>
-					Quantity: {quantity.toFixed(2)}
+					Quantity: {quantity.toFixed(product.divisible ? 2 : 0)}
 					{product.unit}
 				</Grid>
 				<Grid xs={6} item>
