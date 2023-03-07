@@ -61,6 +61,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                             <ContactContextProvider>
                                 <PrivacyModeContextProvider>
                                     <Head>
+                                        <title>Money Manager</title>
                                         <meta
                                             name="viewport"
                                             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -69,7 +70,14 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                                             httpEquiv="ScreenOrientation"
                                             content="autoRotate:disabled"
                                         />
-                                        <title>Money Manager</title>
+                                        <meta
+                                            name="apple-mobile-web-app-capable"
+                                            content="yes"
+                                        />
+                                        <meta
+                                            name="apple-mobile-web-app-title"
+                                            content="MoneyManager"
+                                        />
                                     </Head>
                                     <Component {...pageProps} />
                                 </PrivacyModeContextProvider>
