@@ -19,7 +19,7 @@ const UpdateProfile: FC = () => {
                     title="username"
                     subTitle="visible for linked users"
                     placeholder="john-doe"
-                    helperText="max. 10 characters"
+                    helperText="max. 16 characters"
                 />
                 <ProfileUpdateFieldBoolean
                     prop="seller"
