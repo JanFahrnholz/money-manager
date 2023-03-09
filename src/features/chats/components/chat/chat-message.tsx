@@ -15,7 +15,6 @@ interface ChatMessageProps {
 }
 
 const ChatMessageComponent: FC<ChatMessageProps> = ({ message }) => {
-    console.log("🚀 ~ file: chat-message.tsx:33 ~ message:", message);
     if (userId === message.user) return <ChatMessageOwned message={message} />;
 
     return (
