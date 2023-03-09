@@ -1,9 +1,12 @@
 import Contact from "@/types/Contact";
+import Record from "@/types/Record";
 import { Button, CardActions } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord, OrderStatus } from "features/marketplace/types/Order";
 import { ProductRecord } from "features/marketplace/types/Product";
 import { create } from "lib/PlannedTransactions";
+import { useRouter } from "next/router";
+
 import { FC, ReactNode } from "react";
 import UpdateDeliveryMenu from "../misc/update-delivery-menu";
 interface Props {
@@ -18,7 +21,9 @@ type IncomingOrderCardAction = {
 const OrderCardSellerActions: FC<Props> = ({ order }) => {
     const { update, remove, deliver, loading } = useOrder();
     const product = order.expand.product as ProductRecord;
-    const contact = order.expand.contact as Contact;
+    const contact = order.expand.contact as Record<Contact>;
+
+    const { push } = useRouter();
 
     const planTransaction = () => {
         create({
@@ -30,14 +35,11 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
     };
 
     const deleteButton = () => (
-        <Button
-            size="small"
-            onClick={() => remove(order.id)}
-            disabled={loading}
-        >
+        <Button size="small" onClick={() => remove(order)} disabled={loading}>
             delete order
         </Button>
     );
+
     const actions: IncomingOrderCardAction[] = [
         {
             status: "open",
@@ -110,7 +112,18 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
     if (!currentAction || product.disabled) return <></>;
     if (currentAction.content === undefined) return <></>;
 
-    return <CardActions>{currentAction.content}</CardActions>;
+    return (
+        <CardActions>
+            {currentAction.content}
+            <Button
+                size="small"
+                onClick={() => push(`/orders/${order.id}`)}
+                disabled={loading}
+            >
+                details
+            </Button>
+        </CardActions>
+    );
 };
 
 export default OrderCardSellerActions;

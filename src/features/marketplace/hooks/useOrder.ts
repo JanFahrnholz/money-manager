@@ -10,6 +10,7 @@ import Transaction from "@/types/Transaction";
 import { create as createTransaction } from "lib/Transactions";
 import { useContext, useState } from "react";
 import { MarketplaceContext } from "../context";
+import useChat from "features/chats/hooks/useChat";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
@@ -18,10 +19,12 @@ const useOrder = () => {
     const [loading, setLoading] = useState(false);
 
     const updateProduct = useUpdateProduct();
+    const chat = useChat();
 
     const create = async (
         order: Partial<OrderRecord>,
-        product: ProductRecord
+        product: ProductRecord,
+        chatId: string
     ) => {
         if (!id) return;
         setLoading(true);
@@ -40,6 +43,7 @@ const useOrder = () => {
                         status: "open",
                         product: product.id,
                         contact: contact.id,
+                        chat: chatId,
                     },
                     { expand: "product,contact" }
                 );
@@ -76,12 +80,17 @@ const useOrder = () => {
         }
     };
 
-    const remove = async (id: string) => {
+    const remove = async (order: OrderRecord) => {
+        console.log(
+            "🚀 ~ file: useOrder.ts:84 ~ remove ~ order:",
+            order.export()
+        );
         setLoading(true);
         try {
-            await client.collection("orders").delete(id);
+            await client.collection("orders").delete(order.id);
+            await chat.remove(order.chat);
             toast.success("order deleted");
-            setOrders((prev) => prev.filter((o) => o.id !== id));
+            setOrders((prev) => prev.filter((o) => o.id !== order.id));
         } catch (error) {
             toast.error("could not delete order");
         } finally {

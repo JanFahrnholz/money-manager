@@ -1,6 +1,7 @@
 import { Button, CardActions } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord, OrderStatus } from "features/marketplace/types/Order";
+import { useRouter } from "next/router";
 import { FC, ReactNode } from "react";
 interface Props {
     order: OrderRecord;
@@ -13,6 +14,7 @@ type IncomingOrderCardAction = {
 
 const OrderCardBuyerActions: FC<Props> = ({ order }) => {
     const { update, remove, loading } = useOrder();
+    const { push } = useRouter();
 
     const cancelButton = () => (
         <Button
@@ -24,11 +26,7 @@ const OrderCardBuyerActions: FC<Props> = ({ order }) => {
         </Button>
     );
     const deleteButton = () => (
-        <Button
-            size="small"
-            onClick={() => remove(order.id)}
-            disabled={loading}
-        >
+        <Button size="small" onClick={() => remove(order)} disabled={loading}>
             delete order
         </Button>
     );
@@ -65,7 +63,18 @@ const OrderCardBuyerActions: FC<Props> = ({ order }) => {
     if (!currentAction) return <></>;
     if (currentAction.content === undefined) return <></>;
 
-    return <CardActions>{currentAction.content}</CardActions>;
+    return (
+        <CardActions>
+            {currentAction.content}
+            <Button
+                size="small"
+                onClick={() => push(`/orders/${order.id}`)}
+                disabled={loading}
+            >
+                details
+            </Button>
+        </CardActions>
+    );
 };
 
 export default OrderCardBuyerActions;

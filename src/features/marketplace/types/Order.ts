@@ -1,10 +1,12 @@
 import Contact from "@/types/Contact";
-import Record from "@/types/Record";
+import Chat from "features/chats/types/chat";
+import { Record } from "pocketbase";
 import { ProductRecord } from "./Product";
 
 export type Order = {
     product: ProductRecord;
-    contact: Record<Contact>;
+    contact: Record & Contact;
+    chat: string;
     quantity: number;
     status: OrderStatus;
     message: string;
@@ -21,4 +23,4 @@ export type OrderStatus =
     | "delivered"
     | "canceled";
 
-export type OrderRecord = Record<Order>;
+export type OrderRecord = Record & Order;
