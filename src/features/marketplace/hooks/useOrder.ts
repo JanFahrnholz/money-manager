@@ -14,9 +14,7 @@ import useChat from "features/chats/hooks/useChat";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
-    const { reload } = useRouter();
-    const { setOrders } = useContext(MarketplaceContext);
-    const [loading, setLoading] = useState(false);
+    const { setOrders, loading, setLoading } = useContext(MarketplaceContext);
 
     const updateProduct = useUpdateProduct();
     const chat = useChat();
@@ -81,10 +79,6 @@ const useOrder = () => {
     };
 
     const remove = async (order: OrderRecord) => {
-        console.log(
-            "🚀 ~ file: useOrder.ts:84 ~ remove ~ order:",
-            order.export()
-        );
         setLoading(true);
         try {
             await client.collection("orders").delete(order.id);

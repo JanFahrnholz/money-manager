@@ -19,7 +19,7 @@ const OrderCardLocationInfo: FC<Props> = ({ order }) => {
             sx={{ m: 1, mt: 0 }}
         >
             delivery {parseDeliveryDate(order.when)}{" "}
-            {order.location && `at ${order.location}`}
+            {order.location && `, ${order.location}`}
         </Alert>
     );
 };
