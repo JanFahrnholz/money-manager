@@ -1,4 +1,6 @@
-type Contact = {
+import { Record } from "pocketbase";
+
+type Contact = Record & {
     id: string;
     name: string;
     balance: number;
