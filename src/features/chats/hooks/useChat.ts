@@ -4,7 +4,7 @@ import { ChatContext } from "../context";
 import Chat from "../types/chat";
 
 const useChat = (chatId?: string) => {
-    const { chat, setChat } = useContext(ChatContext);
+    const { chat, setChat, use } = useContext(ChatContext);
 
     const create = async (userId: string) => {
         try {
@@ -23,16 +23,6 @@ const useChat = (chatId?: string) => {
             await client.collection("chats").delete(chatId);
         } catch (error: any) {
             throw new Error(error.message);
-        }
-    };
-
-    const use = async (chatId: string) => {
-        try {
-            const newChat = await client.collection("chats").getOne(chatId);
-            setChat(newChat as Chat);
-            return newChat;
-        } catch (error: any) {
-            setChat(undefined);
         }
     };
 
