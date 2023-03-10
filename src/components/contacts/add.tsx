@@ -114,6 +114,7 @@ const AddContact: FC = () => {
                     />
 
                     <TextField
+                        sx={{ mt: 1 }}
                         id="user-id-input"
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
