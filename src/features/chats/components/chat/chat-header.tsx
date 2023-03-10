@@ -3,7 +3,7 @@ import Chat from "features/chats/types/chat";
 import Username from "features/user-profiles/components/username";
 import useProfile from "features/user-profiles/hooks/useProfile";
 import { userId } from "lib/Pocketbase";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface ChatHeaderProps {
     chat: Chat;
@@ -30,9 +30,9 @@ const ChatHeader: FC<ChatHeaderProps> = ({ chat }) => {
             <Typography>
                 chat with{" "}
                 {participants.map((p) => (
-                    <>
+                    <Fragment key={p}>
                         <Username id={p} key={p} />{" "}
-                    </>
+                    </Fragment>
                 ))}
             </Typography>
         </Paper>
