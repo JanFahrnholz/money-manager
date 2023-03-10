@@ -21,10 +21,10 @@ const ChatHeader: FC<ChatHeaderProps> = ({ chat }) => {
         <Paper
             elevation={0}
             sx={{
-                mb: 2,
                 p: 1,
                 textAlign: "center",
                 backgroundColor: "background.paper",
+                top: 0,
             }}
         >
             <Typography>

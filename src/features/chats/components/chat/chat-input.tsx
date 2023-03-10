@@ -1,4 +1,4 @@
-import { FormControl, OutlinedInput } from "@mui/material";
+import { FormControl, OutlinedInput, Paper } from "@mui/material";
 import Chat from "features/chats/types/chat";
 import { FC, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
@@ -17,20 +17,18 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
         } catch (error) {}
     };
     return (
-        <>
-            <FormControl variant="filled" fullWidth>
-                <OutlinedInput
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="message..."
-                    endAdornment={<SendIcon onClick={() => sendMessage()} />}
-                />
+        <FormControl variant="filled" fullWidth>
+            <OutlinedInput
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="message..."
+                endAdornment={<SendIcon onClick={() => sendMessage()} />}
+            />
 
-                {/* <FormHelperText id="outlined-weight-helper-text">
+            {/* <FormHelperText id="outlined-weight-helper-text">
         Weight
     </FormHelperText> */}
-            </FormControl>
-        </>
+        </FormControl>
     );
 };
 
