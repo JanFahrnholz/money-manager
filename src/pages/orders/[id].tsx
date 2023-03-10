@@ -22,7 +22,9 @@ const OrderDetailsPage: NextPage = () => {
             try {
                 const order = await client
                     .collection("orders")
-                    .getOne<OrderRecord>(query.id);
+                    .getOne<OrderRecord>(query.id, {
+                        expand: "product,contact",
+                    });
                 setOrder(order);
             } catch (error) {}
         };
@@ -36,7 +38,7 @@ const OrderDetailsPage: NextPage = () => {
             <CssBaseline />
             <SubSiteHeader title={`order details`}>
                 {/* order details {order.quantity} */}
-                <OrderCard order={order} />
+                {/* <OrderCard order={order} /> */}
                 <ChatComponent id={order.chat} />
             </SubSiteHeader>
             <Toaster
