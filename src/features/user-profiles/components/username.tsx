@@ -15,8 +15,10 @@ const Username: FC<Props> = ({ id, disableId }) => {
         const set = async () => {
             try {
                 const profile = await get(id);
-                setUsername(profile.username);
-            } catch (error) {}
+                setUsername(profile.username !== "" ? profile.username : id);
+            } catch (error) {
+                setUsername(id);
+            }
         };
         set();
     });
