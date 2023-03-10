@@ -2,6 +2,7 @@ import SubSiteHeader from "@/components/misc/SubSiteHeader";
 import { Button, CssBaseline } from "@mui/material";
 import ChatComponent from "features/chats/components/chat";
 import useChat from "features/chats/hooks/useChat";
+import OrderCard from "features/marketplace/components/orders/order-card";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { client } from "lib/Pocketbase";
 import { NextPage } from "next";
@@ -35,6 +36,7 @@ const OrderDetailsPage: NextPage = () => {
             <CssBaseline />
             <SubSiteHeader title={`order details`}>
                 {/* order details {order.quantity} */}
+                <OrderCard order={order} />
                 <ChatComponent id={order.chat} />
             </SubSiteHeader>
             <Toaster
