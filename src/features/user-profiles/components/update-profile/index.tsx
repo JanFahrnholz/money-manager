@@ -24,7 +24,7 @@ const UpdateProfile: FC = () => {
                 <ProfileUpdateFieldBoolean
                     prop="seller"
                     title="become a seller"
-                    subTitle="lets you create your own products"
+                    subTitle="allows you to create and sell items"
                 />
             </List>
             <Button
