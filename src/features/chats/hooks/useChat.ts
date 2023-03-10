@@ -32,12 +32,13 @@ const useChat = (chatId?: string) => {
             setChat(newChat as Chat);
             return newChat;
         } catch (error: any) {
-            throw new Error(error.message);
+            setChat(undefined);
         }
     };
 
     const send = async (content: string) => {
         if (!chat) throw new Error("no chat in use");
+        if (content.trim() === "") return;
 
         const message = {
             content,
