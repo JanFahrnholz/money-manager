@@ -16,7 +16,6 @@ interface Props {
     order: OrderRecord;
 }
 const OrderCard: FC<Props> = ({ order }) => {
-    console.log("🚀 ~ file: order-card.tsx:19 ~ order:", order);
     const product = order.expand.product as ProductRecord;
     const contact = order.expand.contact as Contact;
     if (!product || !contact) return <></>;
