@@ -3,16 +3,15 @@ import { createContext, FC, useEffect, useState } from "react";
 import { list } from "../lib/Contacts";
 import { client } from "../lib/Pocketbase";
 import Contact from "../types/Contact";
-import Record from "../types/Record";
 
 type ContextProps = {
-    contacts: Record<Contact>[];
+    contacts: Contact[];
 };
 
 export const ContactContext = createContext<ContextProps>(undefined!);
 
 const ContactContextProvider: FC<Props> = (props) => {
-    const [contacts, setContacts] = useState<Record<Contact>[]>([]);
+    const [contacts, setContacts] = useState<Contact[]>([]);
 
     useEffect(() => {
         list()
@@ -23,7 +22,7 @@ const ContactContextProvider: FC<Props> = (props) => {
 
         client
             .collection("contacts")
-            .subscribe<Record<Contact>>("*", ({ action, record }) => {
+            .subscribe<Contact>("*", ({ action, record }) => {
                 setContacts((prevRecords) => {
                     switch (action) {
                         case "create":
