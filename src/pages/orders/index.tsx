@@ -1,5 +1,5 @@
 import SubSiteHeader from "@/components/misc/SubSiteHeader";
-import { Box, CssBaseline } from "@mui/material";
+import { Box, Container, CssBaseline } from "@mui/material";
 import Orders from "features/marketplace/components/orders";
 
 import useOrder from "features/marketplace/hooks/useOrder";
@@ -11,7 +11,9 @@ const OrdersPage: NextPage = () => {
         <>
             <CssBaseline />
             <SubSiteHeader title="orders">
-                <Orders />
+                <Container sx={{ p: 1 }}>
+                    <Orders />
+                </Container>
             </SubSiteHeader>
             <Toaster
                 toastOptions={{
