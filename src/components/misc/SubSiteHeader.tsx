@@ -1,6 +1,6 @@
-import { Box, Grid, Paper } from "@mui/material";
-import { FC, ReactNode } from "react";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import { Box, Container, Grid, Paper } from "@mui/material";
+import { FC, ReactNode, useState } from "react";
+import HomeIcon from "@mui/icons-material/Home";
 import { useRouter } from "next/router";
 import ReplayIcon from "@mui/icons-material/Replay";
 interface Props {
@@ -10,6 +10,27 @@ interface Props {
 
 const SubSiteHeader: FC<Props> = ({ children, title }) => {
     const { back, reload, push } = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const handleReload = () => {
+        setLoading(true);
+        reload();
+    };
+
+    const spinning = loading
+        ? {
+              animation: "spin 1s ease-in-out infinite",
+              "@keyframes spin": {
+                  "0%": {
+                      transform: "rotate(360deg)",
+                  },
+                  "100%": {
+                      transform: "rotate(0deg)",
+                  },
+              },
+          }
+        : {};
+
     return (
         <>
             <Grid
@@ -32,7 +53,7 @@ const SubSiteHeader: FC<Props> = ({ children, title }) => {
                     sx={{ color: "primary.main" }}
                     onClick={() => push("/")}
                 >
-                    <NavigateBeforeIcon />
+                    <HomeIcon />
                 </Grid>
                 <Grid xs={4} item sx={{ textAlign: "center" }}>
                     {title}
@@ -42,13 +63,11 @@ const SubSiteHeader: FC<Props> = ({ children, title }) => {
                     item
                     sx={{ textAlign: "right", color: "primary.main" }}
                 >
-                    <ReplayIcon onClick={() => reload()} />
+                    <ReplayIcon sx={spinning} onClick={() => handleReload()} />
                 </Grid>
             </Grid>
-
-            <Box sx={{ p: 1 }}>
-                <Box sx={{ mb: 7 }} /> {children}
-            </Box>
+            <Box sx={{ pb: 8 }} />
+            <Container sx={{ p: 0 }}>{children}</Container>
         </>
     );
 };
