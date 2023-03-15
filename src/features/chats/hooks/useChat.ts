@@ -10,6 +10,7 @@ const useChat = (chatId?: string) => {
         try {
             const chat = await client.collection("chats").create<Chat>({
                 participants: [myUserId, userId],
+                messages: [],
             });
             setChat(chat);
             return chat;
