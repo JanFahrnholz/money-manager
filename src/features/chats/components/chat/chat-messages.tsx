@@ -3,7 +3,7 @@ import { Container, Divider, Typography } from "@mui/material";
 import Chat from "features/chats/types/chat";
 import useSetting from "features/user-settings/hooks/useSetting";
 import { formatDailyDate } from "lib/Formatter";
-import { FC, useEffect, useRef } from "react";
+import { FC, Fragment, useEffect, useRef } from "react";
 import ChatMessageComponent from "./chat-message";
 
 interface ChatMessagesProps {
@@ -13,6 +13,7 @@ interface ChatMessagesProps {
 const ChatMessages: FC<ChatMessagesProps> = ({ chat }) => {
     const enabled = useSetting("enableChats");
     const ref = useRef<any>(null);
+    const windowBleeding = 350;
 
     useEffect(() => {
         // Scroll to the bottom of the message list when a new message is added
@@ -26,11 +27,12 @@ const ChatMessages: FC<ChatMessagesProps> = ({ chat }) => {
             sx={{
                 p: 0,
                 overflow: enabled ? "scroll" : "hidden",
-                height: "70vh",
+                maxHeight: `${window.innerHeight - windowBleeding}px`,
+                height: "80vh",
             }}
         >
             {chat?.messages.map((message, index, array) => (
-                <div key={message.created.valueOf()}>
+                <Fragment key={message.created.valueOf()}>
                     <RenderInterval
                         index={index}
                         array={array}
@@ -38,7 +40,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({ chat }) => {
                         daily={(date) => dayDivider(date)}
                     />
                     <ChatMessageComponent message={message} />
-                </div>
+                </Fragment>
             ))}
         </Container>
     );
