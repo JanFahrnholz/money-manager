@@ -4,6 +4,7 @@ import OrderDetails from "features/marketplace/components/order-details";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { client } from "lib/Pocketbase";
 import { NextPage } from "next";
+import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -32,6 +33,11 @@ const OrderDetailsPage: NextPage = () => {
 
     return (
         <>
+            <Head>
+                <title>
+                    MoneyManager - order details {order ? `- ${order.id}` : ""}
+                </title>
+            </Head>
             <CssBaseline />
             <SubSiteHeader title={"order details"}>
                 <OrderDetails order={order} />
