@@ -6,15 +6,20 @@ import useSetting from "features/user-settings/hooks/useSetting";
 import { FC } from "react";
 import OrderCardStatus from "../orders/order-card-status";
 import LockIcon from "@mui/icons-material/Lock";
+import OrderDetailsTabContent from "./order-details";
 interface OrderDetailsPageProps {
     order: OrderRecord;
 }
 
 const OrderDetails: FC<OrderDetailsPageProps> = ({ order }) => {
     const chatsEnabled: boolean = useSetting("enableChats");
-    console.log("🚀 ~ file: index.tsx:15 ~ chatsEnabled:", chatsEnabled);
+
     const tabs: Tab[] = [
-        { id: 0, title: "Details", content: <>details</> },
+        {
+            id: 0,
+            title: "Details",
+            content: <OrderDetailsTabContent order={order} />,
+        },
         {
             id: 1,
             title: "Chat",
