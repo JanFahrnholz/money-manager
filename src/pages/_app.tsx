@@ -42,9 +42,9 @@ const theme = createTheme({
         },
     },
 });
-if (process.browser) {
+if (process.browser && process.env.GTM_ID !== undefined) {
     TagManager.initialize({
-        gtmId: process.env.GTM_ID || "",
+        gtmId: process.env.GTM_ID,
     });
 }
 
