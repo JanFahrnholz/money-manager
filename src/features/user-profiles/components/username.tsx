@@ -22,7 +22,7 @@ const Username: FC<Props> = ({ id, disableId }) => {
         };
         set();
     });
-    return <>{username}</>;
+    return <kbd>{username}</kbd>;
 };
 
 export default Username;
