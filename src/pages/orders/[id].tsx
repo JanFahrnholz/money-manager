@@ -1,6 +1,7 @@
 import SubSiteHeader from "@/components/misc/SubSiteHeader";
 import { Breadcrumbs, CssBaseline } from "@mui/material";
 import OrderDetails from "features/marketplace/components/order-details";
+import OrderDetailsSkeleton from "features/marketplace/components/order-details/skeleton";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { client } from "lib/Pocketbase";
 import { NextPage } from "next";
@@ -11,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 const OrderDetailsPage: NextPage = () => {
-    const [order, setOrder] = useState<OrderRecord | undefined>();
+    const [order, setOrder] = useState<OrderRecord | undefined | null>();
     const router: NextRouter = useRouter();
     const query = router.query as { id: string };
 
@@ -25,12 +26,14 @@ const OrderDetailsPage: NextPage = () => {
                         expand: "product,contact",
                     });
                 setOrder(order);
-            } catch (error) {}
+            } catch (error) {
+                setOrder(null);
+            }
         };
         fetch();
     }, [query.id]);
 
-    if (!order) return <>error no order</>;
+    if (order === null) return <>error no order</>;
 
     return (
         <>
@@ -41,7 +44,11 @@ const OrderDetailsPage: NextPage = () => {
             </Head>
             <CssBaseline />
             <SubSiteHeader title={"order details"}>
-                <OrderDetails order={order} />
+                {order === undefined ? (
+                    <OrderDetailsSkeleton />
+                ) : (
+                    <OrderDetails order={order} />
+                )}
             </SubSiteHeader>
             <Toaster
                 toastOptions={{
