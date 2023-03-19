@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from "react";
 
-type Tab = {
+type Slide = {
     id: number;
     title: string;
     icon?: ReactElement;
@@ -8,4 +8,4 @@ type Tab = {
     content: ReactNode;
 };
 
-export default Tab;
+export default Slide;

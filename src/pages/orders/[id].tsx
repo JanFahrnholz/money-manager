@@ -7,6 +7,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 import { Toaster } from "react-hot-toast";
 
 const OrderDetailsPage: NextPage = () => {
