@@ -1,6 +1,7 @@
 services:
   debt-calculator:
     image: node:18
+    restart: always
     ports:
       - "3000:3000"
     volumes:

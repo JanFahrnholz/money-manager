@@ -1,3 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ReactHook<T> = Dispatch<SetStateAction<T>>;
+type ReactHook<T> = Dispatch<SetStateAction<T>>;
+
+export default ReactHook;
