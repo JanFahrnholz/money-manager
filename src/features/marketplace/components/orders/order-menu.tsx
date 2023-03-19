@@ -24,7 +24,6 @@ interface Props {
 const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
     const [amount, setAmount] = useState(0);
     const [payDirectly, setPayDirectly] = useState(true);
-    const [message, setMessage] = useState("");
     const [whenDate, setWhenDate] = useState("today");
     const [whenDatetime, setWhenDatetime] = useState("");
     const { create } = useOrder();
@@ -39,15 +38,15 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
     }, [quantity]);
 
     const submit = async () => {
-        const data = {
-            quantity,
-            payDirectly,
-            message,
-            when: getDeliveryDateObject(whenDate, whenDatetime),
-        };
         try {
             const orderChat = await chat.create(product.owner);
-            await create(data, product, orderChat.id);
+            const data = {
+                quantity,
+                payDirectly,
+                chat: orderChat.id,
+                when: getDeliveryDateObject(whenDate, whenDatetime),
+            };
+            await create(data, product);
             setOpen(false);
         } catch (error) {}
     };
@@ -111,17 +110,8 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                         setTime={setWhenDatetime}
                     />
                 </Grid>
-
-                <Grid xs={12} item>
-                    <TextField
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        label="optional: message"
-                        fullWidth
-                    />
-                </Grid>
             </Grid>
-            <div className="mt-4">
+            <div className="mt-2">
                 <Numpad setter={setAmount} disableDot={!product.divisible} />
             </div>
         </FullscreenMenu>

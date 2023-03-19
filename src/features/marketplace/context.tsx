@@ -54,7 +54,7 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
                         expand: "product,contact",
                         sort: "-updated",
                     });
-                setOrders(orders ? orders : []);
+                setOrders(orders || []);
             } catch (error) {}
         };
         fetchProducts();

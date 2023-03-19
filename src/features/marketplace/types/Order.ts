@@ -3,12 +3,11 @@ import Record from "@/types/Record";
 import { ProductRecord } from "./Product";
 
 export type Order = {
-    product: ProductRecord;
-    contact: Record<Contact>;
+    product: string;
+    contact: string;
     chat: string;
     quantity: number;
     status: OrderStatus;
-    message: string;
     payDirectly: boolean;
     when: Date;
     location: string;

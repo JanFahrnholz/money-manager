@@ -21,8 +21,7 @@ const useOrder = () => {
 
     const create = async (
         order: Partial<OrderRecord>,
-        product: ProductRecord,
-        chatId: string
+        product: ProductRecord
     ) => {
         if (!id) return;
         setLoading(true);
@@ -41,7 +40,6 @@ const useOrder = () => {
                         status: "open",
                         product: product.id,
                         contact: contact.id,
-                        chat: chatId,
                     },
                     { expand: "product,contact" }
                 );
