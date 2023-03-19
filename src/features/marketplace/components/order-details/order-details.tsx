@@ -6,6 +6,7 @@ import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import { formatDailyDateTime } from "lib/Formatter";
 import Username from "features/user-profiles/components/username";
 import ReactTimeAgo from "react-time-ago";
+import OrderActionsMenu from "../misc/order-actions-menu";
 interface OrderDetailsProps {
     order: OrderRecord;
 }
@@ -141,6 +142,7 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
                         />{" "}
                         ago
                     </Typography>
+                    <OrderActionsMenu order={order} />
                 </div>
             </div>
         </>
