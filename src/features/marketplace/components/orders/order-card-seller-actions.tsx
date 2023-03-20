@@ -20,7 +20,7 @@ type IncomingOrderCardAction = {
 
 const OrderCardSellerActions: FC<Props> = ({ order }) => {
     const { update, remove, deliver, loading } = useOrder();
-    const product = order.expand.product as ProductRecord;
+    const product = order.product;
     const contact = order.expand.contact as Record<Contact>;
 
     const { push } = useRouter();

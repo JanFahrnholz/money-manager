@@ -3,7 +3,7 @@ import Record from "@/types/Record";
 import { ProductRecord } from "./Product";
 
 export type Order = {
-    product: string;
+    product: ProductRecord;
     contact: string;
     chat: string;
     quantity: number;

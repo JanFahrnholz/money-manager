@@ -16,7 +16,7 @@ interface Props {
     order: OrderRecord;
 }
 const OrderCard: FC<Props> = ({ order }) => {
-    const product = order.expand.product as ProductRecord;
+    const product = order.product;
     const contact = order.expand.contact as Contact;
     if (!product || !contact) return <></>;
     const id = client.authStore.model?.id;

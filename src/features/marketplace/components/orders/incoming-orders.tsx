@@ -10,6 +10,7 @@ const IncomingOrders: FC = () => {
     const { profile } = useProfile();
     const id = client.authStore.model?.id;
     const { orders } = useContext(MarketplaceContext);
+    console.log("🚀 ~ file: incoming-orders.tsx:13 ~ orders:", orders);
 
     const header = () => (
         <>
@@ -38,7 +39,7 @@ const IncomingOrders: FC = () => {
 
     const incomingOrders = orders
         .filter((order: OrderRecord) => {
-            return order.expand.product.owner === id;
+            return order.product.owner === id;
         })
         .sort((a, b) => {
             const dateA = new Date(a.updated);

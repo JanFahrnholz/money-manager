@@ -38,7 +38,7 @@ const useOrder = () => {
                     {
                         ...order,
                         status: "open",
-                        product: product.id,
+                        product,
                         contact: contact.id,
                     },
                     { expand: "product,contact" }

@@ -16,9 +16,6 @@ interface Props {
 }
 
 const OrderCardStatus: FC<Props> = ({ order, horizontal }) => {
-    const product = order.expand.product as ProductRecord;
-    const contact = order.expand.contact as Contact;
-
     let activeStep = 0;
     const isDeclined = order.status === "declined";
     const isCanceled = order.status === "canceled";
