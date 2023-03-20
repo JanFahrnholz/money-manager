@@ -2,6 +2,7 @@ import SubSiteHeader from "@/components/misc/SubSiteHeader";
 import { Breadcrumbs, CssBaseline } from "@mui/material";
 import OrderDetails from "features/marketplace/components/order-details";
 import OrderDetailsSkeleton from "features/marketplace/components/order-details/skeleton";
+import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord } from "features/marketplace/types/Order";
 import { client } from "lib/Pocketbase";
 import { NextPage } from "next";
@@ -13,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 
 const OrderDetailsPage: NextPage = () => {
     const [order, setOrder] = useState<OrderRecord | undefined | null>();
+    const { orders } = useOrder();
     const router: NextRouter = useRouter();
     const query = router.query as { id: string };
 
@@ -31,6 +33,7 @@ const OrderDetailsPage: NextPage = () => {
             }
         };
         fetch();
+        client.collection("orders").subscribe(query.id, () => fetch());
     }, [query.id]);
 
     if (order === null) return <>error no order</>;
