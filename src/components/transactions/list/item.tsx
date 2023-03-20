@@ -1,3 +1,4 @@
+import Contact from "@/types/Contact";
 import LinkIcon from "@mui/icons-material/Link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -8,13 +9,13 @@ import {
     ListItemText,
     Typography,
 } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import { FC } from "react";
 import { getInitials } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
 import { getColor } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
-import LinkedFrom from "../../misc/LinkedFrom";
 
 interface Props {
     transaction: Record<Transaction>;
@@ -23,6 +24,7 @@ interface Props {
 
 const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
     const isOwner = client.authStore.model?.id == transaction.owner;
+    const contact = transaction.expand.contact as Contact;
 
     const secondaryAction = () => {
         return (
@@ -52,7 +54,7 @@ const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
                     }}
                 >
                     {isOwner ? (
-                        <>{getInitials(transaction.expand.contact.name)}</>
+                        <>{getInitials(contact.name)}</>
                     ) : (
                         <>
                             <LinkIcon />
@@ -72,13 +74,15 @@ const TransactionListItem: FC<Props> = ({ transaction, onClick }) => {
                     >
                         {isOwner ? (
                             <>
-                                {transaction.expand.contact.name}
-                                {transaction.expand.contact.user && (
+                                {contact.name}
+                                {contact.user && (
                                     <span className="pl-1">🔗</span>
                                 )}
                             </>
                         ) : (
-                            <LinkedFrom owner={transaction.owner} />
+                            <>
+                                Linked by <Username id={contact.owner} />
+                            </>
                         )}
                     </Typography>
                 }

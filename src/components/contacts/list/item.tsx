@@ -8,6 +8,7 @@ import {
     ListItemAvatar,
     ListItemText,
 } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import { motion } from "framer-motion";
 import { FC } from "react";
 import { getInitials } from "../../../lib/Contacts";
@@ -58,7 +59,9 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                 <ListItemText
                     primary={
                         !isOwner ? (
-                            <LinkedFrom owner={contact.owner} />
+                            <>
+                                linked by <Username id={contact.owner} />
+                            </>
                         ) : (
                             <>
                                 {!isOwner && "imported "}

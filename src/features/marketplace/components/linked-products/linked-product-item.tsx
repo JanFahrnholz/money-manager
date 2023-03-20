@@ -1,6 +1,7 @@
 import LinkedFrom from "@/components/misc/LinkedFrom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { IconButton, ListItem, ListItemText } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import { FC, useState } from "react";
 import { ProductRecord } from "../../types/Product";
 import ProductOrderMenu from "../orders/order-menu";
@@ -39,7 +40,7 @@ const LinkedProductItem: FC<Props> = ({ product }) => {
                     primary={`${product.description}`}
                     secondary={
                         <>
-                            from <LinkedFrom owner={product.owner} asText />
+                            from <Username id={product.owner} />
                         </>
                     }
                 />

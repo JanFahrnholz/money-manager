@@ -7,20 +7,32 @@ import { formatDailyDateTime } from "lib/Formatter";
 import Username from "features/user-profiles/components/username";
 import ReactTimeAgo from "react-time-ago";
 import OrderActionsMenu from "../misc/order-actions-menu";
+import { userId } from "lib/Pocketbase";
+import Contact from "@/types/Contact";
 interface OrderDetailsProps {
     order: OrderRecord;
 }
 
 const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
-    const product = order.expand.product as ProductRecord;
+    const product = order.product;
+    const contact = order.expand.contact as Contact;
+    const isOwner = order.product.owner === userId;
 
     return (
         <>
             <div className="text-white">
                 <div className="mx-auto px-2 sm:px-6 lg:px-8">
                     <h1 className="text-base font-medium text-primary">
-                        Thanks for your order at <Username id={product.owner} />
-                        !
+                        {isOwner ? (
+                            <>
+                                <Username id={contact.user} /> ordered something
+                            </>
+                        ) : (
+                            <>
+                                Thanks for your order at{" "}
+                                <Username id={product.owner} />!
+                            </>
+                        )}
                     </h1>
                     <Divider></Divider>
                     <div className="mt-2">
