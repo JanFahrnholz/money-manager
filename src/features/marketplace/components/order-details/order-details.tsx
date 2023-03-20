@@ -1,14 +1,13 @@
+import Contact from "@/types/Contact";
+import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 import { Divider, Typography } from "@mui/material";
 import { OrderRecord } from "features/marketplace/types/Order";
-import { ProductRecord } from "features/marketplace/types/Product";
-import { FC } from "react";
-import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
-import { formatDailyDateTime } from "lib/Formatter";
 import Username from "features/user-profiles/components/username";
+import { formatDailyDateTime } from "lib/Formatter";
+import { userId } from "lib/Pocketbase";
+import { FC } from "react";
 import ReactTimeAgo from "react-time-ago";
 import OrderActionsMenu from "../misc/order-actions-menu";
-import { userId } from "lib/Pocketbase";
-import Contact from "@/types/Contact";
 interface OrderDetailsProps {
     order: OrderRecord;
 }
@@ -30,7 +29,7 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
                         ) : (
                             <>
                                 Thanks for your order at{" "}
-                                <Username id={product.owner} />!
+                                <Username id={product.owner} />
                             </>
                         )}
                     </h1>
@@ -53,7 +52,7 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
                                         {product.description}
                                     </p>
                                 </div>
-                                <div className="mt-6 flex flex-1 items-end">
+                                <div className="mt-4 flex flex-1 items-end">
                                     <dl className="flex space-x-4 divide-x divide-dark-200 text-sm sm:space-x-6">
                                         <div className="flex">
                                             <dt className="font-medium text-dark-500">
@@ -80,14 +79,18 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
 
                         <Divider />
 
-                        <div className=" ">
+                        <div>
                             <dl className="grid grid-cols-2  text-sm">
                                 <div>
                                     <dt className="font-medium text-dark-500">
                                         Payment method
                                     </dt>
 
-                                    <p>Cash</p>
+                                    <p>
+                                        {order.payDirectly
+                                            ? "Cash"
+                                            : "Cash (Invoice)"}
+                                    </p>
                                 </div>
                                 <div>
                                     <dt className="font-medium text-dark-500">
@@ -154,7 +157,6 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
                         />{" "}
                         ago
                     </Typography>
-                    <OrderActionsMenu order={order} />
                 </div>
             </div>
         </>
