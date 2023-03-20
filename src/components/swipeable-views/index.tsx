@@ -5,12 +5,13 @@ import { Virtual } from "swiper";
 import "swiper/css/virtual";
 import "swiper/css";
 import Slide from "./slide";
-import { ReactHook } from "@/types/react-hook";
+import ReactHook from "@/types/react-hook";
 import SwipeableViewsDefaultTabs from "./default-tabs";
 
 interface SwipeableViewsProps {
     slides: Slide[];
     startIndex?: number;
+    onChange?: (activeIndex: number) => void;
     tabs?: (
         slides: Slide[],
         currentSlide: number,
@@ -21,6 +22,7 @@ interface SwipeableViewsProps {
 const SwipeableViews: FC<SwipeableViewsProps> = ({
     slides,
     startIndex,
+    onChange,
     tabs,
 }) => {
     const [currentSlide, setCurrentSlide] = useState(
@@ -32,9 +34,10 @@ const SwipeableViews: FC<SwipeableViewsProps> = ({
         setCurrentSlide(id);
     };
     useEffect(() => {
+        onChange ? onChange(currentSlide) : "";
         if (!swiper) return;
         swiper.slideTo(currentSlide);
-    }, [currentSlide]);
+    }, [currentSlide, onChange]);
 
     if (!tabs)
         tabs = (slides, currentSlide, setCurrentSlide) => (
