@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import useProfile from "features/user-profiles/hooks/useProfile";
 import { FC, useEffect, useState } from "react";
 
@@ -22,7 +22,7 @@ const Username: FC<Props> = ({ id, disableId }) => {
         };
         set();
     });
-    return <kbd>{username}</kbd>;
+    return <Chip label={username} size="small" />;
 };
 
 export default Username;
