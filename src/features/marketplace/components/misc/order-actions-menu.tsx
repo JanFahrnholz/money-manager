@@ -91,7 +91,8 @@ const OrderActionsMenu: FC<OrderActionsMenuProps> = ({ order, active }) => {
                 order.status === "declined" ||
                 order.status === "delivered",
             action: async () => {
-                await remove(order), push("/orders");
+                await remove(order);
+                push("/");
             },
         },
     ];
