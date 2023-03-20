@@ -14,7 +14,8 @@ import useChat from "features/chats/hooks/useChat";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
-    const { setOrders, loading, setLoading } = useContext(MarketplaceContext);
+    const { setOrders, orders, loading, setLoading } =
+        useContext(MarketplaceContext);
 
     const updateProduct = useUpdateProduct();
     const chat = useChat();
@@ -118,7 +119,7 @@ const useOrder = () => {
         }
     };
 
-    return { create, update, remove, deliver, loading };
+    return { orders, create, update, remove, deliver, loading };
 };
 
 export default useOrder;
