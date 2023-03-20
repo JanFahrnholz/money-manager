@@ -1,5 +1,6 @@
 import SubSiteHeader from "@/components/misc/SubSiteHeader";
 import { Breadcrumbs, CssBaseline } from "@mui/material";
+import OrderNotFound from "features/marketplace/components/misc/404";
 import OrderDetails from "features/marketplace/components/order-details";
 import OrderDetailsSkeleton from "features/marketplace/components/order-details/skeleton";
 import useOrder from "features/marketplace/hooks/useOrder";
@@ -36,7 +37,16 @@ const OrderDetailsPage: NextPage = () => {
         client.collection("orders").subscribe(query.id, () => fetch());
     }, [query.id]);
 
-    if (order === null) return <>error no order</>;
+    if (order === null)
+        return (
+            <>
+                <Head>
+                    <title>MoneyManager - 404 - order not found</title>
+                </Head>
+                <CssBaseline />
+                <OrderNotFound />
+            </>
+        );
 
     return (
         <>
