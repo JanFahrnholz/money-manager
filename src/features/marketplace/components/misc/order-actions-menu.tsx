@@ -25,9 +25,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { userId } from "lib/Pocketbase";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { useRouter } from "next/router";
+import UpdateOrderMenu from "./update-order-menu";
 
 const OrderActionsMenu: FC<OrderActionsMenuProps> = ({ order, active }) => {
     const [open, setOpen] = useState(false);
+    const [openEditMenu, setOpenEditMenu] = useState(false);
     const isOwner = order.product.owner === userId;
     const { update, remove, deliver, loading } = useOrder();
     const { push } = useRouter();
@@ -75,6 +77,15 @@ const OrderActionsMenu: FC<OrderActionsMenuProps> = ({ order, active }) => {
             action: () => deliver(order),
         },
         {
+            label: "edit",
+            icon: <Edit />,
+            active: isOwner,
+            action: () => {
+                setOpenEditMenu(true);
+                setOpen(false);
+            },
+        },
+        {
             label: "cancel",
             icon: <CancelIcon />,
             active:
@@ -100,6 +111,11 @@ const OrderActionsMenu: FC<OrderActionsMenuProps> = ({ order, active }) => {
     return (
         <>
             <Box>
+                <UpdateOrderMenu
+                    order={order}
+                    open={openEditMenu}
+                    setOpen={setOpenEditMenu}
+                />
                 <Backdrop open={open} sx={{ zIndex: 1000 }} />
                 <Zoom in={active}>
                     <SpeedDial
@@ -117,6 +133,7 @@ const OrderActionsMenu: FC<OrderActionsMenuProps> = ({ order, active }) => {
                     >
                         {actions.reverse().map((action) => {
                             if (!action.active) return;
+
                             return (
                                 <SpeedDialAction
                                     key={action.label}
