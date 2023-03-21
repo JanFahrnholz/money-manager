@@ -1,66 +1,66 @@
+import ReactHook from "@/types/react-hook";
 import {
     Button,
     Dialog,
-    DialogTitle,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    TextField,
-    DialogActions,
+    DialogTitle,
+    FormControlLabel,
     Grid,
+    Switch,
+    TextField,
 } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord } from "features/marketplace/types/Order";
-import {
-    getDeliveryDateObject,
-    getDeliveryTime,
-    setDeliveryTime,
-} from "lib/Formatter";
-import { FC, useState } from "react";
-import { toast } from "react-hot-toast";
+import { getDeliveryTime, setDeliveryTime } from "lib/Formatter";
+import { FC, ReactNode, useEffect, useState } from "react";
 import SelectDeliveryTime from "./select-delivery-time";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 interface Props {
     order: OrderRecord;
+    open: boolean;
+    setOpen: ReactHook<boolean>;
+    handler?: (
+        open: boolean,
+        setOpen: ReactHook<boolean>,
+        loading: boolean
+    ) => ReactNode;
 }
 
-const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
-    const [open, setOpen] = useState(false);
+const UpdateOrderMenu: FC<Props> = ({ order, handler, open, setOpen }) => {
+    const [payDirectly, setPayDirectly] = useState(order.payDirectly);
+
     const [location, setLocation] = useState(order.location);
     const [time, setTime] = useState("");
     const { update, loading } = useOrder();
+
+    const handleClose = () => setOpen(false);
 
     const handleUpdate = async () => {
         const data = {
             ...order,
             location,
+            payDirectly,
             when: setDeliveryTime(order.when, time),
         };
 
         await update(data);
-        setOpen(false);
+        handleClose();
     };
+
     return (
         <>
-            <Button
-                size="small"
-                onClick={() => setOpen(true)}
-                disabled={loading}
-            >
-                edit
-            </Button>
+            {handler !== undefined && handler(open, setOpen, loading)}
 
             <Dialog
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={() => handleClose()}
                 sx={{ bottom: "40%" }}
                 fullWidth
             >
-                <DialogTitle>update delivery</DialogTitle>
+                <DialogTitle>Update order</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        update the delivery instructions
-                    </DialogContentText>
                     <Grid container spacing={1} sx={{ mt: 1 }}>
                         <Grid item xs={8}>
                             <TextField
@@ -79,10 +79,23 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
                                 fullWidth
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={payDirectly}
+                                        onChange={(e, value) =>
+                                            setPayDirectly(value)
+                                        }
+                                    />
+                                }
+                                label="pay directly"
+                            />
+                        </Grid>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button onClick={() => handleClose()}>Cancel</Button>
                     <Button
                         variant="outlined"
                         onClick={() => handleUpdate()}
@@ -96,4 +109,4 @@ const UpdateDeliveryMenu: FC<Props> = ({ order }) => {
     );
 };
 
-export default UpdateDeliveryMenu;
+export default UpdateOrderMenu;
