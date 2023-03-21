@@ -17,6 +17,8 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
     const contact = order.expand.contact as Contact;
     const isOwner = order.product.owner === userId;
 
+    const totalPrice = (order.quantity * product.price).toFixed(2);
+
     return (
         <>
             <div className="text-white">
@@ -133,12 +135,7 @@ const OrderDetailsTabContent: FC<OrderDetailsProps> = ({ order }) => {
                                     <dt className="font-medium text-dark-500">
                                         Total
                                     </dt>
-                                    <dd className="">
-                                        {(
-                                            order.quantity * product.price
-                                        ).toFixed(2)}
-                                        €
-                                    </dd>
+                                    <dd className="">{totalPrice}€</dd>
                                 </div>
                             </dl>
                             <Divider />

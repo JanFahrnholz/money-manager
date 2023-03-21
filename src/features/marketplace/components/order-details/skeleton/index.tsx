@@ -1,21 +1,9 @@
-import Slide from "@/components/swipeable-views/slide";
-import {
-    Box,
-    Container,
-    Divider,
-    Skeleton,
-    Tab,
-    Tabs,
-    Typography,
-} from "@mui/material";
-import useSetting from "features/user-settings/hooks/useSetting";
-import { FC, ReactNode, useState } from "react";
-import LockIcon from "@mui/icons-material/Lock";
-import SwipeableViewsDefaultTabs from "@/components/swipeable-views/default-tabs";
-import { formatDailyDateTime } from "lib/Formatter";
-import ReactTimeAgo from "react-time-ago";
 import SwipeableViews from "@/components/swipeable-views";
-import { ReactHook } from "@/types/react-hook";
+import Slide from "@/components/swipeable-views/slide";
+import LockIcon from "@mui/icons-material/Lock";
+import { Container, Divider, Skeleton, Typography } from "@mui/material";
+import useSetting from "features/user-settings/hooks/useSetting";
+import { FC } from "react";
 
 interface OrderDetailsSkeletonProps {}
 
