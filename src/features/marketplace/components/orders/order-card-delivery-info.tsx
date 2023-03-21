@@ -6,7 +6,7 @@ import { FC } from "react";
 interface Props {
     order: OrderRecord;
 }
-const OrderCardLocationInfo: FC<Props> = ({ order }) => {
+const OrderCardDeliveryInfo: FC<Props> = ({ order }) => {
     if (order.status === "delivered") return <></>;
     if (order.status === "canceled") return <></>;
     if (order.status === "declined") return <></>;
@@ -18,10 +18,10 @@ const OrderCardLocationInfo: FC<Props> = ({ order }) => {
             variant="outlined"
             sx={{ m: 1, mt: 0 }}
         >
-            delivery {parseDeliveryDate(order.when)}{" "}
+            delivery {parseDeliveryDate(order.when)}
             {order.location && `, ${order.location}`}
         </Alert>
     );
 };
 
-export default OrderCardLocationInfo;
+export default OrderCardDeliveryInfo;

@@ -7,8 +7,8 @@ import { ProductRecord } from "features/marketplace/types/Product";
 import { create } from "lib/PlannedTransactions";
 import { useRouter } from "next/router";
 
-import { FC, ReactNode } from "react";
-import UpdateDeliveryMenu from "../misc/update-delivery-menu";
+import { FC, ReactNode, useState } from "react";
+import UpdateOrderMenu from "../misc/update-order-menu";
 interface Props {
     order: OrderRecord;
 }
@@ -20,6 +20,7 @@ type IncomingOrderCardAction = {
 
 const OrderCardSellerActions: FC<Props> = ({ order }) => {
     const { update, remove, deliver, loading } = useOrder();
+    const [openEditMenu, setOpenEditMenu] = useState(false);
     const product = order.product;
     const contact = order.expand.contact as Record<Contact>;
 
@@ -74,7 +75,18 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
                         Package
                     </Button>
 
-                    <UpdateDeliveryMenu order={order} />
+                    <Button
+                        size="small"
+                        onClick={() => setOpenEditMenu(!openEditMenu)}
+                        disabled={loading}
+                    >
+                        edit
+                    </Button>
+                    <UpdateOrderMenu
+                        order={order}
+                        open={openEditMenu}
+                        setOpen={setOpenEditMenu}
+                    />
                 </>
             ),
         },
@@ -93,7 +105,7 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
                     >
                         Deliver
                     </Button>
-                    <UpdateDeliveryMenu order={order} />
+                    <UpdateOrderMenu order={order} />
                 </>
             ),
         },

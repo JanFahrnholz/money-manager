@@ -36,7 +36,8 @@ const OrderCardDetails: FC<Props> = ({ order }) => {
                 {product.unit}
             </Typography>
             <Typography variant="body2">
-                Price: {order.quantity * product.price}€ ({product.price}€/
+                Price: {(order.quantity * product.price).toFixed(2)}€ (
+                {product.price}€/
                 {product.unit}) {!order.payDirectly && "not payed directly"}
             </Typography>
 

@@ -8,7 +8,7 @@ import ReactTimeAgo from "react-time-ago";
 import OrderCardAlert from "./oder-card-alert";
 import OrderCardBuyerActions from "./order-card-buyer-actions";
 import OrderCardDetails from "./order-card-details";
-import OrderCardLocationInfo from "./order-card-location-info";
+import OrderCardDeliveryInfo from "./order-card-delivery-info";
 import OrderCardSellerActions from "./order-card-seller-actions";
 import OrderCardStatus from "./order-card-status";
 
@@ -35,7 +35,7 @@ const OrderCard: FC<Props> = ({ order }) => {
                         <OrderCardStatus order={order} />
                     </Grid>
                 </Grid>
-                <OrderCardLocationInfo order={order} />
+                <OrderCardDeliveryInfo order={order} />
                 <Grid container>
                     <Grid item xs={8}>
                         {isSeller && <OrderCardSellerActions order={order} />}
