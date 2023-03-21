@@ -92,12 +92,10 @@ const useOrder = () => {
     };
 
     const deliver = async (order: OrderRecord) => {
-        if (order.status !== "packaged") return;
         setLoading(true);
 
-        const product = order.expand.product as ProductRecord;
+        const product = order.product;
         const contact = order.expand.contact as Contact;
-        if (!product || !contact) return;
         const stock = product.stock ? product.stock - order.quantity : 0;
 
         const transaction: Transaction = {
@@ -110,10 +108,14 @@ const useOrder = () => {
         };
 
         try {
+            if (!contact) throw new Error("Contact not defined");
+            if (order.status !== "packaged")
+                throw new Error("status must be packaged");
             await updateProduct({ ...product, stock });
             await createTransaction(transaction);
             await update({ ...order, status: "delivered" });
-        } catch (error) {
+        } catch (error: any) {
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
