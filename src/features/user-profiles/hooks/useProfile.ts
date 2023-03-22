@@ -1,22 +1,26 @@
 import Profile from "@/types/Profile";
 import { client } from "lib/Pocketbase";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ProfileContext } from "../context";
 
-const useProfile = () => {
-    const { profile } = useContext(ProfileContext);
+const useProfile = (id?: string | undefined | null): Profile | undefined => {
+    const { profile, profiles, setProfiles } = useContext(ProfileContext);
+    if (id === null) return;
+    if (id === undefined) return profile;
 
-    const get = async (id: string) => {
-        try {
-            return await client
-                .collection("profiles")
-                .getFirstListItem<Profile>(`user.id="${id}"`);
-        } catch (error: any) {
-            throw new Error(error.message);
-        }
+    if (profiles.has(id)) return profiles.get(id);
+
+    const addProfile = (key: string, value: Profile) => {
+        const newProfiles = new Map(profiles);
+        newProfiles.set(key, value);
+        setProfiles(newProfiles);
     };
 
-    return { profile, get };
+    client
+        .collection("profiles")
+        .getFirstListItem<Profile>(`user.id="${id}"`)
+        .then((profile) => addProfile(id, profile))
+        .catch(() => {});
 };
 
 export default useProfile;
