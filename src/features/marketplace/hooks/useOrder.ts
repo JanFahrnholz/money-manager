@@ -99,7 +99,7 @@ const useOrder = () => {
         const stock = product.stock ? product.stock - order.quantity : 0;
 
         const transaction: Transaction = {
-            amount: product.price * order.quantity,
+            amount: +(product.price * order.quantity).toFixed(2),
             contact: contact.id,
             info: order.message,
             type: order.payDirectly ? "Einnahme" : "Rechnung",
