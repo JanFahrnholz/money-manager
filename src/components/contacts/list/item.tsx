@@ -15,7 +15,6 @@ import { getInitials } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
 import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
-import LinkedFrom from "../../misc/LinkedFrom";
 
 type Props = {
     contact: Record<Contact>;
@@ -67,7 +66,10 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                                 {!isOwner && "imported "}
                                 {contact.name}
                                 {contact.user && (
-                                    <span className="pl-1">🔗</span>
+                                    <>
+                                        <span className="px-1">🔗</span>
+                                        <Username id={contact.user} />
+                                    </>
                                 )}
                             </>
                         )

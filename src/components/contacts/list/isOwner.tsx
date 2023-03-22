@@ -34,15 +34,12 @@ const ContactDetailsWhenOwned: FC<Props> = ({ contact, setOpen }) => {
                 agreeText="Delete"
                 action={deleteContact}
             />
-
             <EditContact
                 open={editing}
                 setOpen={setEditing}
                 contact={contact}
             />
-
             {contact.name}
-
             <span className="float-right space-x-3">
                 {!isLinked && (
                     <AddLinkIcon
