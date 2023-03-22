@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FC, useContext } from "react";
 import { MarketplaceContext } from "../../context";
 import LinkedProductItem from "./linked-product-item";
+import ProductCardGrid from "./product-card-grid";
 
 const LinkedProducts: FC = () => {
     const { linkedProducts } = useContext(MarketplaceContext);
@@ -28,6 +29,11 @@ const LinkedProducts: FC = () => {
             </Button>
 
             {linkedProducts.length === 0 && <EmptyProducts />}
+
+            {/* {linkedProducts.length > 0 && (
+                <ProductCardGrid products={linkedProducts} />
+            )} */}
+
             {linkedProducts.length > 0 && (
                 <List>
                     {linkedProducts.map((p) => (
