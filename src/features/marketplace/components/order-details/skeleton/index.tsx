@@ -21,19 +21,25 @@ const OrderDetailsSkeleton: FC<OrderDetailsSkeletonProps> = () => {
             title: "Chat",
             icon: chatsEnabled ? undefined : <LockIcon sx={{ m: 0, p: 0 }} />,
             iconPosition: "end",
-            content: <></>,
+            content: (
+                <Skeleton
+                    variant="rectangular"
+                    height={"70vh"}
+                    sx={{ borderRadius: 1 }}
+                />
+            ),
         },
     ];
 
     return (
-        <Container>
+        <>
             <Skeleton
                 variant="rectangular"
                 height={60}
-                sx={{ mb: 1, borderRadius: 1 }}
+                sx={{ m: 1, borderRadius: 1 }}
             />
             <SwipeableViews slides={slides} />
-        </Container>
+        </>
     );
 };
 
