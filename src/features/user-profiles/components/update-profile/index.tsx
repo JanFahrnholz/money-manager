@@ -6,7 +6,7 @@ import ProfileUpdateFieldBoolean from "./field-boolean";
 import ProfileUpdateFieldString from "./field-string";
 
 const UpdateProfile: FC = () => {
-    const { profile } = useProfile();
+    const profile = useProfile();
     const { unsaved, save } = useContext(ProfileContext);
 
     if (!profile) return <></>;

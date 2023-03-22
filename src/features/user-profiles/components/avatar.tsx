@@ -10,20 +10,9 @@ interface ProfileAvatarProps {
 
 const ProfileAvatar: FC<ProfileAvatarProps> = ({ id, fallbackContent }) => {
     if (!fallbackContent) fallbackContent = <PersonIcon />;
-    const [content, setContent] = useState<string | ReactNode>(fallbackContent);
-    const { profile, get } = useProfile();
+    const profile = useProfile(id);
 
-    useEffect(() => {
-        if (profile?.username) setContent(getInitials(profile.username));
-        if (id)
-            get(id).then((res) =>
-                setContent(
-                    res.username !== ""
-                        ? getInitials(res.username)
-                        : fallbackContent
-                )
-            );
-    }, [id]);
+    const content = profile ? getInitials(profile.username) : fallbackContent;
 
     return <Avatar sx={{ backgroundColor: "primary.main" }}>{content}</Avatar>;
 };

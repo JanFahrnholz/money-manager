@@ -1,6 +1,6 @@
-import { Chip, Typography } from "@mui/material";
+import { Chip } from "@mui/material";
 import useProfile from "features/user-profiles/hooks/useProfile";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 
 type Props = {
     id: string;
@@ -8,21 +8,11 @@ type Props = {
 };
 
 const Username: FC<Props> = ({ id, disableId }) => {
-    const [username, setUsername] = useState(disableId ? "" : id);
-    const { get } = useProfile();
+    const profile = useProfile(id);
 
-    useEffect(() => {
-        const set = async () => {
-            try {
-                const profile = await get(id);
-                setUsername(profile.username !== "" ? profile.username : id);
-            } catch (error) {
-                setUsername(id);
-            }
-        };
-        set();
-    });
-    return <Chip label={username} size="small" />;
+    const display = profile === undefined ? id : profile.username;
+
+    return <Chip label={display} size="small" />;
 };
 
 export default Username;

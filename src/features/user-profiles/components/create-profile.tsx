@@ -4,8 +4,7 @@ import useCreate from "../hooks/useCreate";
 import useProfile from "../hooks/useProfile";
 
 const CreateProfile: FC = () => {
-    const { profile } = useProfile();
-    const [loading, setLoading] = useState(false);
+    const profile = useProfile();
     const create = useCreate();
 
     if (profile) return <></>;
