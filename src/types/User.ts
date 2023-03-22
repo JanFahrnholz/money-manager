@@ -8,6 +8,7 @@ type User = Record<{
     balance: number;
     enablePrivacyMode: boolean;
     enableTransactionsTab: boolean;
+    enableChats: boolean;
     enableInsights: boolean;
 }>;
 

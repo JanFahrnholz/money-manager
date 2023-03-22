@@ -12,12 +12,10 @@ import { FC } from "react";
 
 interface Props {
     order: OrderRecord;
+    horizontal?: boolean;
 }
 
-const OrderCardStatus: FC<Props> = ({ order }) => {
-    const product = order.expand.product as ProductRecord;
-    const contact = order.expand.contact as Contact;
-
+const OrderCardStatus: FC<Props> = ({ order, horizontal }) => {
     let activeStep = 0;
     const isDeclined = order.status === "declined";
     const isCanceled = order.status === "canceled";
@@ -54,12 +52,42 @@ const OrderCardStatus: FC<Props> = ({ order }) => {
     if (isDeclined) step2 = "declined";
     if (isCanceled) step2 = "canceled";
 
+    const getLabelColor = (step: number) => {
+        const error = isDeclined || isCanceled;
+        const active = step === activeStep;
+        let color = "rgba(255,255,255,0.5)";
+        switch (step) {
+            case 1:
+                if (active) color = "success.main";
+                if (step < activeStep || error) color = "primary.main";
+                break;
+            case 2:
+                if (error) color = "error.main";
+                if (step < activeStep) color = "primary.main";
+                if (active) color = "success.main";
+                break;
+            case 3:
+                if (active) color = "success.main";
+                if (step < activeStep) color = "primary.main";
+                break;
+            case 4:
+                if (active) color = "success.main";
+                if (step < activeStep) color = "primary.main";
+                break;
+
+            default:
+                break;
+        }
+        return color;
+    };
+
     return (
         <>
             <Stepper
-                orientation="vertical"
+                orientation={horizontal ? "horizontal" : "vertical"}
                 sx={{ my: 1 }}
                 activeStep={activeStep}
+                alternativeLabel={horizontal}
                 connector={
                     <StepConnector
                         sx={{
@@ -69,18 +97,41 @@ const OrderCardStatus: FC<Props> = ({ order }) => {
                 }
             >
                 <Step>
-                    <StepLabel>open</StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel error={isDeclined || isCanceled}>
-                        <Typography>{step2}</Typography>
+                    <StepLabel
+                        sx={{
+                            "& .MuiSvgIcon-root": { color: getLabelColor(1) },
+                        }}
+                    >
+                        open
                     </StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel>packaged</StepLabel>
+                    <StepLabel
+                        sx={{
+                            "& .MuiSvgIcon-root": { color: getLabelColor(2) },
+                        }}
+                        error={isDeclined || isCanceled}
+                    >
+                        {step2}
+                    </StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel>delivered</StepLabel>
+                    <StepLabel
+                        sx={{
+                            "& .MuiSvgIcon-root": { color: getLabelColor(3) },
+                        }}
+                    >
+                        packaged
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel
+                        sx={{
+                            "& .MuiSvgIcon-root": { color: getLabelColor(4) },
+                        }}
+                    >
+                        delivered
+                    </StepLabel>
                 </Step>
             </Stepper>
         </>

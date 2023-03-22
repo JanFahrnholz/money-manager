@@ -13,6 +13,7 @@ import NavigationContextProvider from "../context/NavigationContext";
 import TransactionContextProvider from "../context/TransactionContext";
 import "../styles/globals.css";
 import TagManager from "react-gtm-module";
+import ChatContextProvider from "features/chats/context";
 
 const theme = createTheme({
     palette: {
@@ -41,9 +42,9 @@ const theme = createTheme({
         },
     },
 });
-if (process.browser) {
+if (process.browser && process.env.GTM_ID !== undefined) {
     TagManager.initialize({
-        gtmId: process.env.GTM_ID || "",
+        gtmId: process.env.GTM_ID,
     });
 }
 
@@ -56,26 +57,36 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <ThemeProvider theme={theme}>
             <ProfileContextProvider>
                 <MarketplaceContextProvider>
-                    <NavigationContextProvider>
-                        <TransactionContextProvider>
-                            <ContactContextProvider>
-                                <PrivacyModeContextProvider>
-                                    <Head>
-                                        <meta
-                                            name="viewport"
-                                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                                        />
-                                        <meta
-                                            httpEquiv="ScreenOrientation"
-                                            content="autoRotate:disabled"
-                                        />
-                                        <title>Money Manager</title>
-                                    </Head>
-                                    <Component {...pageProps} />
-                                </PrivacyModeContextProvider>
-                            </ContactContextProvider>
-                        </TransactionContextProvider>
-                    </NavigationContextProvider>
+                    <ChatContextProvider>
+                        <NavigationContextProvider>
+                            <TransactionContextProvider>
+                                <ContactContextProvider>
+                                    <PrivacyModeContextProvider>
+                                        <Head>
+                                            <title>Money Manager</title>
+                                            <meta
+                                                name="viewport"
+                                                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                                            />
+                                            <meta
+                                                httpEquiv="ScreenOrientation"
+                                                content="autoRotate:disabled"
+                                            />
+                                            <meta
+                                                name="apple-mobile-web-app-capable"
+                                                content="yes"
+                                            />
+                                            <meta
+                                                name="apple-mobile-web-app-title"
+                                                content="MoneyManager"
+                                            />
+                                        </Head>
+                                        <Component {...pageProps} />
+                                    </PrivacyModeContextProvider>
+                                </ContactContextProvider>
+                            </TransactionContextProvider>
+                        </NavigationContextProvider>
+                    </ChatContextProvider>
                 </MarketplaceContextProvider>
             </ProfileContextProvider>
         </ThemeProvider>

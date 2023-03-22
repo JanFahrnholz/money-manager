@@ -11,8 +11,8 @@ import TotalStockValue from "../misc/total-stock-value";
 
 const YourProducts: FC = () => {
     const { products } = useContext(MarketplaceContext);
-    const { profile } = useProfile();
-    const { push } = useRouter();
+    const profile = useProfile();
+
     const isSeller = profile ? profile.seller : false;
     if (!isSeller) return <></>;
     return (

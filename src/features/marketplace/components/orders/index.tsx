@@ -4,7 +4,7 @@ import IncomingOrders from "./incoming-orders";
 import PlacedOrders from "./placed-orders";
 
 const Orders: FC = () => {
-    const { profile } = useProfile();
+    const profile = useProfile();
 
     return (
         <>

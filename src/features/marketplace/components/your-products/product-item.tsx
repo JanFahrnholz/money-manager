@@ -21,7 +21,9 @@ const ProductItem: FC<Props> = ({ product }) => {
 
     const actions = [
         {
-            name: `${product.name} ${product.price}€ per ${product.unit}`,
+            name: `${product.name} ${product.price}€ per ${product.unit}${
+                product.divisible ? ", divisible" : ", not divisible"
+            }`,
             action: undefined as undefined | Function,
             color: undefined as undefined | string,
         },
@@ -77,7 +79,9 @@ const ProductItem: FC<Props> = ({ product }) => {
                         <>
                             Stock:{" "}
                             <PrivacyMode>
-                                {product.stock || 0}
+                                {product.stock?.toFixed(
+                                    product.divisible ? 2 : 0
+                                ) || 0}
                                 {product.unit}
                             </PrivacyMode>
                         </>

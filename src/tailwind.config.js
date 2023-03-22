@@ -3,6 +3,7 @@ module.exports = {
     content: [
         "./pages/**/*.{js,ts,jsx,tsx}",
         "./components/**/*.{js,ts,jsx,tsx}",
+        "./features/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {
@@ -12,6 +13,7 @@ module.exports = {
                     800: "#424242",
                     700: "#5a5a5a",
                     600: "#aaa",
+                    500: "#ccc",
                 },
                 primary: "#ffd600",
                 primaryLight: "#ffff52",

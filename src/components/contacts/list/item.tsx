@@ -8,13 +8,13 @@ import {
     ListItemAvatar,
     ListItemText,
 } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import { motion } from "framer-motion";
 import { FC } from "react";
 import { getInitials } from "../../../lib/Contacts";
 import { client } from "../../../lib/Pocketbase";
 import Contact from "../../../types/Contact";
 import Record from "../../../types/Record";
-import LinkedFrom from "../../misc/LinkedFrom";
 
 type Props = {
     contact: Record<Contact>;
@@ -58,13 +58,18 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                 <ListItemText
                     primary={
                         !isOwner ? (
-                            <LinkedFrom owner={contact.owner} />
+                            <>
+                                linked by <Username id={contact.owner} />
+                            </>
                         ) : (
                             <>
                                 {!isOwner && "imported "}
                                 {contact.name}
                                 {contact.user && (
-                                    <span className="pl-1">🔗</span>
+                                    <>
+                                        <span className="px-1">🔗</span>
+                                        <Username id={contact.user} />
+                                    </>
                                 )}
                             </>
                         )

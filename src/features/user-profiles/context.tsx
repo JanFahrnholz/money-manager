@@ -1,4 +1,6 @@
 import Profile from "@/types/Profile";
+import ReactHook from "@/types/react-hook";
+import User from "@/types/User";
 import useTrigger from "hooks/useTrigger";
 import { client } from "lib/Pocketbase";
 import { Props } from "next/script";
@@ -13,6 +15,8 @@ type ContextProps = {
     reload: () => void;
     unsaved: boolean;
     save: () => void;
+    profiles: Map<string, Profile>;
+    setProfiles: ReactHook<Map<string, Profile>>;
 };
 export const ProfileContext = createContext<ContextProps>(undefined!);
 
@@ -20,6 +24,7 @@ const ProfileContextProvider: FC<Props> = (props) => {
     const [profile, setProfile] = useState<Profile | undefined>();
     const [initial, setInitial] = useState<Profile | undefined>();
     const [unsaved, setUnsaved] = useState(false);
+    const [profiles, setProfiles] = useState(new Map<string, Profile>());
     const [trigger, reload] = useTrigger();
 
     useEffect(() => {
@@ -59,6 +64,8 @@ const ProfileContextProvider: FC<Props> = (props) => {
                 reload,
                 unsaved,
                 save,
+                profiles,
+                setProfiles,
             }}
         >
             {props.children}

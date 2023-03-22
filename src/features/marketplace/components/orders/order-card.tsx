@@ -8,7 +8,7 @@ import ReactTimeAgo from "react-time-ago";
 import OrderCardAlert from "./oder-card-alert";
 import OrderCardBuyerActions from "./order-card-buyer-actions";
 import OrderCardDetails from "./order-card-details";
-import OrderCardLocationInfo from "./order-card-location-info";
+import OrderCardDeliveryInfo from "./order-card-delivery-info";
 import OrderCardSellerActions from "./order-card-seller-actions";
 import OrderCardStatus from "./order-card-status";
 
@@ -16,7 +16,7 @@ interface Props {
     order: OrderRecord;
 }
 const OrderCard: FC<Props> = ({ order }) => {
-    const product = order.expand.product as ProductRecord;
+    const product = order.product;
     const contact = order.expand.contact as Contact;
     if (!product || !contact) return <></>;
     const id = client.authStore.model?.id;
@@ -35,7 +35,7 @@ const OrderCard: FC<Props> = ({ order }) => {
                         <OrderCardStatus order={order} />
                     </Grid>
                 </Grid>
-                <OrderCardLocationInfo order={order} />
+                <OrderCardDeliveryInfo order={order} />
                 <Grid container>
                     <Grid item xs={8}>
                         {isSeller && <OrderCardSellerActions order={order} />}

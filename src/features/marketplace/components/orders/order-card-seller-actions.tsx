@@ -1,11 +1,14 @@
 import Contact from "@/types/Contact";
+import Record from "@/types/Record";
 import { Button, CardActions } from "@mui/material";
 import useOrder from "features/marketplace/hooks/useOrder";
 import { OrderRecord, OrderStatus } from "features/marketplace/types/Order";
 import { ProductRecord } from "features/marketplace/types/Product";
 import { create } from "lib/PlannedTransactions";
-import { FC, ReactNode } from "react";
-import UpdateDeliveryMenu from "../misc/update-delivery-menu";
+import { useRouter } from "next/router";
+
+import { FC, ReactNode, useState } from "react";
+import UpdateOrderMenu from "../misc/update-order-menu";
 interface Props {
     order: OrderRecord;
 }
@@ -17,8 +20,11 @@ type IncomingOrderCardAction = {
 
 const OrderCardSellerActions: FC<Props> = ({ order }) => {
     const { update, remove, deliver, loading } = useOrder();
-    const product = order.expand.product as ProductRecord;
-    const contact = order.expand.contact as Contact;
+    const [openEditMenu, setOpenEditMenu] = useState(false);
+    const product = order.product;
+    const contact = order.expand.contact as Record<Contact>;
+
+    const { push } = useRouter();
 
     const planTransaction = () => {
         create({
@@ -30,14 +36,11 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
     };
 
     const deleteButton = () => (
-        <Button
-            size="small"
-            onClick={() => remove(order.id)}
-            disabled={loading}
-        >
+        <Button size="small" onClick={() => remove(order)} disabled={loading}>
             delete order
         </Button>
     );
+
     const actions: IncomingOrderCardAction[] = [
         {
             status: "open",
@@ -63,17 +66,13 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
         {
             status: "accepted",
             content: (
-                <>
-                    <Button
-                        size="small"
-                        onClick={() => update({ ...order, status: "packaged" })}
-                        disabled={loading}
-                    >
-                        Package
-                    </Button>
-
-                    <UpdateDeliveryMenu order={order} />
-                </>
+                <Button
+                    size="small"
+                    onClick={() => update({ ...order, status: "packaged" })}
+                    disabled={loading}
+                >
+                    Package
+                </Button>
             ),
         },
         {
@@ -83,16 +82,13 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
         {
             status: "packaged",
             content: (
-                <>
-                    <Button
-                        size="small"
-                        onClick={() => deliver(order)}
-                        disabled={loading}
-                    >
-                        Deliver
-                    </Button>
-                    <UpdateDeliveryMenu order={order} />
-                </>
+                <Button
+                    size="small"
+                    onClick={() => deliver(order)}
+                    disabled={loading}
+                >
+                    Deliver
+                </Button>
             ),
         },
         {
@@ -110,7 +106,18 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
     if (!currentAction || product.disabled) return <></>;
     if (currentAction.content === undefined) return <></>;
 
-    return <CardActions>{currentAction.content}</CardActions>;
+    return (
+        <CardActions>
+            {currentAction.content}
+            <Button
+                size="small"
+                onClick={() => push(`/orders/${order.id}`)}
+                disabled={loading}
+            >
+                details
+            </Button>
+        </CardActions>
+    );
 };
 
 export default OrderCardSellerActions;

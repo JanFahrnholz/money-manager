@@ -6,7 +6,7 @@ import ProfileUpdateFieldBoolean from "./field-boolean";
 import ProfileUpdateFieldString from "./field-string";
 
 const UpdateProfile: FC = () => {
-    const { profile } = useProfile();
+    const profile = useProfile();
     const { unsaved, save } = useContext(ProfileContext);
 
     if (!profile) return <></>;
@@ -19,12 +19,12 @@ const UpdateProfile: FC = () => {
                     title="username"
                     subTitle="visible for linked users"
                     placeholder="john-doe"
-                    helperText="max. 10 characters"
+                    helperText="max. 16 characters"
                 />
                 <ProfileUpdateFieldBoolean
                     prop="seller"
                     title="become a seller"
-                    subTitle="lets you create your own products"
+                    subTitle="allows you to create and sell items"
                 />
             </List>
             <Button

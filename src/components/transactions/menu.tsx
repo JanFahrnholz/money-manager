@@ -1,11 +1,11 @@
-import { FC, useState } from "react";
-import { remove } from "../../lib/Transactions";
-import { client } from "../../lib/Pocketbase";
-import Transaction from "../../types/Transaction";
-import Record from "../../types/Record";
-import ActionMenu from "../misc/ActionMenu";
-import { formatDailyDate, formatDailyDateTime } from "../../lib/Formatter";
 import useProfile from "features/user-profiles/hooks/useProfile";
+import { FC } from "react";
+import { formatDailyDateTime } from "../../lib/Formatter";
+import { client } from "../../lib/Pocketbase";
+import { remove } from "../../lib/Transactions";
+import Record from "../../types/Record";
+import Transaction from "../../types/Transaction";
+import ActionMenu from "../misc/ActionMenu";
 
 type Props = {
     transaction: Record<Transaction> | undefined;
@@ -14,11 +14,8 @@ type Props = {
 };
 
 const TransactionDetailMenu: FC<Props> = ({ transaction, open, setOpen }) => {
-    const { get } = useProfile();
-    const [linkedUsername, setLinkedUsername] = useState<string | undefined>();
+    const profile = useProfile(transaction ? transaction.owner : null);
     if (!transaction) return <></>;
-
-    get(transaction.owner).then((res) => setLinkedUsername(res.username));
 
     const isOwner = client.authStore.model?.id == transaction.owner;
 
@@ -39,7 +36,7 @@ const TransactionDetailMenu: FC<Props> = ({ transaction, open, setOpen }) => {
 
     if (!isOwner)
         actions.push({
-            name: `Linked from ${linkedUsername || transaction.owner}`,
+            name: `Linked from ${profile?.username || transaction.owner}`,
             action: undefined,
             color: undefined,
         });

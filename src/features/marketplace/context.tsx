@@ -18,6 +18,8 @@ type ContextProps = {
     linkedProducts: ProductRecord[];
     orders: OrderRecord[];
     setOrders: Dispatch<SetStateAction<OrderRecord[]>>;
+    loading: boolean;
+    setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
 export const MarketplaceContext = createContext<ContextProps>(undefined!);
@@ -26,6 +28,7 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
     const [products, setProducts] = useState<ProductRecord[]>([]);
     const [linkedProducts, setLinkedProducts] = useState<ProductRecord[]>([]);
     const [orders, setOrders] = useState<OrderRecord[]>(undefined!);
+    const [loading, setLoading] = useState(false);
     const id = client.authStore.model?.id;
 
     useEffect(() => {
@@ -51,7 +54,7 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
                         expand: "product,contact",
                         sort: "-updated",
                     });
-                setOrders(orders ? orders : []);
+                setOrders(orders || []);
             } catch (error) {}
         };
         fetchProducts();
@@ -68,6 +71,8 @@ const MarketplaceContextProvider: FC<Props> = (props) => {
                 linkedProducts,
                 orders,
                 setOrders,
+                loading,
+                setLoading,
             }}
         >
             {props.children}

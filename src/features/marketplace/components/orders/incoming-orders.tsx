@@ -1,12 +1,11 @@
 import { CircularProgress, Divider, Typography } from "@mui/material";
 import { MarketplaceContext } from "features/marketplace/context";
-import useProfile from "features/user-profiles/hooks/useProfile";
+import { OrderRecord } from "features/marketplace/types/Order";
 import { client } from "lib/Pocketbase";
 import { FC, useContext } from "react";
 import OrderCard from "./order-card";
 
 const IncomingOrders: FC = () => {
-    const { profile } = useProfile();
     const id = client.authStore.model?.id;
     const { orders } = useContext(MarketplaceContext);
 
@@ -36,7 +35,9 @@ const IncomingOrders: FC = () => {
         );
 
     const incomingOrders = orders
-        .filter((order) => order.expand.product.owner === id)
+        .filter((order: OrderRecord) => {
+            return order.product.owner === id;
+        })
         .sort((a, b) => {
             const dateA = new Date(a.updated);
             const dateB = new Date(b.updated);

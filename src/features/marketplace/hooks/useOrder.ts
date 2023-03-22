@@ -10,14 +10,15 @@ import Transaction from "@/types/Transaction";
 import { create as createTransaction } from "lib/Transactions";
 import { useContext, useState } from "react";
 import { MarketplaceContext } from "../context";
+import useChat from "features/chats/hooks/useChat";
 
 const useOrder = () => {
     const id = client.authStore.model?.id;
-    const { reload } = useRouter();
-    const { setOrders } = useContext(MarketplaceContext);
-    const [loading, setLoading] = useState(false);
+    const { setOrders, orders, loading, setLoading } =
+        useContext(MarketplaceContext);
 
     const updateProduct = useUpdateProduct();
+    const chat = useChat();
 
     const create = async (
         order: Partial<OrderRecord>,
@@ -38,7 +39,7 @@ const useOrder = () => {
                     {
                         ...order,
                         status: "open",
-                        product: product.id,
+                        product,
                         contact: contact.id,
                     },
                     { expand: "product,contact" }
@@ -76,12 +77,13 @@ const useOrder = () => {
         }
     };
 
-    const remove = async (id: string) => {
+    const remove = async (order: OrderRecord) => {
         setLoading(true);
         try {
-            await client.collection("orders").delete(id);
+            await client.collection("orders").delete(order.id);
+            await chat.remove(order.chat);
             toast.success("order deleted");
-            setOrders((prev) => prev.filter((o) => o.id !== id));
+            setOrders((prev) => prev.filter((o) => o.id !== order.id));
         } catch (error) {
             toast.error("could not delete order");
         } finally {
@@ -90,16 +92,14 @@ const useOrder = () => {
     };
 
     const deliver = async (order: OrderRecord) => {
-        if (order.status !== "packaged") return;
         setLoading(true);
 
-        const product = order.expand.product as ProductRecord;
+        const product = order.product;
         const contact = order.expand.contact as Contact;
-        if (!product || !contact) return;
         const stock = product.stock ? product.stock - order.quantity : 0;
 
         const transaction: Transaction = {
-            amount: product.price * order.quantity,
+            amount: +(product.price * order.quantity).toFixed(2),
             contact: contact.id,
             info: order.message,
             type: order.payDirectly ? "Einnahme" : "Rechnung",
@@ -108,16 +108,20 @@ const useOrder = () => {
         };
 
         try {
+            if (!contact) throw new Error("Contact not defined");
+            if (order.status !== "packaged")
+                throw new Error("status must be packaged");
             await updateProduct({ ...product, stock });
             await createTransaction(transaction);
             await update({ ...order, status: "delivered" });
-        } catch (error) {
+        } catch (error: any) {
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
     };
 
-    return { create, update, remove, deliver, loading };
+    return { orders, create, update, remove, deliver, loading };
 };
 
 export default useOrder;
