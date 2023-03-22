@@ -1,18 +1,17 @@
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleIcon from "@mui/icons-material/People";
 import RestoreIcon from "@mui/icons-material/Restore";
+import StoreIcon from "@mui/icons-material/Store";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
+import useSetting from "features/user-settings/hooks/useSetting";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, useContext } from "react";
 import { NavigationContext } from "../context/NavigationContext";
 import useLoggedIn from "../hooks/useLoggedIn";
-import StoreIcon from "@mui/icons-material/Store";
-import useProfile from "features/user-profiles/hooks/useProfile";
-import useSetting from "features/user-settings/hooks/useSetting";
 type Props = {
     tabs: [ReactElement, ReactElement, ReactElement, ReactElement];
 };

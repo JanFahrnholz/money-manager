@@ -51,9 +51,7 @@ const OrderDetailsPage: NextPage = () => {
     return (
         <>
             <Head>
-                <title>
-                    MoneyManager - order details {order ? `- ${order.id}` : ""}
-                </title>
+                <title>MoneyManager - order details</title>
             </Head>
             <CssBaseline />
             <SubSiteHeader title={"order details"}>
