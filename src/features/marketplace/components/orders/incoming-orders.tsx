@@ -1,16 +1,13 @@
 import { CircularProgress, Divider, Typography } from "@mui/material";
 import { MarketplaceContext } from "features/marketplace/context";
 import { OrderRecord } from "features/marketplace/types/Order";
-import useProfile from "features/user-profiles/hooks/useProfile";
 import { client } from "lib/Pocketbase";
 import { FC, useContext } from "react";
 import OrderCard from "./order-card";
 
 const IncomingOrders: FC = () => {
-    const { profile } = useProfile();
     const id = client.authStore.model?.id;
     const { orders } = useContext(MarketplaceContext);
-    console.log("🚀 ~ file: incoming-orders.tsx:13 ~ orders:", orders);
 
     const header = () => (
         <>

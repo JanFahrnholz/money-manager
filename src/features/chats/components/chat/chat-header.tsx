@@ -1,7 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import Chat from "features/chats/types/chat";
 import Username from "features/user-profiles/components/username";
-import useProfile from "features/user-profiles/hooks/useProfile";
 import { userId } from "lib/Pocketbase";
 import { FC, Fragment } from "react";
 
@@ -10,7 +9,6 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: FC<ChatHeaderProps> = ({ chat }) => {
-    const { get } = useProfile();
     if (!userId) return <></>;
 
     const participants = chat.participants.filter(
