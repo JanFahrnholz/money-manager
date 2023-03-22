@@ -25,7 +25,6 @@ const ProfileContextProvider: FC<Props> = (props) => {
     const [initial, setInitial] = useState<Profile | undefined>();
     const [unsaved, setUnsaved] = useState(false);
     const [profiles, setProfiles] = useState(new Map<string, Profile>());
-    console.log("🚀 ~ file: context.tsx:28 ~ profiles:", profiles);
     const [trigger, reload] = useTrigger();
 
     useEffect(() => {
