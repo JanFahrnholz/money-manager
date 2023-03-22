@@ -66,10 +66,7 @@ const ContactListItem: FC<Props> = ({ contact, delay }) => {
                                 {!isOwner && "imported "}
                                 {contact.name}
                                 {contact.user && (
-                                    <>
-                                        <span className="px-1">🔗</span>
-                                        <Username id={contact.user} />
-                                    </>
+                                    <span className="px-1">🔗</span>
                                 )}
                             </>
                         )
