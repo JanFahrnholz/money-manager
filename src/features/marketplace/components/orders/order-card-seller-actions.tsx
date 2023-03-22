@@ -97,16 +97,13 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
         {
             status: "packaged",
             content: (
-                <>
-                    <Button
-                        size="small"
-                        onClick={() => deliver(order)}
-                        disabled={loading}
-                    >
-                        Deliver
-                    </Button>
-                    <UpdateOrderMenu order={order} />
-                </>
+                <Button
+                    size="small"
+                    onClick={() => deliver(order)}
+                    disabled={loading}
+                >
+                    Deliver
+                </Button>
             ),
         },
         {
