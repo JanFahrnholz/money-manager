@@ -66,28 +66,13 @@ const OrderCardSellerActions: FC<Props> = ({ order }) => {
         {
             status: "accepted",
             content: (
-                <>
-                    <Button
-                        size="small"
-                        onClick={() => update({ ...order, status: "packaged" })}
-                        disabled={loading}
-                    >
-                        Package
-                    </Button>
-
-                    <Button
-                        size="small"
-                        onClick={() => setOpenEditMenu(!openEditMenu)}
-                        disabled={loading}
-                    >
-                        edit
-                    </Button>
-                    <UpdateOrderMenu
-                        order={order}
-                        open={openEditMenu}
-                        setOpen={setOpenEditMenu}
-                    />
-                </>
+                <Button
+                    size="small"
+                    onClick={() => update({ ...order, status: "packaged" })}
+                    disabled={loading}
+                >
+                    Package
+                </Button>
             ),
         },
         {
