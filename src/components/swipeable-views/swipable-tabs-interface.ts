@@ -1,4 +1,4 @@
-import { ReactHook } from "@/types/react-hook";
+import ReactHook from "@/types/react-hook";
 import Slide from "./slide";
 
 export default interface SwipeableTabsInterface {

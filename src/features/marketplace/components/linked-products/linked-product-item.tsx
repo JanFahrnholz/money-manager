@@ -1,4 +1,3 @@
-import LinkedFrom from "@/components/misc/LinkedFrom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { IconButton, ListItem, ListItemText } from "@mui/material";
 import Username from "features/user-profiles/components/username";

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, ReactNode, useEffect, useState } from "react";
 import { Box, Container, Tab as MuiTab, Tabs } from "@mui/material";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";

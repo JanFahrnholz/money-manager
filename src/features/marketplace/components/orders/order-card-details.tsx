@@ -1,8 +1,6 @@
-import LinkedFrom from "@/components/misc/LinkedFrom";
 import Contact from "@/types/Contact";
 import { CardContent, Typography } from "@mui/material";
 import { OrderRecord } from "features/marketplace/types/Order";
-import { ProductRecord } from "features/marketplace/types/Product";
 import Username from "features/user-profiles/components/username";
 import { client } from "lib/Pocketbase";
 import { FC } from "react";
