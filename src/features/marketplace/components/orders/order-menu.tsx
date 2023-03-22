@@ -1,5 +1,4 @@
 import FullscreenMenu from "@/components/misc/FullscreenMenu";
-import LinkedFrom from "@/components/misc/LinkedFrom";
 import Numpad from "@/components/misc/numpad";
 import {
     FormControlLabel,
@@ -11,6 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import useChat from "features/chats/hooks/useChat";
+import Username from "features/user-profiles/components/username";
 import { getDeliveryDateObject } from "lib/Formatter";
 import { FC, useEffect, useState } from "react";
 import useOrder from "../../hooks/useOrder";
@@ -35,7 +35,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
 
     useEffect(() => {
         setAmount(quantity * product.price);
-    }, [quantity]);
+    }, [product.price, quantity]);
 
     const submit = async () => {
         try {
@@ -76,7 +76,7 @@ const ProductOrderMenu: FC<Props> = ({ product, open, setOpen }) => {
                     Price: {product.price}€/{product.unit}
                 </Grid>
                 <Grid xs={6} item>
-                    from <LinkedFrom owner={product.owner} asText />
+                    from <Username id={product.owner} />
                 </Grid>
                 <Grid xs={6} item>
                     Quantity: {quantity.toFixed(product.divisible ? 2 : 0)}

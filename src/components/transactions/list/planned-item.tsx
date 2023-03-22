@@ -10,6 +10,7 @@ import {
     ListItemText,
     Typography,
 } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import { confirm, remove } from "lib/PlannedTransactions";
 import { FC, useState } from "react";
 import { getInitials } from "../../../lib/Contacts";
@@ -17,7 +18,6 @@ import { client } from "../../../lib/Pocketbase";
 import { getColor } from "../../../lib/Transactions";
 import Record from "../../../types/Record";
 import Transaction from "../../../types/Transaction";
-import LinkedFrom from "../../misc/LinkedFrom";
 import TransactionDetailMenu from "../menu";
 
 const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
@@ -92,7 +92,7 @@ const PlannedTransactionListItem: FC<{ transaction: Record<Transaction> }> = ({
                                 )}
                             </>
                         ) : (
-                            <LinkedFrom owner={transaction.owner} />
+                            <Username id={transaction.owner} />
                         )}
                     </Typography>
                 }

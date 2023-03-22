@@ -9,6 +9,7 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import Username from "features/user-profiles/components/username";
 import {
     calcAvgAmountPerWeek,
     calculateAverageAmountPerDay,
@@ -17,7 +18,6 @@ import { FC } from "react";
 import useFetchContactDetails from "../../../hooks/useFetchContactDetails";
 import { formatDailyDate } from "../../../lib/Formatter";
 import { client } from "../../../lib/Pocketbase";
-import LinkedFrom from "../../misc/LinkedFrom";
 import ContactDetailsWhenOwned from "./isOwner";
 
 interface Props {
@@ -64,7 +64,7 @@ const ContactDetailDrawer: FC<Props> = ({ id, open, setOpen }) => {
                             setOpen={setOpen}
                         />
                     ) : (
-                        <LinkedFrom owner={data.contact.owner} />
+                        <Username id={data.contact.owner} />
                     )}
                 </Typography>
 
