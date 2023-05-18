@@ -6,6 +6,7 @@ import Contact from "../types/Contact";
 
 type ContextProps = {
     contacts: Contact[];
+    getContactByUserId: (id: string) => undefined | Contact;
 };
 
 export const ContactContext = createContext<ContextProps>(undefined!);
@@ -52,10 +53,15 @@ const ContactContextProvider: FC<Props> = (props) => {
         return () => unsubscribe();
     }, []);
 
+    const getContactByUserId = (id: string) => {
+        return contacts.find((contact) => contact.user === id);
+    };
+
     return (
         <ContactContext.Provider
             value={{
                 contacts,
+                getContactByUserId,
             }}
         >
             {props.children}

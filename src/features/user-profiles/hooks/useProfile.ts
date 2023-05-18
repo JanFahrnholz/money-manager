@@ -8,7 +8,9 @@ const useProfile = (id?: string | undefined | null): Profile | undefined => {
     if (id === null) return;
     if (id === undefined) return profile;
 
-    if (profiles.has(id)) return profiles.get(id);
+    if (profiles !== undefined) {
+        if (profiles.has(id)) return profiles.get(id);
+    }
 
     const addProfile = (key: string, value: Profile) => {
         const newProfiles = new Map(profiles);
