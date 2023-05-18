@@ -1,7 +1,7 @@
 docker-compose -f docker-compose.prod.yml down -v
 git pull
-cd ./src 
+cd ./src
 yarn
 yarn build
 cd ../
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up
