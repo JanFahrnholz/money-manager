@@ -21,6 +21,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({ chat }) => {
             ref.current.scrollTop = ref.current.scrollHeight;
         }
     }, [chat.messages]);
+
     return (
         <Container
             ref={ref}
