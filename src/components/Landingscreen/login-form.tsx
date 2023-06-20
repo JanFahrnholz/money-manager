@@ -16,14 +16,14 @@ const LandingscreenLoginForm: FC = () => {
     const [error, setError] = useState<string | false>();
     const [pw, setPw] = useState<string>("");
     const { id, setId, enabled, setEnabled } = useRememberId();
-    const [status, setStatus] = useState<any>("Access ID");
+    const [status, setStatus] = useState<any>("Login");
 
     const router = useRouter();
 
     const handleSubmit = async () => {
         if (!id || !pw) {
             setError("Enter credentials");
-            setStatus("Access ID");
+            setStatus("Login");
             return;
         }
 

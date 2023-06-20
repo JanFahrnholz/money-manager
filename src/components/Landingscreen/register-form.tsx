@@ -62,7 +62,10 @@ const LandingscreenRegisterForm: FC = () => {
                         sx={{ width: 250 }}
                     />
                 </FormControl>
-                <PasswordStrengthBar password={pw} minLength={8} />
+
+                {pw !== "" && (
+                    <PasswordStrengthBar password={pw} minLength={8} />
+                )}
 
                 {focused && (
                     <motion.div
@@ -78,7 +81,6 @@ const LandingscreenRegisterForm: FC = () => {
                                 value={pw2}
                                 variant="standard"
                                 onChange={(e) => setPw2(e.target.value)}
-                                onBlur={(e) => setFocused(false)}
                                 sx={{ width: 250 }}
                             />
                         </FormControl>
