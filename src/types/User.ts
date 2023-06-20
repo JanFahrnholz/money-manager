@@ -10,6 +10,9 @@ type User = Record<{
     enableTransactionsTab: boolean;
     enableChats: boolean;
     enableInsights: boolean;
+    settings: {
+        analytics: boolean;
+    };
 }>;
 
 export default User;

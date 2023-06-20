@@ -5,7 +5,14 @@ services:
       - "3000:3000"
     volumes:
       - "./src:/srv/app"
-    networks:
-      - nginx
     working_dir: "/srv/app"
     command: [ "yarn", "dev" ]
+
+  cronjobs:
+    image: node:18
+    volumes:
+      - "./src/cronjobs:/cronjobs"
+    environment:
+      - NODE_ENV=development
+    working_dir: "/cronjobs"
+    command: [ "yarn", "start" ]
