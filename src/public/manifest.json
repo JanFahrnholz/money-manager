@@ -3,8 +3,8 @@
     "background_color": "#303030",
     "display": "standalone",
     "orientation": "portrait",
-    "scope": "money-manager-svelte/www/",
-    "start_url": "money-manager-svelte/www/"
+    "scope": "/",
+    "start_url": "/",
     "name": "MoneyManager",
     "short_name": "MoneyManager",
     "description": "",
